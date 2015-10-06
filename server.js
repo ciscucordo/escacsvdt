@@ -1,7 +1,29 @@
 #!/bin/env node
 //  OpenShift sample Node application
 var express = require('express');
-var fs      = require('fs');
+
+var http = require("http");
+
+// special magic, now all requests have sessions!
+var session = require('./node_modules_custom/session.js/lib/core').session;
+
+//filesystem
+var fs = require("fs");
+
+var path = require("path");
+var mime = require("mime");
+
+//var dispatcher = require('httpdispatcher');
+
+//........................ini mysql........................
+var mysql = require("mysql");
+var db = mysql.createConnection({
+    host: "127.0.0.1",
+    user: "escacsvdt",
+    password: "escacsvdt",
+    database: "escacsvdt"
+});
+var qs = require("querystring");
 
 
 /**
