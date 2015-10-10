@@ -16,7 +16,6 @@ var mime = require("mime");
 //var dispatcher = require('httpdispatcher');
 
 var mysql = require("mysql");
-var db = {};
 var qs = require("querystring");
 
 /**
@@ -47,7 +46,7 @@ var SampleApp = function() {
             self.ipaddress = "127.0.0.1";
         };
 		
-		db = mysql.createConnection({
+		self.db = mysql.createConnection({
 			host: self.ipaddress,
 			user: "escacsvdt",
 			password: "escacsvdt",
@@ -129,7 +128,7 @@ var SampleApp = function() {
         };
 		
 		self.routes['/mysql'] = function(req, res) {
-			db.query(
+			self.db.query(
 				'select * from JUGADOR',
 				'',
 				function (err, rows) {
