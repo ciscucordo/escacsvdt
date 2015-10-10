@@ -1,7 +1,0 @@
-* "datepicker_es.js" posa en espanyol les dates.
-
-* "jquery.form.js" serveix per pujar fitxers a través d'un formulari HTML.
-
-* "jqTree" serveix per construir l'arbre de Localización de tumor primario (més info a la web: http://mbraak.github.io/jqTree/)
-
-* "jquery-ui-1.10.3.custom" hi ha tots els objectes customitzables de jQuery, com el "datepicker", "dialog", etc...
