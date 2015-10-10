@@ -278,7 +278,7 @@ var SampleApp = function() {
 					
                 } else {
                     //traduïm un path URL a un path d'arxiu relatiu
-                    filePath = "public/escacsvdt/pages" + pRequest.url;
+                    filePath = "public/escacsvdt" + pRequest.url;
                 }
                 var absPath = filePath;
                 //servim l'arxiu estàtic
