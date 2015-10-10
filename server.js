@@ -125,6 +125,26 @@ var SampleApp = function() {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.cache_get('index.html') );
         };
+		
+		self.routes['/mysql'] = function(req, res) {
+			db.query(
+				'select * from jugador',
+				'',
+				function (err, rows) {
+					if (err)
+						throw err;
+					if (rows.length > 0) {
+						var html = "<html><body>Jugadors:";
+						for (var i = 0; i < rows.length; i++) {
+							html += "id:" + rows[i].ID;
+							html += "nick:" + rows[i].NICK;
+						}
+						res.send(html);
+					}
+				}
+            );
+        };
+		
     };
 
 
