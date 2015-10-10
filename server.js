@@ -15,13 +15,13 @@ var mime = require("mime");
 
 //var dispatcher = require('httpdispatcher');
 
-/*var mysql = require("mysql");
+var mysql = require("mysql");
 var db = mysql.createConnection({
     host: "127.0.0.1",
     user: "escacsvdt",
     password: "escacsvdt",
     database: "escacsvdt"
-});*/
+});
 var qs = require("querystring");
 
 
