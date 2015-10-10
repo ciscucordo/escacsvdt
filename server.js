@@ -249,6 +249,33 @@ var SampleApp = function() {
                 //determinem l'arxiu HTML a servir per defecte
                 if (pRequest.url == "/") {
                     filePath = "public/escacsvdt/index.html";
+					
+					
+				//prova!!!
+				} else if (pRequest.url == "/mysql") {
+					var paramsInSql = [];
+					self.db.query(
+						'select * from JUGADOR',
+						[],
+						function (err, rows) {
+							if (err)
+								throw err;
+							if (rows.length > 0) {
+								var html = "<html><body>Jugadors:<br>";
+								for (var i = 0; i < rows.length; i++) {
+									html += "id:" + rows[i].ID;
+									html += "nick:" + rows[i].NICK;
+									html += "<br>";
+								}
+								html += "</body></html>";
+								res.send(html);
+							} else {
+								res.send("<html><body>NOPS!</body></html>");
+							}
+						}
+					);
+					
+					
                 } else {
                     //traduïm un path URL a un path d'arxiu relatiu
                     filePath = "public/escacsvdt/pages" + pRequest.url;
