@@ -128,9 +128,10 @@ var SampleApp = function() {
         };
 		
 		self.routes['/mysql'] = function(req, res) {
+			var paramsInSql = [];
 			self.db.query(
 				'select * from JUGADOR',
-				'',
+				[],
 				function (err, rows) {
 					if (err)
 						throw err;
