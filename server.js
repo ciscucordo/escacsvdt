@@ -16,14 +16,8 @@ var mime = require("mime");
 //var dispatcher = require('httpdispatcher');
 
 var mysql = require("mysql");
-var db = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "escacsvdt",
-    password: "escacsvdt",
-    database: "escacsvdt"
-});
+var db = {};
 var qs = require("querystring");
-
 
 /**
  *  Define the sample application.
@@ -52,6 +46,14 @@ var SampleApp = function() {
             console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
             self.ipaddress = "127.0.0.1";
         };
+		
+		db = mysql.createConnection({
+			host: self.ipaddress,
+			user: "escacsvdt",
+			password: "escacsvdt",
+			database: "escacsvdt"
+		});
+		
     };
 
 
@@ -128,18 +130,22 @@ var SampleApp = function() {
 		
 		self.routes['/mysql'] = function(req, res) {
 			db.query(
-				'select * from jugador',
+				'select * from JUGADOR',
 				'',
 				function (err, rows) {
 					if (err)
 						throw err;
 					if (rows.length > 0) {
-						var html = "<html><body>Jugadors:";
+						var html = "<html><body>Jugadors:<br>";
 						for (var i = 0; i < rows.length; i++) {
 							html += "id:" + rows[i].ID;
 							html += "nick:" + rows[i].NICK;
+							html += "<br>";
 						}
+						html += "</body></html>";
 						res.send(html);
+					} else {
+						res.send("<html><body>NOPS!</body></html>");
 					}
 				}
             );
