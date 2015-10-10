@@ -15,6 +15,15 @@ var mime = require("mime");
 
 //var dispatcher = require('httpdispatcher');
 
+var mysql = require("mysql");
+var db = mysql.createConnection({
+    host: "127.0.0.1",
+    user: "escacsvdt",
+    password: "escacsvdt",
+    database: "escacsvdt"
+});
+var qs = require("querystring");
+
 
 /**
  *  Define the sample application.
@@ -168,4 +177,7 @@ var SampleApp = function() {
 var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
+
+var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
+escacsVdtServerSockets.listenToMe(zapp.app);
 
