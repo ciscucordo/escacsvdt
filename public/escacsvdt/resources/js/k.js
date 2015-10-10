@@ -1,0 +1,1 @@
+var JUGADORLLISTAT_NICK = "jugadorllistat_nick";

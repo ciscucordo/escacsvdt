@@ -1,6 +1,6 @@
 #!/bin/env node
 //  OpenShift sample Node application
-var express = require('express');
+//var express = require('express');
 
 var http = require("http");
 
@@ -56,11 +56,13 @@ var SampleApp = function() {
 		
     };
 
-
+	
     /**
      *  Populate the cache.
      */
-    self.populateCache = function() {
+	self.cache = {};
+    /*
+	self.populateCache = function() {
         if (typeof self.zcache === "undefined") {
             self.zcache = { 'index.html': '' };
         }
@@ -68,14 +70,17 @@ var SampleApp = function() {
         //  Local cache for static content.
         self.zcache['index.html'] = fs.readFileSync('./index.html');
     };
-
+	*/
+	
 
     /**
      *  Retrieve entry (content) from cache.
      *  @param {string} key  Key identifying content to retrieve from cache.
      */
-    self.cache_get = function(key) { return self.zcache[key]; };
-
+    /*
+	self.cache_get = function(key) { return self.zcache[key]; };
+	*/
+	
 
     /**
      *  terminator === the termination handler
@@ -115,7 +120,8 @@ var SampleApp = function() {
     /**
      *  Create the routing table entries + handlers for the application.
      */
-    self.createRoutes = function() {
+    /*
+	self.createRoutes = function() {
         self.routes = { };
 
         self.routes['/asciimo'] = function(req, res) {
@@ -153,20 +159,126 @@ var SampleApp = function() {
         };
 		
     };
+	*/
+	
+	
+	//guardem els arxius a enviar en cache, perquè l'accés a memòria és més ràpid que l'accés a disc
+    function serveStatic(pResponse, pCache, pAbsPath) {
+        //mirem si l'arxiu ja està en memòria
+        if (pCache[pAbsPath]) {
+            //enviem l'arxiu de memòria
+            sendFile(pResponse, pAbsPath, pCache[pAbsPath]);
+        } else {
+            //mirem si l'arxiu existeix en disc
+            fs.exists(pAbsPath, function (pExists) {
+                if (pExists) {
+                    //llegim l'arxiu de disc
+                    fs.readFile(pAbsPath, function (pErr, pData) {
+                        if (pErr) {
+                            send404(pResponse);
+                        } else {
+                            pCache[pAbsPath] = pData;
+                            //enviem l'arxiu des de disc
+                            sendFile(pResponse, pAbsPath, pData);
+                        }
+                    });
+                } else {
+                    send404(pResponse);
+                }
+            });
+        }
+    }
+    
 
+    function parseReceivedData(pRequest, pCb) {
+        var body = "";
+        pRequest.setEncoding("utf8");
+        pRequest.on("data", function (pChunk) {
+            body += pChunk;
+        });
+        pRequest.on("end", function () {
+            var data = qs.parse(body);
+            pCb(data);
+        });
+    }
+
+    //enviar un missatge d'error si la petició fa referència a un recurs que no existeix
+    function send404(pResponse) {
+        pResponse.writeHead(404, {"Content-Type": "text/plain"});
+        pResponse.write("Error 404: recurs no trobat.");
+        pResponse.end();
+    }
+
+    //primer s'escriu la capçalera HTTP i llavors s'envia amb el contingut del arxius
+    function sendFile(pResponse, pFilePath, pFileContents) {
+        pResponse.writeHead(
+                200,
+                {"content-type": mime.lookup(path.basename(pFilePath))}
+        );
+        pResponse.end(pFileContents);
+    }
+
+    function sendHtml(pResponse, pHtml) {
+        pResponse.setHeader("Content-Type", "text/html");
+        pResponse.setHeader("Content-Length", Buffer.byteLength(pHtml));
+        pResponse.end(pHtml);
+    }
+
+    function sendJson(pResponse, pJson) {
+        if (pJson instanceof Array === true) {
+            pJson = JSON.stringify(pJson);
+        }
+        pResponse.setHeader("Content-Type", "application/json;charset=UTF-8");
+        pResponse.setHeader("Content-Length", Buffer.byteLength(pJson));
+        pResponse.end(pJson);
+    }
+	
+
+	self.onRequest = function (pRequest, pResponse) {
+
+        // before we process any part of the request, let's give it a session!
+        session(pRequest, pResponse, function (pRequest, pResponse) {
+
+            var filePath = false;
+            //var isMySqlOp = doMySqlOp(pRequest, pResponse);
+            //var isSessionOp = doSessionOp(pRequest, pResponse);
+
+            //dispatcher.dispatch(pRequest, pResponse);
+            //si la petició no és de BBDD, llavors servim l'arxiu demanat!!!
+            //if (isMySqlOp === false && isSessionOp === false) {
+                //determinem l'arxiu HTML a servir per defecte
+                if (pRequest.url == "/") {
+                    filePath = "public/escacsvdt/index.html";
+                } else {
+                    //traduïm un path URL a un path d'arxiu relatiu
+                    filePath = "public/escacsvdt/pages" + pRequest.url;
+                }
+                var absPath = filePath;
+                //servim l'arxiu estàtic
+                serveStatic(pResponse, self.cache, absPath);
+            //}
+
+        });
+
+    };
 
     /**
      *  Initialize the server (express) and create the routes and register
      *  the handlers.
      */
     self.initializeServer = function() {
-        self.createRoutes();
-        self.app = express.createServer();
+        
+		self.app = http.createServer(self.onRequest);
+		//self.createRoutes();
+        //self.app = express.createServer();
+		
+		//var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
+		//escacsVdtServerSockets.listenToMe(self.app);
 
         //  Add handlers for the app (from the routes).
-        for (var r in self.routes) {
+        /*for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
-        }
+        }*/
     };
 
 
@@ -175,7 +287,7 @@ var SampleApp = function() {
      */
     self.initialize = function() {
         self.setupVariables();
-        self.populateCache();
+        //self.populateCache();
         self.setupTerminationHandlers();
 
         // Create the express server and routes.
@@ -205,6 +317,3 @@ var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
 
-/*var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
-escacsVdtServerSockets.listenToMe(zapp.app);
-*/
