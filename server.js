@@ -47,11 +47,11 @@ var SampleApp = function() {
         };
 		
 		self.db = mysql.createConnection({
-			host: process.env.OPENSHIFT_MYSQL_DB_HOST,
-			user: process.env.OPENSHIFT_MYSQL_DB_USERNAME,
-			password: process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
-			port: process.env.OPENSHIFT_MYSQL_DB_PORT,
-			database: "escacsvdt"
+			host: process.env.OPENSHIFT_MYSQL_DB_HOST || self.ipaddress,
+			user: process.env.OPENSHIFT_MYSQL_DB_USERNAME || 'escacsvdt',
+			password: process.env.OPENSHIFT_MYSQL_DB_PASSWORD || 'escacsvdt',
+			port: process.env.OPENSHIFT_MYSQL_DB_PORT || 3306,
+			database: process.env.OPENSHIFT_GEAR_NAME || 'escacsvdt'
 		});
 		
     };
