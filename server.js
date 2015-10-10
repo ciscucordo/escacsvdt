@@ -178,6 +178,6 @@ var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
 
-var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
+/*var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
 escacsVdtServerSockets.listenToMe(zapp.app);
-
+*/
