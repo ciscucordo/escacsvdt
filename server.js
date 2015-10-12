@@ -243,6 +243,7 @@ var SampleApp = function() {
             //var isMySqlOp = doMySqlOp(pRequest, pResponse);
             //var isSessionOp = doSessionOp(pRequest, pResponse);
 
+			
             //dispatcher.dispatch(pRequest, pResponse);
             //si la petició no és de BBDD, llavors servim l'arxiu demanat!!!
             //if (isMySqlOp === false && isSessionOp === false) {
