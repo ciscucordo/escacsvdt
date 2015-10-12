@@ -268,9 +268,9 @@ var SampleApp = function() {
 									html += "<br>";
 								}
 								html += "</body></html>";
-								res.send(html);
+								pResponse.send(html);
 							} else {
-								res.send("<html><body>NOPS!</body></html>");
+								pResponse.send("<html><body>NOPS!</body></html>");
 							}
 						}
 					);
