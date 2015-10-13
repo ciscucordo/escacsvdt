@@ -43,8 +43,7 @@ var SampleApp = function() {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
             //  allows us to run/test the app locally.
             console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
-            self.ipaddress = "localhost";
-            //self.ipaddress = "127.0.0.1";
+            self.ipaddress = "127.0.0.1";
         };
 		
 		self.db = mysql.createConnection({
@@ -258,9 +257,9 @@ var SampleApp = function() {
                                     
                                     filePath = false;
                                     
-                                    doLogin(pRequest, pResponse);
                                     
-					/*var paramsInSql = [];
+                                    parseReceivedData(pRequest, function (pRow) {
+                                        var paramsInSql = [];
                                         self.db.query(
 						'select * from JUGADOR',
 						paramsInSql,
@@ -275,12 +274,15 @@ var SampleApp = function() {
 									html += "<br>";
 								}
 								html += "</body></html>";
-								pResponse.send(html);
+                                                                sendHtml(pResponse, html);
+								//pResponse.send(html);
 							} else {
-								pResponse.send("<html><body>NOPS!</body></html>");
+                                                            sendHtml(pResponse, "<html><body>NOPS!</body></html>");
+								//pResponse.send("<html><body>NOPS!</body></html>");
 							}
 						}
-					);*/
+					);
+                                });
 					
 					
                 } else {
