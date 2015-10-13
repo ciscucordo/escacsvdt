@@ -257,7 +257,10 @@ var SampleApp = function() {
 				} else if (pRequest.url == "/mysql") {
                                     
                                     filePath = false;
-					var paramsInSql = [];
+                                    
+                                    doLogin(pRequest, pResponse);
+                                    
+					/*var paramsInSql = [];
                                         self.db.query(
 						'select * from JUGADOR',
 						paramsInSql,
@@ -277,7 +280,7 @@ var SampleApp = function() {
 								pResponse.send("<html><body>NOPS!</body></html>");
 							}
 						}
-					);
+					);*/
 					
 					
                 } else {
@@ -296,6 +299,40 @@ var SampleApp = function() {
         });
 
     };
+
+
+function doLogin(pRequest, pResponse) {
+        parseReceivedData(pRequest, function (pRow) {
+            var sql = " SELECT * FROM jugador " +
+                    " WHERE 1=1 ";
+            var paramsInSql = [];
+            for (var propertyName in pRow) {
+                sql += " AND " + propertyName + "=? ";
+                paramsInSql.push(pRow[propertyName]);
+            }
+            self.db.query(
+                    sql,
+                    paramsInSql,
+                    function (err, rows) {
+                        if (err)
+                            throw err;
+                        if (rows.length === 1) {
+                            pRequest.session.idJugador = rows[0].ID;
+                            pRequest.session.nickJugador = rows[0].NICK;
+
+                            doUpdateHoraUltimLogin(pRequest.session.idJugador);
+                            doUpdateStateJugador(pRequest.session.idJugador, 0);
+
+                            //servim el resultat de la query en format JSON
+                            sendJson(pResponse, rows);
+                        } else {
+                            sendJson(pResponse, []);
+                        }
+                    }
+            );
+
+        });
+    }
 
     /**
      *  Initialize the server (express) and create the routes and register
