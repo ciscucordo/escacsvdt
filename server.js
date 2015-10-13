@@ -43,7 +43,8 @@ var SampleApp = function() {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
             //  allows us to run/test the app locally.
             console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
-            self.ipaddress = "127.0.0.1";
+            self.ipaddress = "localhost";
+            //self.ipaddress = "127.0.0.1";
         };
 		
 		self.db = mysql.createConnection({
@@ -254,10 +255,12 @@ var SampleApp = function() {
 					
 				//////////////prova jol///////////////////!!!
 				} else if (pRequest.url == "/mysql") {
+                                    
+                                    filePath = false;
 					var paramsInSql = [];
-					self.db.query(
+                                        self.db.query(
 						'select * from JUGADOR',
-						[],
+						paramsInSql,
 						function (err, rows) {
 							if (err)
 								throw err;
@@ -281,9 +284,13 @@ var SampleApp = function() {
                     //traduïm un path URL a un path d'arxiu relatiu
                     filePath = "public/escacsvdt" + pRequest.url;
                 }
-                var absPath = filePath;
-                //servim l'arxiu estàtic
-                serveStatic(pResponse, self.cache, absPath);
+                
+                if (filePath != false) {
+                
+                    var absPath = filePath;
+                    //servim l'arxiu estàtic
+                    serveStatic(pResponse, self.cache, absPath);
+                }
             //}
 
         });
