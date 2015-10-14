@@ -101,7 +101,7 @@ var SampleApp = function () {
         //mirem si l'arxiu ja està en memòria
         if (pCache[pAbsPath]) {
             //enviem l'arxiu de memòria
-            sendFile(pResponse, pAbsPath, pCache[pAbsPath]);
+            utils.sendFile(pResponse, pAbsPath, pCache[pAbsPath]);
         } else {
             //mirem si l'arxiu existeix en disc
             fs.exists(pAbsPath, function (pExists) {
@@ -109,15 +109,15 @@ var SampleApp = function () {
                     //llegim l'arxiu de disc
                     fs.readFile(pAbsPath, function (pErr, pData) {
                         if (pErr) {
-                            send404(pResponse);
+                            utils.send404(pResponse);
                         } else {
                             pCache[pAbsPath] = pData;
                             //enviem l'arxiu des de disc
-                            sendFile(pResponse, pAbsPath, pData);
+                            utils.sendFile(pResponse, pAbsPath, pData);
                         }
                     });
                 } else {
-                    send404(pResponse);
+                    utils.send404(pResponse);
                 }
             });
         }
