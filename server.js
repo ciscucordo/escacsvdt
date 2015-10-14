@@ -10,13 +10,12 @@ var session = require('./node_modules_custom/session.js/lib/core').session;
 //filesystem
 var fs = require("fs");
 
-var path = require("path");
-var mime = require("mime");
+
 
 //var dispatcher = require('httpdispatcher');
 
 var utils = require("./lib/utils");
-
+var dbLib = require("./lib/escacs_vdt_server_mysql");
 
 /**
  *  Define the sample application.
@@ -47,7 +46,7 @@ var SampleApp = function () {
         }
         ;
 
-        
+
 
     };
 
@@ -56,8 +55,8 @@ var SampleApp = function () {
      *  Populate the cache.
      */
     self.cache = {};
-    
-    
+
+
     /**
      *  terminator === the termination handler
      *  Terminate server on receipt of the specified signal.
@@ -124,143 +123,76 @@ var SampleApp = function () {
         }
     }
 
-    //enviar un missatge d'error si la petició fa referència a un recurs que no existeix
-    function send404(pResponse) {
-        pResponse.writeHead(404, {"Content-Type": "text/plain"});
-        pResponse.write("Error 404: recurs no trobat.");
-        pResponse.end();
-    }
 
-    //primer s'escriu la capçalera HTTP i llavors s'envia amb el contingut del arxius
-    function sendFile(pResponse, pFilePath, pFileContents) {
-        pResponse.writeHead(
-                200,
-                {"Content-Type": mime.lookup(path.basename(pFilePath))}
-        );
-        pResponse.end(pFileContents);
-    }
-
-    function sendHtml(pResponse, pHtml) {
-        pResponse.setHeader("Content-Type", "text/html");
-        pResponse.setHeader("Content-Length", Buffer.byteLength(pHtml));
-        pResponse.end(pHtml);
-    }
-
-    function sendJson(pResponse, pJson) {
-        if (pJson instanceof Array === true) {
-            pJson = JSON.stringify(pJson);
+    function doSessionOp(pRequest, pResponse) {
+        var isSessionOp = false;
+        var op = pRequest.url.substring(1, pRequest.url.length);
+        switch (op) {
+            case "doGetSession":
+                isSessionOp = true;
+                utils.sendJson(pResponse, [{
+                        idJugador: pRequest.session.idJugador,
+                        nickJugador: pRequest.session.nickJugador,
+                        idRepte: pRequest.session.idRepte,
+                        tipusJugador: pRequest.session.tipusJugador,
+                        elMeuColor: pRequest.session.elMeuColor,
+                        temps: pRequest.session.temps,
+                        tempsIncrement: pRequest.session.tempsIncrement,
+                        idJugadorContrincant: pRequest.session.idJugadorContrincant
+                    }]);
+                break;
+            case "doUpdateRepteSession":
+                isSessionOp = true;
+                utils.parseReceivedData(pRequest, function (pParams) {
+                    pRequest.session.idRepte = pParams["idRepte"];
+                    pRequest.session.tipusJugador = pParams["tipusJugador"];
+                    pRequest.session.elMeuColor = pParams["elMeuColor"];
+                    pRequest.session.temps = pParams["temps"];
+                    pRequest.session.tempsIncrement = pParams["tempsIncrement"];
+                    pRequest.session.ambEvaluacioElo = pParams["ambEvaluacioElo"];
+                    pRequest.session.idJugadorContrincant = pParams["idJugadorContrincant"];
+                    utils.sendJson(pResponse, [{
+                            idJugador: pRequest.session.idJugador,
+                            nickJugador: pRequest.session.nickJugador,
+                            idRepte: pRequest.session.idRepte,
+                            tipusJugador: pRequest.session.tipusJugador,
+                            elMeuColor: pRequest.session.elMeuColor,
+                            temps: pRequest.session.temps,
+                            tempsIncrement: pRequest.session.tempsIncrement,
+                            ambEvaluacioElo: pRequest.session.ambEvaluacioElo,
+                            idJugadorContrincant: pRequest.session.idJugadorContrincant
+                        }]);
+                });
+                break;
         }
-        pResponse.setHeader("Content-Type", "application/json;charset=UTF-8");
-        pResponse.setHeader("Content-Length", Buffer.byteLength(pJson));
-        pResponse.end(pJson);
+        return isSessionOp;
     }
 
 
     self.onRequest = function (pRequest, pResponse) {
-
+        var pathRootSite = "public/escacsvdt";
         // before we process any part of the request, let's give it a session!
         session(pRequest, pResponse, function (pRequest, pResponse) {
-
             var filePath = false;
-            //var isMySqlOp = doMySqlOp(pRequest, pResponse);
-            //var isSessionOp = doSessionOp(pRequest, pResponse);
-
-
+            var isMySqlOp = dbLib.doMySqlOp(process, pRequest, pResponse);
+            var isSessionOp = doSessionOp(pRequest, pResponse);
             //dispatcher.dispatch(pRequest, pResponse);
             //si la petició no és de BBDD, llavors servim l'arxiu demanat!!!
-            //if (isMySqlOp === false && isSessionOp === false) {
-            //determinem l'arxiu HTML a servir per defecte
-            if (pRequest.url == "/") {
-                filePath = "public/escacsvdt/index.html";
-
-
-            } else if (pRequest.url == "/hello") {
-                filePath = false;
-                sendHtml(pResponse, utils.hello());
-
-                //////////////prova jol///////////////////!!!
-            } else if (pRequest.url == "/mysql") {
-
-                filePath = false;
-
-
-                parseReceivedData(pRequest, function (pRow) {
-                    var paramsInSql = [];
-                    self.db.query(
-                            'select * from JUGADOR',
-                            paramsInSql,
-                            function (err, rows) {
-                                if (err)
-                                    throw err;
-                                if (rows.length > 0) {
-                                    var html = "<html><body>Jugadors:<br>";
-                                    for (var i = 0; i < rows.length; i++) {
-                                        html += "id:" + rows[i].ID;
-                                        html += "nick:" + rows[i].NICK;
-                                        html += "<br>";
-                                    }
-                                    html += "</body></html>";
-                                    sendHtml(pResponse, html);
-                                    //pResponse.send(html);
-                                } else {
-                                    sendHtml(pResponse, "<html><body>NOPS!</body></html>");
-                                    //pResponse.send("<html><body>NOPS!</body></html>");
-                                }
-                            }
-                    );
-                });
-
-
-            } else {
-                //traduïm un path URL a un path d'arxiu relatiu
-                filePath = "public/escacsvdt" + pRequest.url;
-            }
-
-            if (filePath != false) {
-
+            if (isMySqlOp === false && isSessionOp === false) {
+                //determinem l'arxiu HTML a servir per defecte
+                if (pRequest.url === "/") {
+                    filePath = pathRootSite + "/index.html";
+                } else {
+                    //traduïm un path URL a un path d'arxiu relatiu
+                    filePath = pathRootSite + pRequest.url;
+                }
                 var absPath = filePath;
                 //servim l'arxiu estàtic
                 serveStatic(pResponse, self.cache, absPath);
             }
-            //}
-
         });
-
     };
 
-
-    function doLogin(pRequest, pResponse) {
-        parseReceivedData(pRequest, function (pRow) {
-            var sql = " SELECT * FROM jugador " +
-                    " WHERE 1=1 ";
-            var paramsInSql = [];
-            for (var propertyName in pRow) {
-                sql += " AND " + propertyName + "=? ";
-                paramsInSql.push(pRow[propertyName]);
-            }
-            self.db.query(
-                    sql,
-                    paramsInSql,
-                    function (err, rows) {
-                        if (err)
-                            throw err;
-                        if (rows.length === 1) {
-                            pRequest.session.idJugador = rows[0].ID;
-                            pRequest.session.nickJugador = rows[0].NICK;
-
-                            doUpdateHoraUltimLogin(pRequest.session.idJugador);
-                            doUpdateStateJugador(pRequest.session.idJugador, 0);
-
-                            //servim el resultat de la query en format JSON
-                            sendJson(pResponse, rows);
-                        } else {
-                            sendJson(pResponse, []);
-                        }
-                    }
-            );
-
-        });
-    }
 
     /**
      *  Initialize the server (express) and create the routes and register
@@ -289,7 +221,6 @@ var SampleApp = function () {
         self.setupVariables();
         //self.populateCache();
         self.setupTerminationHandlers();
-
         // Create the express server and routes.
         self.initializeServer();
     };
