@@ -174,7 +174,7 @@ var SampleApp = function () {
                 filePath = "public/escacsvdt/index.html";
 
 
-            } else if (pRequest.url == "hello") {
+            } else if (pRequest.url == "/hello") {
                 filePath = false;
                 sendHtml(pResponse, utils.hello());
 
