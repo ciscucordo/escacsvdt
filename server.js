@@ -170,7 +170,7 @@ var SampleApp = function () {
 
 
     self.onRequest = function (pRequest, pResponse) {
-        var pathRootSite = "public/escacsvdt";
+        var rootSitePath = "public/escacsvdt";
         // before we process any part of the request, let's give it a session!
         session(pRequest, pResponse, function (pRequest, pResponse) {
             var filePath = false;
@@ -181,10 +181,10 @@ var SampleApp = function () {
             if (isMySqlOp === false && isSessionOp === false) {
                 //determinem l'arxiu HTML a servir per defecte
                 if (pRequest.url === "/") {
-                    filePath = pathRootSite + "/index.html";
+                    filePath = rootSitePath + "/index.html";
                 } else {
                     //traduïm un path URL a un path d'arxiu relatiu
-                    filePath = pathRootSite + pRequest.url;
+                    filePath = rootSitePath + pRequest.url;
                 }
                 var absPath = filePath;
                 //servim l'arxiu estàtic
