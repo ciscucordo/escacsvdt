@@ -170,7 +170,7 @@ var SampleApp = function () {
 
 
     self.onRequest = function (pRequest, pResponse) {
-        var rootSitePath = "public/escacsvdt";
+        var rootSitePath = "public/escacsvdt"; 
         // before we process any part of the request, let's give it a session!
         session(pRequest, pResponse, function (pRequest, pResponse) {
             var filePath = false;
