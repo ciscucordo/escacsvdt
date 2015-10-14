@@ -16,7 +16,7 @@ var mime = require("mime");
 //var dispatcher = require('httpdispatcher');
 
 var mysql = require("mysql");
-var qs = require("querystring");
+
 
 /**
  *  Define the sample application.
@@ -130,19 +130,6 @@ var SampleApp = function () {
         }
     }
 
-
-    function parseReceivedData(pRequest, pCb) {
-        var body = "";
-        pRequest.setEncoding("utf8");
-        pRequest.on("data", function (pChunk) {
-            body += pChunk;
-        });
-        pRequest.on("end", function () {
-            var data = qs.parse(body);
-            pCb(data);
-        });
-    }
-
     //enviar un missatge d'error si la petició fa referència a un recurs que no existeix
     function send404(pResponse) {
         pResponse.writeHead(404, {"Content-Type": "text/plain"});
@@ -154,7 +141,7 @@ var SampleApp = function () {
     function sendFile(pResponse, pFilePath, pFileContents) {
         pResponse.writeHead(
                 200,
-                {"content-type": mime.lookup(path.basename(pFilePath))}
+                {"Content-Type": mime.lookup(path.basename(pFilePath))}
         );
         pResponse.end(pFileContents);
     }
