@@ -15,7 +15,7 @@ var mime = require("mime");
 
 //var dispatcher = require('httpdispatcher');
 
-var mysql = require("mysql");
+var utils = require("./lib/utils");
 
 
 /**
@@ -47,13 +47,7 @@ var SampleApp = function () {
         }
         ;
 
-        self.db = mysql.createConnection({
-            host: process.env.OPENSHIFT_MYSQL_DB_HOST || self.ipaddress,
-            user: process.env.OPENSHIFT_MYSQL_DB_USERNAME || 'escacsvdt',
-            password: process.env.OPENSHIFT_MYSQL_DB_PASSWORD || 'escacsvdt',
-            port: process.env.OPENSHIFT_MYSQL_DB_PORT || 3306,
-            database: process.env.OPENSHIFT_GEAR_NAME || 'escacsvdt'
-        });
+        
 
     };
 
@@ -179,6 +173,10 @@ var SampleApp = function () {
             if (pRequest.url == "/") {
                 filePath = "public/escacsvdt/index.html";
 
+
+            } else if (pRequest.url == "hello") {
+                filePath = false;
+                sendHtml(pResponse, utils.hello());
 
                 //////////////prova jol///////////////////!!!
             } else if (pRequest.url == "/mysql") {
