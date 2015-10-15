@@ -251,25 +251,6 @@ function doDinsSalaRepteAcceptat(pJsonMirarRepteAcceptat)
                 idJugadorContrincant: pJsonMirarRepteAcceptat["idJugadorContrincant"]
             });
             window.location = "./sala.htm";
-            /*$.ajax({
-             type: "post",
-             url: "sala.htm",
-             datatype: "html",
-             data: "",
-             async: false,
-             cache: false,
-             timeout: 3000,
-             success: function(data, textStatus, jqXHR) {
-             $('body').html(data);
-             $("#cocoloco").html("havia una vez");
-             },
-             error: function(jqXHR, textStatus, errorThrown) {
-             //
-             },
-             complete: function(jqXHR, textStatus) {
-             //
-             }
-             });*/
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(errorThrown);
