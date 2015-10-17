@@ -3,6 +3,7 @@
 //var express = require('express');
 
 var http = require("http");
+var socketio = require("socket.io");
 
 // special magic, now all requests have sessions!
 var session = require('./node_modules_custom/session.js/lib/core').session;
@@ -16,7 +17,6 @@ var fs = require("fs");
 
 var utils = require("./lib/utils");
 var dbLib = require("./lib/escacs_vdt_server_mysql");
-var socketsLib = require("./lib/escacs_vdt_server_sockets");
 
 /**
  *  Define the sample application.
@@ -41,7 +41,7 @@ var SampleApp = function () {
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
-            //  allows us to run/test the app locally.
+            //  allows us to run/test the server locally.
             console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
             self.ipaddress = "127.0.0.1";
         }
@@ -65,7 +65,7 @@ var SampleApp = function () {
      */
     self.terminator = function (sig) {
         if (typeof sig === "string") {
-            console.log('%s: Received %s - terminating sample app ...',
+            console.log('%s: Received %s - terminating sample server ...',
                     Date(Date.now()), sig);
             process.exit(1);
         }
@@ -171,7 +171,7 @@ var SampleApp = function () {
 
 
     self.onRequest = function (pRequest, pResponse) {
-        var rootSitePath = "public/escacsvdt"; 
+        var rootSitePath = "public/escacsvdt";
         // before we process any part of the request, let's give it a session!
         session(pRequest, pResponse, function (pRequest, pResponse) {
             var filePath = false;
@@ -200,20 +200,64 @@ var SampleApp = function () {
      *  the handlers.
      */
     self.initializeServer = function () {
-
-        self.app = http.createServer(self.onRequest);
+        self.server = http.createServer(self.onRequest);
         //self.createRoutes();
-        //self.app = express.createServer();
-
-        socketsLib.listenToMe(self.app);
+        //self.server = express.createServer();
         //var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
-        //escacsVdtServerSockets.listenToMe(self.app);
+        //escacsVdtServerSockets.listenToMe(self.server);
 
         //  Add handlers for the app (from the routes).
         /*for (var r in self.routes) {
-         self.app.get(r, self.routes[r]);
+         self.server.get(r, self.routes[r]);
          }*/
-        
+    };
+
+
+    // socket.io initialization on the server side
+    self.initializeSocketIO = function () {
+        self.io = socketio.listen(self.server);
+        //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
+        self.io.set("log level", 1);
+        self.io.enable('browser client minification');  // send minified client
+        self.io.enable('browser client etag');          // apply etag caching logic based on version number
+        self.io.enable('browser client gzip');          // gzip the file
+        self.io.set('log level', 1);                    // reduce logging
+        self.io.set('transports', [
+            'websocket'
+        ]);
+        return this;
+    };
+
+    self.addSocketIOEvents = function () {
+        //es defineix un handle de cada connexió d'usuari invitat
+        io.sockets.on("connection", function (pSocket) {
+            //assignem el nick
+            //handleNickBroadcasting(pSocket);
+            //creació/canvi de l'habitació
+            handleRoomJoining(pSocket);
+            //enviar/rebre jugades
+            handleMoveBroadcasting(pSocket);
+            //guestNumber = assignGuestName(pSocket, guestNumber, nickNames, namesUsed);
+            //col·loquem a l'usuari invitat a una habitació 
+            //joinRoom(pSocket);
+            //handle dels missatges de l'usuari
+            handleMessageBroadcasting(pSocket, nickNames);
+            //dóna a l'usuari una llista d'usuaris de l'habitació
+            pSocket.on("rooms", function () {
+                //pSocket.emit("rooms", io.sockets.adapter.rooms);
+                pSocket.emit("rooms", io.sockets.manager.rooms);
+            });
+            handleProposeDrawBroadcasting(pSocket);
+            handleReplyProposeDrawBroadcasting(pSocket);
+            //es neteja quan l'usuari es desconnecta
+            handleClientDisconnection(pSocket, nickNames, namesUsed);
+        });
+        /*self.io.sockets.on('connection', function (socket) {
+            socket.emit('news', {hello: 'world'});
+            socket.on('my other event', function (data) {
+                console.log(data);
+            });
+        });*/
     };
 
 
@@ -224,8 +268,10 @@ var SampleApp = function () {
         self.setupVariables();
         //self.populateCache();
         self.setupTerminationHandlers();
+
         // Create the express server and routes.
         self.initializeServer();
+        self.initializeSocketIO().addSocketIOEvents();
     };
 
 
