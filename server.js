@@ -213,6 +213,7 @@ var SampleApp = function () {
     };
 
 
+    //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     // socket.io initialization on the server side
     self.initializeSocketIO = function () {
         self.io = socketio.listen(self.server);
@@ -228,7 +229,8 @@ var SampleApp = function () {
         return this;
     };
 
-    self.addSocketIOEvents = function () {
+    //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
+    self.addSocketIOEvenxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxts = function () {
         //es defineix un handle de cada connexió d'usuari invitat
         io.sockets.on("connection", function (pSocket) {
             //assignem el nick
