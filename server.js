@@ -16,6 +16,7 @@ var fs = require("fs");
 
 var utils = require("./lib/utils");
 var dbLib = require("./lib/escacs_vdt_server_mysql");
+var socketsLib = require("./lib/escacs_vdt_server_sockets");
 
 /**
  *  Define the sample application.
@@ -204,6 +205,7 @@ var SampleApp = function () {
         //self.createRoutes();
         //self.app = express.createServer();
 
+        socketsLib.listenToMe(self.app);
         //var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
         //escacsVdtServerSockets.listenToMe(self.app);
 
@@ -211,6 +213,7 @@ var SampleApp = function () {
         /*for (var r in self.routes) {
          self.app.get(r, self.routes[r]);
          }*/
+        
     };
 
 
