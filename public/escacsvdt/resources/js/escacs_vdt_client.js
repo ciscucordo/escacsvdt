@@ -134,7 +134,9 @@ var canBeginGame = false;
 
 $(document).ready(function () {
 
-    socket = io.connect();
+    //per OPENSHIFT
+    var socket = io.connect('ws://vdt-6qdomain.rhcloud.com:8000/');
+    //socket = io.connect();
 
     jsonSession = doGetSession();
     jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].idJugadorContrincant);
