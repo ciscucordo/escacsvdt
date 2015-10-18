@@ -257,7 +257,7 @@ var SampleApp = function () {
 
         // Create the express server and routes.
         self.initializeServer();
-        self.initializeSocketIO();
+        //self.initializeSocketIO();
     };
 
 
