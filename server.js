@@ -222,7 +222,8 @@ var SampleApp = function () {
     self.initializeSocketIO = function () {
         
         self.io = socketio.listen(self.server);
-        
+        //TEMPORAL!!!!!!!!!
+        /*
         //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
         self.io.set("log level", 1);
         self.io.enable('browser client minification');  // send minified client
@@ -233,8 +234,7 @@ var SampleApp = function () {
             'websocket'
         ]);
         
-        //TEMPORAL!!!!!!!!!
-        /*var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
+        var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
         escacsVdtServerSockets.addSocketIOEvents(self.io);*/
         
         //return this;
