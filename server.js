@@ -18,7 +18,7 @@ var fs = require("fs");
 var utils = require("./lib/utils");
 
 var dbLib = require("./lib/escacs_vdt_server_mysql");
-//var socketio = require("socket.io");
+var socketio = require("socket.io");
 
 /**
  *  Define the sample application.
@@ -219,7 +219,7 @@ var SampleApp = function () {
 
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     // socket.io initialization on the server side
-    /*self.initializeSocketIO = function () {
+    self.initializeSocketIO = function () {
         
         console.log("FCF:1");
         
@@ -248,7 +248,7 @@ var SampleApp = function () {
         console.log("FCF:5");
         
         //return this;
-    };*/
+    };
 
 
     /**
@@ -261,7 +261,7 @@ var SampleApp = function () {
 
         // Create the express server and routes.
         self.initializeServer();
-        //self.initializeSocketIO();
+        self.initializeSocketIO();
     };
 
 
