@@ -221,7 +221,7 @@ var SampleApp = function () {
     // socket.io initialization on the server side
     self.initializeSocketIO = function () {
         //TEMPORAL!!!!!!!!!
-        /*
+        /**/
         self.io = socketio.listen(self.server);
         
         //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
@@ -235,7 +235,7 @@ var SampleApp = function () {
         ]);
         
         var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
-        escacsVdtServerSockets.addSocketIOEvents(self.io);*/
+        escacsVdtServerSockets.addSocketIOEvents(self.io);
         
         //return this;
     };
