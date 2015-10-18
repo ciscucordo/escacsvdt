@@ -216,7 +216,13 @@ var SampleApp = function () {
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     // socket.io initialization on the server side
     self.initializeSocketIO = function () {
-        self.io = socketio.listen(self.server, se);
+        
+        console.log("FCF:1");
+        
+        self.io = socketio.listen(self.server);
+        
+        console.log("FCF:2");
+        
         //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
         self.io.set("log level", 1);
         self.io.enable('browser client minification');  // send minified client
@@ -227,8 +233,16 @@ var SampleApp = function () {
             'websocket'
         ]);
         
+        console.log("FCF:3");
+        
         var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
+        
+        console.log("FCF:4");
+        
         escacsVdtServerSockets.addSocketIOEvents(self.io);
+        
+        console.log("FCF:5");
+        
         //return this;
     };
 
