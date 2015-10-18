@@ -226,40 +226,11 @@ var SampleApp = function () {
         self.io.set('transports', [
             'websocket'
         ]);
-        return this;
-    };
-
-    //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    self.addSocketIOEvenxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxts = function () {
-        //es defineix un handle de cada connexió d'usuari invitat
-        io.sockets.on("connection", function (pSocket) {
-            //assignem el nick
-            //handleNickBroadcasting(pSocket);
-            //creació/canvi de l'habitació
-            handleRoomJoining(pSocket);
-            //enviar/rebre jugades
-            handleMoveBroadcasting(pSocket);
-            //guestNumber = assignGuestName(pSocket, guestNumber, nickNames, namesUsed);
-            //col·loquem a l'usuari invitat a una habitació 
-            //joinRoom(pSocket);
-            //handle dels missatges de l'usuari
-            handleMessageBroadcasting(pSocket, nickNames);
-            //dóna a l'usuari una llista d'usuaris de l'habitació
-            pSocket.on("rooms", function () {
-                //pSocket.emit("rooms", io.sockets.adapter.rooms);
-                pSocket.emit("rooms", io.sockets.manager.rooms);
-            });
-            handleProposeDrawBroadcasting(pSocket);
-            handleReplyProposeDrawBroadcasting(pSocket);
-            //es neteja quan l'usuari es desconnecta
-            handleClientDisconnection(pSocket, nickNames, namesUsed);
-        });
-        /*self.io.sockets.on('connection', function (socket) {
-            socket.emit('news', {hello: 'world'});
-            socket.on('my other event', function (data) {
-                console.log(data);
-            });
-        });*/
+        
+        var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
+        escacsVdtServerSockets.addSocketIOEvents(self.io);
+        
+        //return this;
     };
 
 
@@ -273,7 +244,7 @@ var SampleApp = function () {
 
         // Create the express server and routes.
         self.initializeServer();
-        self.initializeSocketIO().addSocketIOEvents();
+        self.initializeSocketIO();
     };
 
 
