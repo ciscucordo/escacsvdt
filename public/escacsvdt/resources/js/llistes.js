@@ -241,14 +241,14 @@ function doDinsSalaRepteAcceptat(pJsonMirarRepteAcceptat)
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
             doUpdateRepteSession({
-                idRepte: pJsonMirarRepteAcceptat["IDREPTE"],
-                idPartida: pJsonMirarRepteAcceptat["IDPARTIDA"],
-                tipusJugador: pJsonMirarRepteAcceptat["TIPUSJUGADOR"],
-                elMeuColor: pJsonMirarRepteAcceptat["ELMEUCOLOR"],
-                temps: pJsonMirarRepteAcceptat["TEMPS"],
-                tempsIncrement: pJsonMirarRepteAcceptat["TEMPSINCREMENT"],
-                ambEvaluacioElo: pJsonMirarRepteAcceptat["AMBEVALUACIOELO"],
-                idJugadorContrincant: pJsonMirarRepteAcceptat["IDJUGADORCONTRINCANT"]
+                IDREPTE: pJsonMirarRepteAcceptat["IDREPTE"],
+                IDPARTIDA: pJsonMirarRepteAcceptat["IDPARTIDA"],
+                TIPUSJUGADOR: pJsonMirarRepteAcceptat["TIPUSJUGADOR"],
+                ELMEUCOLOR: pJsonMirarRepteAcceptat["ELMEUCOLOR"],
+                TEMPS: pJsonMirarRepteAcceptat["TEMPS"],
+                TEMPSINCREMENT: pJsonMirarRepteAcceptat["TEMPSINCREMENT"],
+                AMBEVALUACIOELO: pJsonMirarRepteAcceptat["AMBEVALUACIOELO"],
+                IDJUGADORCONTRINCANT: pJsonMirarRepteAcceptat["IDJUGADORCONTRINCANT"]
             });
             window.location = "./sala.htm";
         },

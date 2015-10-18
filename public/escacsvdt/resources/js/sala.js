@@ -46,7 +46,7 @@ $(document).ready(function ()
     
     jsonSession = doGetSession();
     
-    param_idRepte = jsonSession[0].idRepte;
+    param_idRepte = jsonSession[0].IDREPTE;
     var jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
     if (jsonPartida.length > 0) {
         param_idPartida = jsonPartida[0].ID;
@@ -68,15 +68,15 @@ $(document).ready(function ()
         }, 1000);
     }
     
-    var jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].idJugadorContrincant);
+    var jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
     var nickJugadorContrincant = jsonJugadorContrincant[0].NICK;
     $("#labelJugadorTop").html(nickJugadorContrincant);
-    $("#labelTempsTop").html(secondsToHms(jsonSession[0].temps));
-    $("#hiddenTempsTop").val(jsonSession[0].temps);
-    $("#labelJugadorBottom").html(jsonSession[0].nickJugador);
-    $("#labelTempsBottom").html(secondsToHms(jsonSession[0].temps));
-    $("#hiddenTempsBottom").val(jsonSession[0].temps);
-    if (jsonSession[0].elMeuColor == "B") {
+    $("#labelTempsTop").html(secondsToHms(jsonSession[0].TEMPS));
+    $("#hiddenTempsTop").val(jsonSession[0].TEMPS);
+    $("#labelJugadorBottom").html(jsonSession[0].NICKJUGADOR);
+    $("#labelTempsBottom").html(secondsToHms(jsonSession[0].TEMPS));
+    $("#hiddenTempsBottom").val(jsonSession[0].TEMPS);
+    if (jsonSession[0].ELMEUCOLOR == "B") {
         window.posCol = new PosicioColor("bottom", "top");
     } else {
         window.posCol = new PosicioColor("top", "bottom");
@@ -103,7 +103,7 @@ $(document).ready(function ()
 
     //el primer torn sempre és de les BLANQUES ("B") !!!
     window.colorTorn = "B";
-    param_colorUsuari = jsonSession[0].elMeuColor;
+    param_colorUsuari = jsonSession[0].ELMEUCOLOR;
     
     console.log("param_idRepte:", param_idRepte, " param_idPartida:", param_idPartida);
 
@@ -118,10 +118,10 @@ function doSortir()
 function doCrearPartida()
 {
     var jsonSession = doGetSession();
-    var idJugador = jsonSession[0].idJugador;
-    var idJugadorContrincant = jsonSession[0].idJugadorContrincant; 
-    var idRepte = jsonSession[0].idRepte;
-    var elMeuColor = jsonSession[0].elMeuColor;
+    var idJugador = jsonSession[0].IDJUGADOR;
+    var idJugadorContrincant = jsonSession[0].IDJUGADORCONTRINCANT; 
+    var idRepte = jsonSession[0].IDREPTE;
+    var elMeuColor = jsonSession[0].ELMEUCOLOR;
     var idJugadorBlanques, idJugadorNegres;
     switch (elMeuColor) {
         case "B":
@@ -133,9 +133,9 @@ function doCrearPartida()
             idJugadorNegres = idJugador;
             break;
     }
-    var temps = jsonSession[0].temps;
-    var tempsIncrement = jsonSession[0].tempsIncrement;
-    var ambEvaluacioElo = jsonSession[0].ambEvaluacioElo;
+    var temps = jsonSession[0].TEMPS;
+    var tempsIncrement = jsonSession[0].TEMPSINCREMENT;
+    var ambEvaluacioElo = jsonSession[0].AMBEVALUACIOELO;
     
     var idPartida = "";
     $.ajax({

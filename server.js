@@ -134,36 +134,36 @@ var SampleApp = function () {
             case "doGetSession":
                 isSessionOp = true;
                 utils.sendJson(pResponse, [{
-                        idJugador: pRequest.session.idJugador,
-                        nickJugador: pRequest.session.nickJugador,
-                        idRepte: pRequest.session.idRepte,
-                        tipusJugador: pRequest.session.tipusJugador,
-                        elMeuColor: pRequest.session.elMeuColor,
-                        temps: pRequest.session.temps,
-                        tempsIncrement: pRequest.session.tempsIncrement,
-                        idJugadorContrincant: pRequest.session.idJugadorContrincant
+                        IDJUGADOR: pRequest.session.IDJUGADOR,
+                        NICKJUGADOR: pRequest.session.NICKJUGADOR,
+                        IDREPTE: pRequest.session.IDREPTE,
+                        TIPUSJUGADOR: pRequest.session.TIPUSJUGADOR,
+                        ELMEUCOLOR: pRequest.session.ELMEUCOLOR,
+                        TEMPS: pRequest.session.TEMPS,
+                        TEMPSINCREMENT: pRequest.session.TEMPSINCREMENT,
+                        IDJUGADORCONTRINCANT: pRequest.session.IDJUGADORCONTRINCANT
                     }]);
                 break;
             case "doUpdateRepteSession":
                 isSessionOp = true;
                 utils.parseReceivedData(pRequest, function (pParams) {
-                    pRequest.session.idRepte = pParams["idRepte"];
-                    pRequest.session.tipusJugador = pParams["tipusJugador"];
-                    pRequest.session.elMeuColor = pParams["elMeuColor"];
-                    pRequest.session.temps = pParams["temps"];
-                    pRequest.session.tempsIncrement = pParams["tempsIncrement"];
-                    pRequest.session.ambEvaluacioElo = pParams["ambEvaluacioElo"];
-                    pRequest.session.idJugadorContrincant = pParams["idJugadorContrincant"];
+                    pRequest.session.IDREPTE = pParams["IDREPTE"];
+                    pRequest.session.TIPUSJUGADOR = pParams["TIPUSJUGADOR"];
+                    pRequest.session.ELMEUCOLOR = pParams["ELMEUCOLOR"];
+                    pRequest.session.TEMPS = pParams["TEMPS"];
+                    pRequest.session.TEMPSINCREMENT = pParams["TEMPSINCREMENT"];
+                    pRequest.session.AMBEVALUACIOELO = pParams["AMBEVALUACIOELO"];
+                    pRequest.session.IDJUGADORCONTRINCANT = pParams["IDJUGADORCONTRINCANT"];
                     utils.sendJson(pResponse, [{
-                            idJugador: pRequest.session.idJugador,
-                            nickJugador: pRequest.session.nickJugador,
-                            idRepte: pRequest.session.idRepte,
-                            tipusJugador: pRequest.session.tipusJugador,
-                            elMeuColor: pRequest.session.elMeuColor,
-                            temps: pRequest.session.temps,
-                            tempsIncrement: pRequest.session.tempsIncrement,
-                            ambEvaluacioElo: pRequest.session.ambEvaluacioElo,
-                            idJugadorContrincant: pRequest.session.idJugadorContrincant
+                            IDJUGADOR: pRequest.session.IDJUGADOR,
+                            NICKJUGADOR: pRequest.session.NICKJUGADOR,
+                            IDREPTE: pRequest.session.IDREPTE,
+                            TIPUSJUGADOR: pRequest.session.TIPUSJUGADOR,
+                            ELMEUCOLOR: pRequest.session.ELMEUCOLOR,
+                            TEMPS: pRequest.session.TEMPS,
+                            TEMPSINCREMENT: pRequest.session.TEMPSINCREMENT,
+                            AMBEVALUACIOELO: pRequest.session.AMBEVALUACIOELO,
+                            IDJUGADORCONTRINCANT: pRequest.session.IDJUGADORCONTRINCANT
                         }]);
                 });
                 break;

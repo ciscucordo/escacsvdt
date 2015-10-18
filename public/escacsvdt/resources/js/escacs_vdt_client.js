@@ -56,7 +56,7 @@ EscacsVdtClient.prototype.changeRoom = function (pRoom, pElMeuNick) {
  };*/
 
 EscacsVdtClient.prototype.processCommand = function (pCommand) {
-    var elMeuNick = jsonSession[0].nickJugador;
+    var elMeuNick = jsonSession[0].NICKJUGADOR;
     var words = pCommand.split(" ");
     //obtenim l'ordre de la primera paraula
     var command = words[0];
@@ -140,7 +140,7 @@ $(document).ready(function () {
     //var socket = io();
 
     jsonSession = doGetSession();
-    jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].idJugadorContrincant);
+    jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
     nickContrincant = jsonJugadorContrincant[0].NICK;
 
     escacsVdtClient = new EscacsVdtClient(socket);
@@ -153,9 +153,9 @@ $(document).ready(function () {
     // Cuando la conexión es exitosa le preguntamos al user
     // su nick mediante un prompt y lo emitimos al servidor
     socket.on("connect", function () {
-        var elMeuNick = jsonSession[0].nickJugador;
+        var elMeuNick = jsonSession[0].NICKJUGADOR;
         //entrem al repte actual!!!
-        roomRepte = "repte" + jsonSession[0].idRepte;
+        roomRepte = "repte" + jsonSession[0].IDREPTE;
         escacsVdtClient.processCommand("join" + " " + roomRepte + " " + elMeuNick);
     });
     //mostra missatges del sistema
@@ -163,7 +163,7 @@ $(document).ready(function () {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 0);'>" + displayTime() + " - " + pMessage.text + "</div>");
     });
     socket.on("systemMessageJoinRoom", function (pMessage) {
-        var elMeuNick = jsonSession[0].nickJugador;
+        var elMeuNick = jsonSession[0].NICKJUGADOR;
         if (pMessage.text != "" && pMessage.text != elMeuNick) {
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - " + pMessage.text + " acaba d'entrar. Que comenci la partida!</div>");
             canBeginGame = true;
@@ -197,7 +197,7 @@ $(document).ready(function () {
     });
     socket.on("proposeDraw", function (pProposeDraw) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - En " + nickContrincant + " et proposa taules.</div>");
-        var elMeuNick = jsonSession[0].nickJugador;
+        var elMeuNick = jsonSession[0].NICKJUGADOR;
         if (pProposeDraw.nickProposat == elMeuNick) {
             var fnYes = function () {
                 escacsVdtClient.processCommand("replyProposeDraw" + " " + "1");
