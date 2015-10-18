@@ -175,7 +175,12 @@ var SampleApp = function () {
         // before we process any part of the request, let's give it a session!
         session(pRequest, pResponse, function (pRequest, pResponse) {
             var filePath = false;
-            var isMySqlOp = dbLib.doMySqlOp(process, pRequest, pResponse);
+            
+            //////TEMPORAL!!!!!!!!!!
+            var isMySqlOp = false; 
+            //dbLib.doMySqlOp(process, pRequest, pResponse);
+            
+            
             var isSessionOp = doSessionOp(pRequest, pResponse);
             //dispatcher.dispatch(pRequest, pResponse);
             //si la petició no és de BBDD, llavors servim l'arxiu demanat!!!
