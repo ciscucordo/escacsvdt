@@ -216,7 +216,7 @@ var SampleApp = function () {
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     // socket.io initialization on the server side
     self.initializeSocketIO = function () {
-        self.io = socketio.listen(self.server);
+        self.io = socketio.listen(self.server, se);
         //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
         self.io.set("log level", 1);
         self.io.enable('browser client minification');  // send minified client
