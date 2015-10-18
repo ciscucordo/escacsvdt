@@ -221,11 +221,7 @@ var SampleApp = function () {
     // socket.io initialization on the server side
     self.initializeSocketIO = function () {
         
-        console.log("FCF:1");
-        
         self.io = socketio.listen(self.server);
-        
-        console.log("FCF:2");
         
         //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
         self.io.set("log level", 1);
@@ -237,15 +233,9 @@ var SampleApp = function () {
             'websocket'
         ]);
         
-        console.log("FCF:3");
-        
-        var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
-        
-        console.log("FCF:4");
-        
-        escacsVdtServerSockets.addSocketIOEvents(self.io);
-        
-        console.log("FCF:5");
+        //TEMPORAL!!!!!!!!!
+        /*var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
+        escacsVdtServerSockets.addSocketIOEvents(self.io);*/
         
         //return this;
     };
