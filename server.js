@@ -271,7 +271,7 @@ var SampleApp = function () {
     self.start = function () {
         //  Start the server on the specific interface (and port).
         self.server.listen(self.port, self.ipaddress, function () {
-            console.log('%s: Node server started on %s:%d ...',
+            console.log('%s: Servidor Node iniciat a %s:%d ...',
                     Date(Date.now()), self.ipaddress, self.port);
         });
     };
