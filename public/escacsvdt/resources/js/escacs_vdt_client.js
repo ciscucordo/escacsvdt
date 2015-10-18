@@ -135,8 +135,8 @@ var canBeginGame = false;
 $(document).ready(function () {
 
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    //var socket = io.connect('ws://vdt-6qdomain.rhcloud.com:8000/');
-    var socket = io.connect();
+    var socket = io.connect('ws://vdt-6qdomain.rhcloud.com:8000/');
+    //var socket = io.connect();
     //var socket = io();
 
     jsonSession = doGetSession();
