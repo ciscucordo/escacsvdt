@@ -233,10 +233,10 @@ var SampleApp = function () {
         self.io.set('transports', [
             'websocket'
         ]);
-        
+        */
         var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
         escacsVdtServerSockets.addSocketIOEvents(self.io);
-        */
+        
         //return this;
     };
 
