@@ -220,10 +220,10 @@ var SampleApp = function () {
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     // socket.io initialization on the server side
     self.initializeSocketIO = function () {
-        //TEMPORAL!!!!!!!!!
-        /**/
-        self.io = socketio.listen(self.server);
         
+        self.io = socketio.listen(self.server);
+        //TEMPORAL!!!!!!!!!
+        /*
         //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
         self.io.set("log level", 1);
         self.io.enable('browser client minification');  // send minified client
@@ -236,7 +236,7 @@ var SampleApp = function () {
         
         var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
         escacsVdtServerSockets.addSocketIOEvents(self.io);
-        
+        */
         //return this;
     };
 
