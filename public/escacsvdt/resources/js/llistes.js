@@ -206,13 +206,13 @@ function doMirarRepteAcceptat()
         type: "post",
         url: "/doMirarRepteAcceptat",
         datatype: "json",
-        data: "REPTELLISTAT_IDJUGADOR=" + jsonSession[0].idJugador,
+        data: "REPTELLISTAT_IDJUGADOR=" + jsonSession[0].IDJUGADOR,
         async: false,
         cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
             var jsonMirarRepteAcceptat = data;
-            if (jsonMirarRepteAcceptat[0].entrarASala == "1") {
+            if (jsonMirarRepteAcceptat[0].ENTRARASALA == "1") {
                 if (window.openedDialog) {
                     window.openedDialog.dialog("close");
                 }
@@ -241,14 +241,14 @@ function doDinsSalaRepteAcceptat(pJsonMirarRepteAcceptat)
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
             doUpdateRepteSession({
-                idRepte: pJsonMirarRepteAcceptat["idRepte"],
-                idPartida: pJsonMirarRepteAcceptat["idPartida"],
-                tipusJugador: pJsonMirarRepteAcceptat["tipusJugador"],
-                elMeuColor: pJsonMirarRepteAcceptat["elMeuColor"],
-                temps: pJsonMirarRepteAcceptat["temps"],
-                tempsIncrement: pJsonMirarRepteAcceptat["tempsIncrement"],
-                ambEvaluacioElo: pJsonMirarRepteAcceptat["ambEvaluacioElo"],
-                idJugadorContrincant: pJsonMirarRepteAcceptat["idJugadorContrincant"]
+                idRepte: pJsonMirarRepteAcceptat["IDREPTE"],
+                idPartida: pJsonMirarRepteAcceptat["IDPARTIDA"],
+                tipusJugador: pJsonMirarRepteAcceptat["TIPUSJUGADOR"],
+                elMeuColor: pJsonMirarRepteAcceptat["ELMEUCOLOR"],
+                temps: pJsonMirarRepteAcceptat["TEMPS"],
+                tempsIncrement: pJsonMirarRepteAcceptat["TEMPSINCREMENT"],
+                ambEvaluacioElo: pJsonMirarRepteAcceptat["AMBEVALUACIOELO"],
+                idJugadorContrincant: pJsonMirarRepteAcceptat["IDJUGADORCONTRINCANT"]
             });
             window.location = "./sala.htm";
         },
@@ -283,7 +283,7 @@ function loadDialogCrearRepte(pIdObj) {
         success: function (result) {
             $("#dialogCrearRepte").html(result);
             var jsonSession = doGetSession();
-            $("#REPTE_IDJUGADORREPTADOR").val(jsonSession[0].idJugador);
+            $("#REPTE_IDJUGADORREPTADOR").val(jsonSession[0].IDJUGADOR);
             $("#dialogCrearRepte").dialog({
                 title: "Nou repte",
                 autoOpen: false,
@@ -366,7 +366,7 @@ function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pV
                 var finReg = regIniFin_.reg_fin;
                 var nRows = 0;
                 var jsonSession = doGetSession();
-                var nickJugadorSession = jsonSession[0].nickJugador;
+                var nickJugadorSession = jsonSession[0].NICKJUGADOR;
                 for (var i = iniReg; i < finReg; i++) {
 
                     var reg = data[i];
@@ -541,7 +541,7 @@ function doAcceptarRepte(pIdRepte)
         url: "/doAcceptarRepte",
         datatype: "text",
         data: "REPTELLISTAT_ID=" + pIdRepte +
-                "&REPTELLISTAT_IDJUGADORREPTAT=" + jsonSession[0].idJugador,
+                "&REPTELLISTAT_IDJUGADORREPTAT=" + jsonSession[0].IDJUGADOR,
         async: false,
         cache: false,
         timeout: 3000,
