@@ -3,7 +3,7 @@
 //var express = require('express');
 
 var http = require("http");
-//var socketio = require("socket.io");
+
 
 // special magic, now all requests have sessions!
 var session = require('./node_modules_custom/session.js/lib/core').session;
@@ -16,7 +16,9 @@ var fs = require("fs");
 //var dispatcher = require('httpdispatcher');
 
 var utils = require("./lib/utils");
-var dbLib = require("./lib/escacs_vdt_server_mysql");
+
+//var dbLib = require("./lib/escacs_vdt_server_mysql");
+//var socketio = require("socket.io");
 
 /**
  *  Define the sample application.
@@ -179,9 +181,10 @@ var SampleApp = function () {
             //////TEMPORAL!!!!!!!!!!
             var isMySqlOp = false; 
             //dbLib.doMySqlOp(process, pRequest, pResponse);
+            var isSessionOp = false;
+            //doSessionOp(pRequest, pResponse);
             
             
-            var isSessionOp = doSessionOp(pRequest, pResponse);
             //dispatcher.dispatch(pRequest, pResponse);
             //si la petició no és de BBDD, llavors servim l'arxiu demanat!!!
             if (isMySqlOp === false && isSessionOp === false) {
