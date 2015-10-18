@@ -223,13 +223,12 @@ var SampleApp = function () {
         
         self.io = socketio.listen(self.server);
         //TEMPORAL!!!!!!!!!
-        /*
+        /* */
         //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
         self.io.set("log level", 1);
         self.io.enable('browser client minification');  // send minified client
         self.io.enable('browser client etag');          // apply etag caching logic based on version number
         self.io.enable('browser client gzip');          // gzip the file
-        self.io.set('log level', 1);                    // reduce logging*/
         self.io.set('transports', [
             'websocket'
         ]);
