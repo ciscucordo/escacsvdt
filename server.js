@@ -220,10 +220,10 @@ var SampleApp = function () {
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     // socket.io initialization on the server side
     self.initializeSocketIO = function () {
-        
-        self.io = socketio.listen(self.server);
         //TEMPORAL!!!!!!!!!
         /*
+        self.io = socketio.listen(self.server);
+        
         //per fer DEBUG, escriure al cmd: "DEBUG=socket.io* node myapp"
         self.io.set("log level", 1);
         self.io.enable('browser client minification');  // send minified client
@@ -251,7 +251,7 @@ var SampleApp = function () {
 
         // Create the express server and routes.
         self.initializeServer();
-        //self.initializeSocketIO();
+        self.initializeSocketIO();
     };
 
 
@@ -276,6 +276,4 @@ var SampleApp = function () {
 var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
-
-zapp.initializeSocketIO();
 
