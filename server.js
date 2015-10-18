@@ -18,7 +18,7 @@ var fs = require("fs");
 var utils = require("./lib/utils");
 
 var dbLib = require("./lib/escacs_vdt_server_mysql");
-var socketio = require("./node_modules_custom/socket.io/lib/socket.io");
+var socketio = require("socket.io");
 
 /**
  *  Define the sample application.
