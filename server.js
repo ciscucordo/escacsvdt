@@ -229,7 +229,6 @@ var SampleApp = function () {
         
         var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
         escacsVdtServerSockets.addSocketIOEvents(self.io);
-        
         //return this;
     };
 
