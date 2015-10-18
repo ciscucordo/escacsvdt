@@ -3,7 +3,7 @@
 //var express = require('express');
 
 var http = require("http");
-var socketio = require("socket.io");
+//var socketio = require("socket.io");
 
 // special magic, now all requests have sessions!
 var session = require('./node_modules_custom/session.js/lib/core').session;
@@ -215,7 +215,7 @@ var SampleApp = function () {
 
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     // socket.io initialization on the server side
-    self.initializeSocketIO = function () {
+    /*self.initializeSocketIO = function () {
         
         console.log("FCF:1");
         
@@ -244,7 +244,7 @@ var SampleApp = function () {
         console.log("FCF:5");
         
         //return this;
-    };
+    };*/
 
 
     /**
