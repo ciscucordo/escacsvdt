@@ -12,3 +12,5 @@ bin-release/
 /nbproject/private/
 nbproject/project.properties
 nbproject/project.xml
+node_modules/socket.io/node_modules/socket.io-parser/node_modules/json3/lib/json3.min.js
+node_modules/mime/.npmignore
