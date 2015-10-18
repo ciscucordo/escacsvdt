@@ -17,7 +17,7 @@ var fs = require("fs");
 
 var utils = require("./lib/utils");
 
-//var dbLib = require("./lib/escacs_vdt_server_mysql");
+var dbLib = require("./lib/escacs_vdt_server_mysql");
 //var socketio = require("socket.io");
 
 /**
@@ -178,12 +178,8 @@ var SampleApp = function () {
         session(pRequest, pResponse, function (pRequest, pResponse) {
             var filePath = false;
             
-            //////TEMPORAL!!!!!!!!!!
-            var isMySqlOp = false; 
-            //dbLib.doMySqlOp(process, pRequest, pResponse);
-            var isSessionOp = false;
-            //doSessionOp(pRequest, pResponse);
-            
+            var isMySqlOp = dbLib.doMySqlOp(process, pRequest, pResponse);
+            var isSessionOp = doSessionOp(pRequest, pResponse);
             
             //dispatcher.dispatch(pRequest, pResponse);
             //si la petició no és de BBDD, llavors servim l'arxiu demanat!!!
@@ -273,7 +269,7 @@ var SampleApp = function () {
      *  Start the server (starts up the sample application).
      */
     self.start = function () {
-        //  Start the app on the specific interface (and port).
+        //  Start the server on the specific interface (and port).
         self.server.listen(self.port, self.ipaddress, function () {
             console.log('%s: Node server started on %s:%d ...',
                     Date(Date.now()), self.ipaddress, self.port);
