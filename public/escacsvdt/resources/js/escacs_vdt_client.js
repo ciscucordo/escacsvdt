@@ -209,7 +209,7 @@ $(document).ready(function () {
             console.log("bJo:", bJo, " bEll:", bEll);
             
             if (bEll === true) {
-                $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - " + pMessage.textAlreadyInRoom + " ja t'esperava. Que comenci la partida!</div>");
+                $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - " + nickContrincant + " ja t'esperava. Que comenci la partida!</div>");
             }
             if (bJo === true && bEll === true) {
                 canBeginGame = true;
