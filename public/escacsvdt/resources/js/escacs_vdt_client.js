@@ -128,6 +128,7 @@ var escacsVdtClient;
 
 var jsonSession, jsonJugadorContrincant;
 var roomRepte = "roomRepte";
+var elMeuNick = "";
 var nickContrincant = "";
 var canBeginGame = false;
 
@@ -144,6 +145,7 @@ $(document).ready(function () {
     });
 
     jsonSession = doGetSession();
+    elMeuNick = jsonSession[0].NICKJUGADOR;
     
     console.log("escacs_vdt_client-->jsonSession:", jsonSession);
     
@@ -160,7 +162,6 @@ $(document).ready(function () {
     // Cuando la conexión es exitosa le preguntamos al user
     // su nick mediante un prompt y lo emitimos al servidor
     socket.on("connect", function () {
-        var elMeuNick = jsonSession[0].NICKJUGADOR;
         //entrem al repte actual!!!
         roomRepte = "repte" + jsonSession[0].IDREPTE;
         
@@ -173,7 +174,6 @@ $(document).ready(function () {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 0);'>" + displayTime() + " - " + pMessage.text + "</div>");
     });
     socket.on("systemMessageJoinRoom", function (pMessage) {
-        var elMeuNick = jsonSession[0].NICKJUGADOR;
         if (pMessage.text === elMeuNick) {
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 130, 0);'>" + displayTime() + " - Benvingut a la sala de joc.</div>");
         }
@@ -181,14 +181,19 @@ $(document).ready(function () {
     socket.on("systemMessageBroadcastJoinRoom", function (pMessage) {
         if (pMessage.textAlreadyInRoom != "") {
             var namesInRoom = pMessage.textAlreadyInRoom.split(",");
-            var b = false;
+            var bJo, bEll = false;
             for (var i = 0; i < namesInRoom.length; i++) {
-                if (b === false) {
-                    b = (namesInRoom[i] === nickContrincant);
+                if (bEll === false) {
+                    bEll = (namesInRoom[i] === nickContrincant);
+                }
+                if (bJo === false) {
+                    bJo = (namesInRoom[i] === elMeuNick);
                 }
             }
-            if (b === true) {
+            if (bEll === true) {
                 $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - " + pMessage.textAlreadyInRoom + " ja t'esperava. Que comenci la partida!</div>");
+            }
+            if (bJo === true && bEll === true) {
                 canBeginGame = true;
             }
         }
