@@ -173,7 +173,10 @@ $(document).ready(function () {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 0);'>" + displayTime() + " - " + pMessage.text + "</div>");
     });
     socket.on("systemMessageJoinRoom", function (pMessage) {
-        $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 130, 0);'>" + displayTime() + " - Benvingut a la sala de joc.</div>");
+        var elMeuNick = jsonSession[0].NICKJUGADOR;
+        if (pMessage.text === elMeuNick) {
+            $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 130, 0);'>" + displayTime() + " - Benvingut a la sala de joc.</div>");
+        }
     });
     socket.on("systemMessageBroadcastJoinRoom", function (pMessage) {
         if (pMessage.textAlreadyInRoom != "") {
