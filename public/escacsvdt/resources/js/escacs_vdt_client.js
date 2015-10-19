@@ -218,6 +218,7 @@ $(document).ready(function () {
         }
     });
     socket.on("canBeginGame", function() {
+        canBeginGame = true;
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - Que comenci la partida!</div>");
     });
     socket.on("systemMessageDisconnection", function (pMessage) {
