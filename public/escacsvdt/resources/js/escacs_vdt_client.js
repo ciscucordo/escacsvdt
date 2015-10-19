@@ -50,6 +50,12 @@ EscacsVdtClient.prototype.changeRoom = function (pRoom, pElMeuNick) {
     });
 };
 
+EscacsVdtClient.prototype.sendCanBeginGame = function () {
+    this.socket.emit("canBeginGame", {
+        canBeginGame: true
+    });
+};
+
 /*EscacsVdtClient.prototype.sendDisconnect = function() {
  this.socket.emit("disconnect");
  this.socket.removeAllListeners();
@@ -100,6 +106,9 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - A la proposta de taules de " + nickContrincant + " li has dit que " + replyMsg + "." + (reply == "1" ? " Per tant, la partida acaba en taules." : "") + "</div>");
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: 1/2-1/2</div>");
             this.sendReplyProposeDraw(elMeuNick, reply);
+            break;
+        case "canBeginGame":
+            this.sendCanBeginGame();
             break;
         case "finishGame":
             break;
@@ -204,8 +213,12 @@ $(document).ready(function () {
             }
             if (bJo === true && bEll === true) {
                 canBeginGame = true;
+                escacsVdtClient.processCommand("canBeginGame");
             }
         }
+    });
+    socket.on("canBeginGame", function() {
+        $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - Que comenci la partida!</div>");
     });
     socket.on("systemMessageDisconnection", function (pMessage) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(180, 0, 0);'>" + displayTime() + " - " + pMessage.text + " ha sortit de la sala de joc.</div>");
