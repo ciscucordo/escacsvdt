@@ -167,6 +167,7 @@ $(document).ready(function () {
         roomRepte = "repte" + jsonSession[0].IDREPTE;
         
         console.log("escacs_vdt_client-->socket on connect:", roomRepte);
+        console.log("escacs_vdt_client-->NICKCONTRINCANT:", nickContrincant);
         
         escacsVdtClient.processCommand("join" + " " + roomRepte + " " + elMeuNick);
     });
@@ -182,6 +183,9 @@ $(document).ready(function () {
     socket.on("systemMessageBroadcastJoinRoom", function (pMessage) {
         if (pMessage.textAlreadyInRoom != "") {
             var namesInRoom = pMessage.textAlreadyInRoom.split(",");
+            
+            console.log("namesInRoom:", namesInRoom);
+            
             var bJo, bEll = false;
             for (var i = 0; i < namesInRoom.length; i++) {
                 if (bEll === false) {
@@ -191,6 +195,9 @@ $(document).ready(function () {
                     bJo = (namesInRoom[i] === elMeuNick);
                 }
             }
+            
+            console.log("bJo:", bJo, " bEll:", bEll);
+            
             if (bEll === true) {
                 $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - " + pMessage.textAlreadyInRoom + " ja t'esperava. Que comenci la partida!</div>");
             }
