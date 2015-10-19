@@ -144,6 +144,9 @@ $(document).ready(function () {
     });
 
     jsonSession = doGetSession();
+    
+    console.log("escacs_vdt_client-->jsonSession:", jsonSession);
+    
     jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
     nickContrincant = jsonJugadorContrincant[0].NICK;
 
@@ -160,6 +163,9 @@ $(document).ready(function () {
         var elMeuNick = jsonSession[0].NICKJUGADOR;
         //entrem al repte actual!!!
         roomRepte = "repte" + jsonSession[0].IDREPTE;
+        
+        console.log("escacs_vdt_client-->socket on connect:", roomRepte);
+        
         escacsVdtClient.processCommand("join" + " " + roomRepte + " " + elMeuNick);
     });
     //mostra missatges del sistema
