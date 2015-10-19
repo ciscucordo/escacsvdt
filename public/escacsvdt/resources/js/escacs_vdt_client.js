@@ -135,6 +135,15 @@ var canBeginGame = false;
 
 $(document).ready(function () {
 
+    jsonSession = doGetSession();
+    elMeuNick = jsonSession[0].NICKJUGADOR;
+    
+    console.log("escacs_vdt_client-->jsonSession:", jsonSession);
+    
+    jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
+    nickContrincant = jsonJugadorContrincant[0].NICK;
+
+
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     //var socket = io.connect('ws://vdt-6qdomain.rhcloud.com:8000/');
     //var socket = io.connect();
@@ -143,14 +152,6 @@ $(document).ready(function () {
         //path: '/socket.io-client',
         transports: ['websocket','polling']
     });
-
-    jsonSession = doGetSession();
-    elMeuNick = jsonSession[0].NICKJUGADOR;
-    
-    console.log("escacs_vdt_client-->jsonSession:", jsonSession);
-    
-    jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
-    nickContrincant = jsonJugadorContrincant[0].NICK;
 
     escacsVdtClient = new EscacsVdtClient(socket);
     //mostra el canvi d'habitació
