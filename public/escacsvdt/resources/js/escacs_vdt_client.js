@@ -174,13 +174,20 @@ $(document).ready(function () {
     });
     socket.on("systemMessageJoinRoom", function (pMessage) {
         var elMeuNick = jsonSession[0].NICKJUGADOR;
-        if (pMessage.text != "" && pMessage.text != elMeuNick) {
+        /*if (pMessage.text != "" && pMessage.text != elMeuNick) {
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - " + pMessage.text + " acaba d'entrar. Que comenci la partida!</div>");
             canBeginGame = true;
-        } else {
+        } else {*/
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 130, 0);'>" + displayTime() + " - Benvingut a la sala de joc.</div>");
-        }
-        if (pMessage.textAlreadyInRoom != "" && pMessage.textAlreadyInRoom != elMeuNick) {
+        /*}*/
+        if (pMessage.textAlreadyInRoom != "") {
+            var namesInRoom = pMessage.textAlreadyInRoom.split(",");
+            var b = false;
+            for (var i = 0; i < namesInRoom.length; i++) {
+                if (b === false) {
+                    b = (namesInRoom[i] !== "" && namesInRoom[i] === nickContrincant);
+                }
+            }
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - " + pMessage.textAlreadyInRoom + " ja t'esperava. Que comenci la partida!</div>");
             canBeginGame = true;
         }
