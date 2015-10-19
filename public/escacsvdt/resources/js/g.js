@@ -55,6 +55,7 @@ function doUpdateRepteSession(pJsonRepteAcceptat) {
         cache: false,
         success: function (data) {
             result = "1";
+            window.location = "./sala.htm";
         },
         error: function (s, i, error) {
             result = "0";

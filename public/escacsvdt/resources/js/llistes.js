@@ -250,7 +250,7 @@ function doDinsSalaRepteAcceptat(pJsonMirarRepteAcceptat)
                 AMBEVALUACIOELO: pJsonMirarRepteAcceptat["AMBEVALUACIOELO"],
                 IDJUGADORCONTRINCANT: pJsonMirarRepteAcceptat["IDJUGADORCONTRINCANT"]
             });
-            window.location = "./sala.htm";
+            //window.location = "./sala.htm";
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);
