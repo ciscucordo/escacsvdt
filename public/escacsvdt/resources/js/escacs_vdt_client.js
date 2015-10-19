@@ -139,7 +139,7 @@ $(document).ready(function () {
     //var socket = io.connect();
     //var socket = io();
     var socket = io('http://vdt-6qdomain.rhcloud.com:8000', {
-        path: '/socket.io-client',
+        //path: '/socket.io-client',
         transports: ['websocket','polling']
     });
 
