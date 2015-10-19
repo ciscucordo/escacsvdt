@@ -186,7 +186,8 @@ $(document).ready(function () {
             
             console.log("namesInRoom:", namesInRoom);
             
-            var bJo, bEll = false;
+            var bJo = false;
+            var bEll = false;
             for (var i = 0; i < namesInRoom.length; i++) {
                 if (bEll === false) {
                     bEll = (namesInRoom[i] === nickContrincant);
