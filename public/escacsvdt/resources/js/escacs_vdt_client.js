@@ -135,9 +135,13 @@ var canBeginGame = false;
 $(document).ready(function () {
 
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    var socket = io.connect('ws://vdt-6qdomain.rhcloud.com:8000/');
+    //var socket = io.connect('ws://vdt-6qdomain.rhcloud.com:8000/');
     //var socket = io.connect();
     //var socket = io();
+    var socket = io('http://vdt-6qdomain.rhcloud.com:8000', {
+        path: '/socket.io-client',
+        transports: ['websocket','polling']
+    });
 
     jsonSession = doGetSession();
     jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);

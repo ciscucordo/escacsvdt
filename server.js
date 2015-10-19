@@ -230,7 +230,7 @@ var SampleApp = function () {
         //self.io.enable('browser client etag');          // apply etag caching logic based on version number
         //self.io.enable('browser client gzip');          // gzip the file
         self.io.set('transports', [
-            'websocket'
+            'websocket','polling'
         ]);
         
         var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
