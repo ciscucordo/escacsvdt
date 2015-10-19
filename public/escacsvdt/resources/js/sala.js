@@ -158,7 +158,7 @@ function doCrearPartida()
             } 
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            console.log(errorThrown);
         },
         complete: function (jqXHR, textStatus) {
             //
@@ -227,7 +227,7 @@ function doSelectIdPartidaByIdRepte(pIdRepte)
             res = data;
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            console.log(errorThrown);
         },
         complete: function (jqXHR, textStatus) {
             //
@@ -251,7 +251,7 @@ function doSelectJugadorById(pIdJugador)
             res = data;
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            console.log(errorThrown);
         },
         complete: function (jqXHR, textStatus) {
             //

@@ -131,7 +131,7 @@ function setPosicioElDOM(elDOM, pCasellaDesti) {
         elDOM = getElDOMByNom(elDOM);
     }
     
-    console.log(elDOM, pCasellaDesti);
+    //console.log(elDOM, pCasellaDesti);
     
     if (elDOM) {
         elDOM.style.left = pCasellaDesti.x + "px";
@@ -242,7 +242,7 @@ FitxaDades.prototype = {
     },
     set iiJ(val) {
         
-        console.log((val instanceof Point) );
+        //console.log((val instanceof Point) );
         
         var iiJDesti = null;
         var xiYDesti = null;
@@ -1205,13 +1205,7 @@ function checkIsOKMove(pFitxaNom, pCasellaDesti) {
         //no quedi en check!!!
         if (bIsOKMove === true) {
 
-            if (fD.color == "B")
-                console.log("antes:", fD.iiJ, iiJ);
-
             fD.iiJ = iiJ;
-
-            if (fD.color == "B")
-                console.log("despues:", fD.iiJ);
 
             /*var arrayT = commutatorArrayT(TAULER_VIRTUAL);
              arrayT[fD.iiJ.i][fD.iiJ.j] = "";
@@ -1772,7 +1766,7 @@ function doCrearPosicioTauler(pFD, pJugada)
     var colorUltimaJugada = pFD.color;
     var posicio = codeArrayTaulerReal();
     
-    console.log("idPartida:", param_idPartida, "numJugada:", numJugada, "colorUltimaJugada:", colorUltimaJugada, "posicio:", posicio);
+    //console.log("idPartida:", param_idPartida, "numJugada:", numJugada, "colorUltimaJugada:", colorUltimaJugada, "posicio:", posicio);
     
     $.ajax({
         type: "post",
@@ -1789,7 +1783,7 @@ function doCrearPosicioTauler(pFD, pJugada)
             //
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            console.log(errorThrown);
         },
         complete: function (jqXHR, textStatus) {
             //

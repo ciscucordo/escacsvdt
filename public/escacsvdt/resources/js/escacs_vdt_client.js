@@ -64,7 +64,7 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
     words.shift();
     var msgCommand = false;
 
-    console.log("pCommand:", pCommand);
+    //console.log("pCommand:", pCommand);
 
     switch (command) {
         /*case "nick":
@@ -138,7 +138,7 @@ $(document).ready(function () {
     //var socket = io.connect('ws://vdt-6qdomain.rhcloud.com:8000/');
     //var socket = io.connect();
     //var socket = io();
-    var socket = io('http://vdt-6qdomain.rhcloud.com:8000', {
+    var socket = io('http://vdt-6qdomain.rhcloud.com:8000' || 'http://localhost:8000', {
         //path: '/socket.io-client',
         transports: ['websocket','polling']
     });
@@ -262,7 +262,7 @@ $(document).ready(function () {
 function doUpdateResultatPartida(pResultat)
 {
 
-    console.log("idPartida:", param_idPartida);
+    //console.log("idPartida:", param_idPartida);
 
     $.ajax({
         type: "post",
@@ -277,7 +277,7 @@ function doUpdateResultatPartida(pResultat)
             //
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            console.log(errorThrown);
         },
         complete: function (jqXHR, textStatus) {
             //

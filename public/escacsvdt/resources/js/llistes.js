@@ -221,7 +221,7 @@ function doMirarRepteAcceptat()
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            console.log(errorThrown);
         },
         complete: function (jqXHR, textStatus) {
             //
@@ -253,7 +253,7 @@ function doDinsSalaRepteAcceptat(pJsonMirarRepteAcceptat)
             window.location = "./sala.htm";
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            console.log(errorThrown);
         },
         complete: function (jqXHR, textStatus) {
             //
