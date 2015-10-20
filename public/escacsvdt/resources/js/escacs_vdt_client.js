@@ -62,7 +62,7 @@ EscacsVdtClient.prototype.sendCanBeginGame = function () {
  };*/
 
 EscacsVdtClient.prototype.processCommand = function (pCommand) {
-    var elMeuNick = jsonSession[0].NICKJUGADOR;
+    var elMeuNick = jsonSession[0].user;//NICKJUGADOR;
     var words = pCommand.split(" ");
     //obtenim l'ordre de la primera paraula
     var command = words[0];
@@ -145,7 +145,7 @@ var canBeginGame = false;
 $(document).ready(function () {
 
     jsonSession = doGetSession();
-    elMeuNick = jsonSession[0].NICKJUGADOR;
+    elMeuNick = jsonSession[0].user; //NICKJUGADOR;
     
     console.log("escacs_vdt_client-->jsonSession:", jsonSession);
     
@@ -243,7 +243,7 @@ $(document).ready(function () {
     });
     socket.on("proposeDraw", function (pProposeDraw) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - En " + nickContrincant + " et proposa taules.</div>");
-        var elMeuNick = jsonSession[0].NICKJUGADOR;
+        var elMeuNick = jsonSession[0].user; //NICKJUGADOR;
         if (pProposeDraw.nickProposat == elMeuNick) {
             var fnYes = function () {
                 escacsVdtClient.processCommand("replyProposeDraw" + " " + "1");

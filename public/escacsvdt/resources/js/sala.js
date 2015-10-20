@@ -73,7 +73,7 @@ $(document).ready(function ()
     $("#labelJugadorTop").html(nickJugadorContrincant);
     $("#labelTempsTop").html(secondsToHms(jsonSession[0].TEMPS));
     $("#hiddenTempsTop").val(jsonSession[0].TEMPS);
-    $("#labelJugadorBottom").html(jsonSession[0].NICKJUGADOR);
+    $("#labelJugadorBottom").html(jsonSession[0].user/*NICKJUGADOR*/);
     $("#labelTempsBottom").html(secondsToHms(jsonSession[0].TEMPS));
     $("#hiddenTempsBottom").val(jsonSession[0].TEMPS);
     if (jsonSession[0].ELMEUCOLOR == "B") {
@@ -88,18 +88,6 @@ $(document).ready(function ()
             clearInterval(window.refreshCanBeginGame);
         }
     }, 1000);
-    
-    /*$("#cocoloco").html
-     (
-     "idJugador: " + jsonSession[0].idJugador +
-     "<br>nickJugador: " + jsonSession[0].nickJugador +
-     "<br>idRepte: " + jsonSession[0].idRepte +
-     "<br>tipusJugador: " + jsonSession[0].tipusJugador +
-     "<br>elMeuColor: " + jsonSession[0].elMeuColor +
-     "<br>temps: " + jsonSession[0].temps +
-     "<br>tempsIncrement: " + jsonSession[0].tempsIncrement +
-     "<br>idJugadorContrincant: " + jsonSession[0].idJugadorContrincant
-     );*/
 
     //el primer torn sempre és de les BLANQUES ("B") !!!
     window.colorTorn = "B";

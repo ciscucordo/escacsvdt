@@ -132,38 +132,41 @@ var SampleApp = function () {
         var op = pRequest.url.substring(1, pRequest.url.length);
         switch (op) {
             case "doGetSession":
+                
+                console.log(pRequest.session.data.user);
+                
                 isSessionOp = true;
                 utils.sendJson(pResponse, [{
-                        IDJUGADOR: pRequest.session.IDJUGADOR,
-                        NICKJUGADOR: pRequest.session.NICKJUGADOR,
-                        IDREPTE: pRequest.session.IDREPTE,
-                        TIPUSJUGADOR: pRequest.session.TIPUSJUGADOR,
-                        ELMEUCOLOR: pRequest.session.ELMEUCOLOR,
-                        TEMPS: pRequest.session.TEMPS,
-                        TEMPSINCREMENT: pRequest.session.TEMPSINCREMENT,
-                        IDJUGADORCONTRINCANT: pRequest.session.IDJUGADORCONTRINCANT
+                        IDJUGADOR: pRequest.session.data.IDJUGADOR,
+                        NICKJUGADOR: pRequest.session.data.user, //NICKJUGADOR,
+                        IDREPTE: pRequest.session.data.IDREPTE,
+                        TIPUSJUGADOR: pRequest.session.data.TIPUSJUGADOR,
+                        ELMEUCOLOR: pRequest.session.data.ELMEUCOLOR,
+                        TEMPS: pRequest.session.data.TEMPS,
+                        TEMPSINCREMENT: pRequest.session.data.TEMPSINCREMENT,
+                        IDJUGADORCONTRINCANT: pRequest.session.data.IDJUGADORCONTRINCANT
                     }]);
                 break;
             case "doUpdateRepteSession":
                 isSessionOp = true;
                 utils.parseReceivedData(pRequest, function (pParams) {
-                    pRequest.session.IDREPTE = pParams["IDREPTE"];
-                    pRequest.session.TIPUSJUGADOR = pParams["TIPUSJUGADOR"];
-                    pRequest.session.ELMEUCOLOR = pParams["ELMEUCOLOR"];
-                    pRequest.session.TEMPS = pParams["TEMPS"];
-                    pRequest.session.TEMPSINCREMENT = pParams["TEMPSINCREMENT"];
-                    pRequest.session.AMBEVALUACIOELO = pParams["AMBEVALUACIOELO"];
-                    pRequest.session.IDJUGADORCONTRINCANT = pParams["IDJUGADORCONTRINCANT"];
+                    pRequest.session.data.IDREPTE = pParams["IDREPTE"];
+                    pRequest.session.data.TIPUSJUGADOR = pParams["TIPUSJUGADOR"];
+                    pRequest.session.data.ELMEUCOLOR = pParams["ELMEUCOLOR"];
+                    pRequest.session.data.TEMPS = pParams["TEMPS"];
+                    pRequest.session.data.TEMPSINCREMENT = pParams["TEMPSINCREMENT"];
+                    pRequest.session.data.AMBEVALUACIOELO = pParams["AMBEVALUACIOELO"];
+                    pRequest.session.data.IDJUGADORCONTRINCANT = pParams["IDJUGADORCONTRINCANT"];
                     utils.sendJson(pResponse, [{
-                            IDJUGADOR: pRequest.session.IDJUGADOR,
-                            NICKJUGADOR: pRequest.session.NICKJUGADOR,
-                            IDREPTE: pRequest.session.IDREPTE,
-                            TIPUSJUGADOR: pRequest.session.TIPUSJUGADOR,
-                            ELMEUCOLOR: pRequest.session.ELMEUCOLOR,
-                            TEMPS: pRequest.session.TEMPS,
-                            TEMPSINCREMENT: pRequest.session.TEMPSINCREMENT,
-                            AMBEVALUACIOELO: pRequest.session.AMBEVALUACIOELO,
-                            IDJUGADORCONTRINCANT: pRequest.session.IDJUGADORCONTRINCANT
+                            IDJUGADOR: pRequest.session.data.IDJUGADOR,
+                            NICKJUGADOR: pRequest.session.data.user, //NICKJUGADOR,
+                            IDREPTE: pRequest.session.data.IDREPTE,
+                            TIPUSJUGADOR: pRequest.session.data.TIPUSJUGADOR,
+                            ELMEUCOLOR: pRequest.session.data.ELMEUCOLOR,
+                            TEMPS: pRequest.session.data.TEMPS,
+                            TEMPSINCREMENT: pRequest.session.data.TEMPSINCREMENT,
+                            AMBEVALUACIOELO: pRequest.session.data.AMBEVALUACIOELO,
+                            IDJUGADORCONTRINCANT: pRequest.session.data.IDJUGADORCONTRINCANT
                         }]);
                 });
                 break;

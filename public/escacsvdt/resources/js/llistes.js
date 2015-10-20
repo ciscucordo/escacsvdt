@@ -90,8 +90,10 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
                 var finReg = regIniFin_.reg_fin;
                 var nRows = 0;
                 for (var i = iniReg; i < finReg; i++) {
-                    //for (var i = 0; i < data.length; i++) {
                     var reg = data[i];
+                    
+                    console.log(reg);
+                    
                     html += "<tr>" +
                             "<td class='formfont' style='text-align: center; height: 25px;'>" +
                             "<!-- // -->" +
@@ -366,7 +368,7 @@ function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pV
                 var finReg = regIniFin_.reg_fin;
                 var nRows = 0;
                 var jsonSession = doGetSession();
-                var nickJugadorSession = jsonSession[0].NICKJUGADOR;
+                var nickJugadorSession = jsonSession[0].user; //.NICKJUGADOR;
                 for (var i = iniReg; i < finReg; i++) {
 
                     var reg = data[i];
@@ -563,6 +565,23 @@ function doAcceptarRepte(pIdRepte)
     return sOk;
 }
 
+function doLogout() {
+    $.ajax({
+        url: '/doLogout',
+        type: 'post',
+        datatype: 'json',
+        data: "",
+        success: function (data) {
+            alert(data);
+            if (data === "1") {
+                window.location = "./login.htm";
+            }
+        },
+        error: function (s, i, error) {
+            console.log(error);
+        }
+    });
+}
 
 //////////////////////////////////// fin repte /////////////////////////////////
 
