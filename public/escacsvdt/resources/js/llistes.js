@@ -572,8 +572,9 @@ function doLogout() {
         datatype: 'json',
         data: "",
         success: function (data) {
-            alert(data);
-            if (data === "1") {
+            if (data == "1") {
+                clearIntervalLlista("PAG_LLISTA_JUGADOR");
+                clearIntervalLlista("PAG_LLISTA_REPTE");
                 window.location = "./login.htm";
             }
         },

@@ -4,7 +4,7 @@
 
 var http = require("http");
 
-
+//INFO: http://blog.nodejitsu.com/sessions-and-cookies-in-node/
 // special magic, now all requests have sessions!
 var session = require('./node_modules_custom/session.js/lib/core').session;
 
