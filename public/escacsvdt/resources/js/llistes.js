@@ -13,7 +13,7 @@ $(document).ready(function () {
             type: 'post',
             datatype: 'json',
             data: formData,
-            async: false,
+            async: true,
             cache: false,
             timeout: 3000,
             success: function (data) {
@@ -67,7 +67,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
         data: "JUGADORLLISTAT_NICK=" + pValueNick +
                 "&JUGADORLLISTAT_PERFIL_DESC=" + pValuePerfil_desc +
                 "&JUGADORLLISTAT_ESTAT_DESC=" + pValueEstat,
-        async: false,
+        async: true,
         cache: false,
         timeout: 3000,
         success: function (data) {
@@ -207,7 +207,7 @@ function doMirarRepteAcceptat()
         url: "/doMirarRepteAcceptat",
         datatype: "json",
         data: "REPTELLISTAT_IDJUGADOR=" + jsonSession[0].IDJUGADOR,
-        async: false,
+        async: true,
         cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
@@ -277,8 +277,8 @@ function loadDialogCrearRepte(pIdObj) {
     $.ajax({
         url: "../dialog/dialogCrearRepte.htm",
         type: "post",
-        async: false,
-        cache: false,
+        async: true,
+        cache: true,
         timeout: 3000,
         success: function (result) {
             $("#dialogCrearRepte").html(result);
@@ -339,7 +339,7 @@ function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pV
         datatype: 'json',
         data: "REPTELLISTAT_JUGADORREPTADOR_DESC=" + pValueJugadorReptador +
                 "&REPTELLISTAT_AMBEVALUACIOELO=" + pValueAmbEvaluacioElo,
-        async: false,
+        async: true,
         cache: false,
         timeout: 3000,
         success: function (data) {
@@ -484,7 +484,7 @@ function doCrearRepte(pParams)
         url: "/doCrearRepte",
         datatype: "text",
         data: pParams,
-        async: false,
+        async: true,
         cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
@@ -510,7 +510,7 @@ function doEliminarRepte(pIdRepte)
             url: "/doEliminarRepte",
             datatype: "text",
             data: "REPTELLISTAT_ID=" + pIdRepte,
-            async: false,
+            async: true,
             cache: false,
             timeout: 3000,
             success: function (data, textStatus, jqXHR) {
@@ -542,7 +542,7 @@ function doAcceptarRepte(pIdRepte)
         datatype: "text",
         data: "REPTELLISTAT_ID=" + pIdRepte +
                 "&REPTELLISTAT_IDJUGADORREPTAT=" + jsonSession[0].IDJUGADOR,
-        async: false,
+        async: true,
         cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
