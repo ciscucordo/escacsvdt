@@ -138,7 +138,7 @@ var SampleApp = function () {
                 isSessionOp = true;
                 utils.sendJson(pResponse, [{
                         IDJUGADOR: pRequest.session.data.IDJUGADOR,
-                        NICKJUGADOR: pRequest.session.data.user, //NICKJUGADOR,
+                        user/*NICKJUGADOR*/: pRequest.session.data.user, //NICKJUGADOR,
                         IDREPTE: pRequest.session.data.IDREPTE,
                         TIPUSJUGADOR: pRequest.session.data.TIPUSJUGADOR,
                         ELMEUCOLOR: pRequest.session.data.ELMEUCOLOR,
@@ -159,7 +159,7 @@ var SampleApp = function () {
                     pRequest.session.data.IDJUGADORCONTRINCANT = pParams["IDJUGADORCONTRINCANT"];
                     utils.sendJson(pResponse, [{
                             IDJUGADOR: pRequest.session.data.IDJUGADOR,
-                            NICKJUGADOR: pRequest.session.data.user, //NICKJUGADOR,
+                            user/*NICKJUGADOR*/: pRequest.session.data.user, //NICKJUGADOR,
                             IDREPTE: pRequest.session.data.IDREPTE,
                             TIPUSJUGADOR: pRequest.session.data.TIPUSJUGADOR,
                             ELMEUCOLOR: pRequest.session.data.ELMEUCOLOR,
