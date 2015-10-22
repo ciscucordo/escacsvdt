@@ -135,7 +135,7 @@ function processUserInput(pCommand, pEscacsVdt, pSocket) {
 var socket;
 var escacsVdtClient;
 
-var jsonSession, jsonJugadorContrincant;
+var /*jsonSession, */jsonJugadorContrincant;
 var roomRepte = "roomRepte";
 var elMeuNick = "";
 var nickContrincant = "";
@@ -144,10 +144,13 @@ var canBeginGame = false;
 
 $(document).ready(function () {
 
-    jsonSession = doGetSession();
+    if (!jsonSession) {
+        jsonSession = doGetSession();
+    }
+    
     elMeuNick = jsonSession[0].user; //NICKJUGADOR;
     
-    console.log("escacs_vdt_client-->jsonSession:", jsonSession);
+    //console.log("escacs_vdt_client-->jsonSession:", jsonSession);
     
     jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
     nickContrincant = jsonJugadorContrincant[0].NICK;
@@ -175,8 +178,8 @@ $(document).ready(function () {
         //entrem al repte actual!!!
         roomRepte = "repte" + jsonSession[0].IDREPTE;
         
-        console.log("escacs_vdt_client-->socket on connect:", roomRepte);
-        console.log("escacs_vdt_client-->NICKCONTRINCANT:", nickContrincant);
+        //console.log("escacs_vdt_client-->socket on connect:", roomRepte);
+        //console.log("escacs_vdt_client-->NICKCONTRINCANT:", nickContrincant);
         
         escacsVdtClient.processCommand("join" + " " + roomRepte + " " + elMeuNick);
     });
@@ -193,7 +196,7 @@ $(document).ready(function () {
         if (pMessage.textAlreadyInRoom != "") {
             var namesInRoom = pMessage.textAlreadyInRoom.split(",");
             
-            console.log("namesInRoom:", namesInRoom);
+            //console.log("namesInRoom:", namesInRoom);
             
             var bJo = false;
             var bEll = false;
@@ -206,7 +209,7 @@ $(document).ready(function () {
                 }
             }
             
-            console.log("bJo:", bJo, " bEll:", bEll);
+            //console.log("bJo:", bJo, " bEll:", bEll);
             
             if (bEll === true) {
                 $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - " + nickContrincant + " ja t'esperava. Que comenci la partida!</div>");

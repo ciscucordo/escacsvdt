@@ -31,7 +31,7 @@ $(document).ready(function () {
                  */
             },
             error: function (s, i, error) {
-                window.location = "./login.htm";
+                //window.location = "./login.htm";
                 console.log(error);
             }
         });
@@ -92,7 +92,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
                 for (var i = iniReg; i < finReg; i++) {
                     var reg = data[i];
                     
-                    console.log(reg);
+                    //console.log(reg);
                     
                     html += "<tr>" +
                             "<td class='formfont' style='text-align: center; height: 25px;'>" +
@@ -202,7 +202,10 @@ function doOmplirLlistaJugador()
 //////////////////////////////////// ini repte /////////////////////////////////
 function doMirarRepteAcceptat()
 {
-    var jsonSession = doGetSession();
+    if (!jsonSession) {
+        jsonSession = doGetSession();
+    }
+    
     var res = "";
     $.ajax({
         type: "post",
@@ -284,7 +287,9 @@ function loadDialogCrearRepte(pIdObj) {
         timeout: 3000,
         success: function (result) {
             $("#dialogCrearRepte").html(result);
-            var jsonSession = doGetSession();
+            if (!jsonSession) {
+                jsonSession = doGetSession();
+            }
             $("#REPTE_IDJUGADORREPTADOR").val(jsonSession[0].IDJUGADOR);
             $("#dialogCrearRepte").dialog({
                 title: "Nou repte",
@@ -367,7 +372,9 @@ function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pV
                 var iniReg = regIniFin_.reg_ini;
                 var finReg = regIniFin_.reg_fin;
                 var nRows = 0;
-                var jsonSession = doGetSession();
+                if (!jsonSession) {
+                    jsonSession = doGetSession();
+                }
                 var nickJugadorSession = jsonSession[0].user; //.NICKJUGADOR;
                 for (var i = iniReg; i < finReg; i++) {
 
@@ -536,7 +543,9 @@ function doEliminarRepte(pIdRepte)
 
 function doAcceptarRepte(pIdRepte)
 {
-    var jsonSession = doGetSession();
+    if (!jsonSession) {
+        jsonSession = doGetSession();
+    }
     var sOk = "0";
     $.ajax({
         type: "post",

@@ -38,13 +38,13 @@ window.timer = null;
 window.listJugadesB = new Array();
 window.listJugadesN = new Array();
 
-var jsonSession;
-
 $(document).ready(function ()
 {
     $("#capcaleraPag").html(htmlCapcaleraPag());
     
-    jsonSession = doGetSession();
+    if (!jsonSession) {
+        jsonSession = doGetSession();
+    }
     
     param_idRepte = jsonSession[0].IDREPTE;
     var jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
@@ -57,7 +57,7 @@ $(document).ready(function ()
     //controlem si hi ha hagut dessincronització per obtenir idPartida!!!
     if (!param_idPartida) {
         window.refreshGetIdPartida = self.setInterval(function () {
-            console.log("No s'ha obtingut param_idPartida, s'intenta recuperar...");
+            //console.log("No s'ha obtingut param_idPartida, s'intenta recuperar...");
             jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
             if (jsonPartida.length > 0) {
                 param_idPartida = jsonPartida[0].ID;
@@ -93,7 +93,7 @@ $(document).ready(function ()
     window.colorTorn = "B";
     param_colorUsuari = jsonSession[0].ELMEUCOLOR;
     
-    console.log("param_idRepte:", param_idRepte, " param_idPartida:", param_idPartida);
+    //console.log("param_idRepte:", param_idRepte, " param_idPartida:", param_idPartida);
 
 });
 
@@ -105,7 +105,9 @@ function doSortir()
 
 function doCrearPartida()
 {
-    var jsonSession = doGetSession();
+    if (!jsonSession) {
+        jsonSession = doGetSession();
+    }
     var idJugador = jsonSession[0].IDJUGADOR;
     var idJugadorContrincant = jsonSession[0].IDJUGADORCONTRINCANT; 
     var idRepte = jsonSession[0].IDREPTE;

@@ -1,4 +1,6 @@
 
+var jsonSession;
+
 function htmlCapcaleraPag() {
     var str = "<table style='width: 100%; border: 0px;'>";
     str += "  <tr>";
