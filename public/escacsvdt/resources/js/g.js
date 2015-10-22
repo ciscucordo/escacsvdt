@@ -61,7 +61,8 @@ function doUpdateRepteSession(pJsonRepteAcceptat) {
         },
         error: function (s, i, error) {
             result = "0";
-            window.location = "./login.htm";
+            console.log(error);
+            //window.location = "./login.htm";
         }
     });
     return result;

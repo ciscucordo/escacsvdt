@@ -150,7 +150,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
             }
         },
         error: function (s, i, error) {
-            window.location = "./login.htm";
+            //window.location = "./login.htm";
             console.log(error);
         }
     });
