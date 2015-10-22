@@ -31,7 +31,7 @@ function doGetSession() {
         datatype: 'json',
         data: "",
         async: false,
-        cache: false,
+        //cache: false,
         success: function (data) {
             result = data;
             if (result == "") {
@@ -53,8 +53,8 @@ function doUpdateRepteSession(pJsonRepteAcceptat) {
         type: 'post',
         datatype: 'json',
         data: pJsonRepteAcceptat,
-        async: false,
-        cache: false,
+        async: true,
+        //cache: false,
         success: function (data) {
             result = "1";
             window.location = "./sala.htm";

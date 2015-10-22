@@ -316,7 +316,7 @@ function doUpdateResultatPartida(pResultat)
         data: "IDPARTIDA=" + param_idPartida +
                 "&RESULTAT=" + pResultat,
         async: false,
-        cache: false,
+        //cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
             //

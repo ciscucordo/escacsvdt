@@ -1777,7 +1777,7 @@ function doCrearPosicioTauler(pFD, pJugada)
                 "&COLORULTIMAJUGADA=" + colorUltimaJugada +
                 "&POSICIO=" + posicio,
         async: false,
-        cache: false,
+        //cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
             //

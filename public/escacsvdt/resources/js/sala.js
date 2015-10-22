@@ -139,7 +139,7 @@ function doCrearPartida()
                 "&TEMPSINCREMENT=" + tempsIncrement +
                 "&AMBEVALUACIOELO=" + ambEvaluacioElo,
         async: false,
-        cache: false,
+        //cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
             var jsonPartida = doSelectIdPartidaByIdRepte(idRepte);
@@ -166,7 +166,7 @@ function doAbandonar()
             datatype: "text",
             data: "REPTELLISTAT_ID=" + param_idRepte,
             async: false,
-            cache: false,
+            //cache: false,
             timeout: 3000,
             success: function (data, textStatus, jqXHR) {
                 doOmplirLlistaRepte();
@@ -211,7 +211,7 @@ function doSelectIdPartidaByIdRepte(pIdRepte)
         datatype: "json",
         data: "IDREPTE=" + pIdRepte,
         async: false,
-        cache: false,
+        //cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
             res = data;
@@ -235,7 +235,7 @@ function doSelectJugadorById(pIdJugador)
         datatype: "json",
         data: "ID=" + pIdJugador,
         async: false,
-        cache: false,
+        //cache: false,
         timeout: 3000,
         success: function (data, textStatus, jqXHR) {
             res = data;
