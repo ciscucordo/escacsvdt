@@ -140,7 +140,7 @@ function doCrearPartida()
                 "&AMBEVALUACIOELO=" + ambEvaluacioElo,
         async: false,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data, textStatus, jqXHR) {
             var jsonPartida = doSelectIdPartidaByIdRepte(idRepte);
             if (jsonPartida.length > 0) {
@@ -167,7 +167,7 @@ function doAbandonar()
             data: "REPTELLISTAT_ID=" + param_idRepte,
             async: false,
             //cache: false,
-            timeout: 3000,
+            timeout: 30000,
             success: function (data, textStatus, jqXHR) {
                 doOmplirLlistaRepte();
                 sOk = "1";
@@ -212,7 +212,7 @@ function doSelectIdPartidaByIdRepte(pIdRepte)
         data: "IDREPTE=" + pIdRepte,
         async: false,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data, textStatus, jqXHR) {
             res = data;
         },
@@ -236,7 +236,7 @@ function doSelectJugadorById(pIdJugador)
         data: "ID=" + pIdJugador,
         async: false,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data, textStatus, jqXHR) {
             res = data;
         },

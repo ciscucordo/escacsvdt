@@ -15,7 +15,7 @@ $(document).ready(function () {
             data: formData,
             async: true,
             //cache: false,
-            timeout: 3000,
+            timeout: 30000,
             success: function (data) {
                 if (data.length >= 0) {
                     window.location = "./llistes.htm";
@@ -69,7 +69,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
                 "&JUGADORLLISTAT_ESTAT_DESC=" + pValueEstat,
         async: true,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data) {
             if (data.length >= 0) {
                 var html = "<tr>" +
@@ -214,7 +214,7 @@ function doMirarRepteAcceptat()
         data: "REPTELLISTAT_IDJUGADOR=" + jsonSession[0].IDJUGADOR,
         async: true,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data, textStatus, jqXHR) {
             var jsonMirarRepteAcceptat = data;
             if (jsonMirarRepteAcceptat[0].ENTRARASALA == "1") {
@@ -243,7 +243,7 @@ function doDinsSalaRepteAcceptat(pJsonMirarRepteAcceptat)
         data: pJsonMirarRepteAcceptat,
         async: false,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data, textStatus, jqXHR) {
             doUpdateRepteSession({
                 IDREPTE: pJsonMirarRepteAcceptat["IDREPTE"],
@@ -284,7 +284,7 @@ function loadDialogCrearRepte(pIdObj) {
         type: "post",
         async: true,
         //cache: true,
-        timeout: 3000,
+        timeout: 30000,
         success: function (result) {
             $("#dialogCrearRepte").html(result);
             if (!jsonSession) {
@@ -348,7 +348,7 @@ function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pV
                 "&REPTELLISTAT_AMBEVALUACIOELO=" + pValueAmbEvaluacioElo,
         async: true,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data) {
 
             //console.log("data:", data);
@@ -495,7 +495,7 @@ function doCrearRepte(pParams)
         data: pParams,
         async: true,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data, textStatus, jqXHR) {
             doOmplirLlistaRepte();
             sOk = "1";
@@ -521,7 +521,7 @@ function doEliminarRepte(pIdRepte)
             data: "REPTELLISTAT_ID=" + pIdRepte,
             async: true,
             //cache: false,
-            timeout: 3000,
+            timeout: 30000,
             success: function (data, textStatus, jqXHR) {
                 doOmplirLlistaRepte();
                 sOk = "1";
@@ -555,7 +555,7 @@ function doAcceptarRepte(pIdRepte)
                 "&REPTELLISTAT_IDJUGADORREPTAT=" + jsonSession[0].IDJUGADOR,
         async: true,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data, textStatus, jqXHR) {
             if (window.openedDialog) {
                 window.openedDialog.dialog("close");

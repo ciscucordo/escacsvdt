@@ -317,7 +317,7 @@ function doUpdateResultatPartida(pResultat)
                 "&RESULTAT=" + pResultat,
         async: false,
         //cache: false,
-        timeout: 3000,
+        timeout: 30000,
         success: function (data, textStatus, jqXHR) {
             //
         },
