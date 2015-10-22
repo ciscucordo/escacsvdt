@@ -1,6 +1,9 @@
 
 window.openedDialog = null;
 
+var finishedOmplirLlistaJugador = false;
+var finishedOmplirLlistaRepte = false;
+
 $(document).ready(function () {
 
     $("#capcaleraPag").html(htmlCapcaleraPag());
@@ -60,6 +63,7 @@ function goToSeguentPagJugador()
 
 function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pValueNumPagActual)
 {
+    finishedOmplirLlistaJugador = false;
     $.ajax({
         url: '/doListJugador',
         type: 'post',
@@ -148,6 +152,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
             } else {
                 $(".labError").text("No hi ha jugadors");
             }
+            finishedOmplirLlistaJugador = true;
         },
         error: function (s, i, error) {
             //window.location = "./login.htm";
@@ -178,7 +183,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
 
 function doOmplirLlistaJugador()
 {
-    $.ajaxSetup({cache: false});
+    //$.ajaxSetup({cache: false});
     clearIntervalLlista("PAG_LLISTA_JUGADOR");
     //filtres de la llista
     var objNick = document.getElementById("nick");
@@ -191,7 +196,9 @@ function doOmplirLlistaJugador()
     doOmplirLlistaJugadorSub(valueNick, valuePerfil_desc, valueEstat, valueNumPagActual);
     //actualitzem la llista cada 5 seg. (5000)
     window.refreshLlistaJugador = self.setInterval(function () {
-        doOmplirLlistaJugadorSub(valueNick, valuePerfil_desc, valueEstat, valueNumPagActual);
+        if (finishedOmplirLlistaJugador === true) {
+            doOmplirLlistaJugadorSub(valueNick, valuePerfil_desc, valueEstat, valueNumPagActual);
+        }
     }, 5000);
 }
 
@@ -340,6 +347,7 @@ function goToSeguentPagRepte()
 
 function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pValueNumPagActual)
 {
+    finishedOmplirLlistaRepte === false;
     $.ajax({
         url: "/doListRepte",
         type: 'post',
@@ -454,6 +462,7 @@ function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pV
             } else {
                 $(".labError").text("No hi ha reptes");
             }
+            finishedOmplirLlistaRepte = true;
         },
         error: function (s, i, error) {
             //window.location = "../../login.htm";
@@ -476,10 +485,12 @@ function doOmplirLlistaRepte()
     doOmplirLlistaRepteSub(valueJugadorReptador, valueAmbEvaluacioElo, valueNumPagActual);
     //actualitzem la llista cada 5 seg. (5000)
     window.refreshLlistaRepte = self.setInterval(function () {
-        try {
-            doOmplirLlistaRepteSub(valueJugadorReptador, valueAmbEvaluacioElo, valueNumPagActual);
-        } finally {
-            doMirarRepteAcceptat();
+        if (finishedOmplirLlistaRepte === true) {
+            try {
+                doOmplirLlistaRepteSub(valueJugadorReptador, valueAmbEvaluacioElo, valueNumPagActual);
+            } finally {
+                doMirarRepteAcceptat();
+            }
         }
     }, 5000);
 
