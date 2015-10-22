@@ -199,7 +199,7 @@ function doOmplirLlistaJugador()
         if (finishedOmplirLlistaJugador === true) {
             doOmplirLlistaJugadorSub(valueNick, valuePerfil_desc, valueEstat, valueNumPagActual);
         }
-    }, 5000);
+    }, 30000);
 }
 
 //////////////////////////////////// fin jugador ///////////////////////////////
