@@ -231,11 +231,11 @@ $(document).ready(function () {
         var resultatBBDD = '-1';
         if (jsonSession[0].ELMEUCOLOR == 'B') {
             resultat = 'GUANYEN BLANQUES (1-0)';
-            resultatMsg = 'La partida ha acabant guanyant blanques per abandó de ' + pMessage.text + '.';
+            resultatMsg = 'La partida ha acabant guanyant blanques perquè ' + pMessage.text + ' ha abandonat la sala.';
             resultatBBDD = '1';
         } else {
             resultat = 'GUANYEN NEGRES (0-1)';
-            resultatMsg = 'La partida ha acabant guanyant negres per abandó de ' + pMessage.text + '.';
+            resultatMsg = 'La partida ha acabant guanyant negres perquè ' + pMessage.text + ' ha abandonat la sala.';
             resultatBBDD = '3';
         }
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultat + "</div>");
