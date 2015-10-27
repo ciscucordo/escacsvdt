@@ -226,6 +226,21 @@ $(document).ready(function () {
     });
     socket.on("systemMessageDisconnection", function (pMessage) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(180, 0, 0);'>" + displayTime() + " - " + pMessage.text + " ha sortit de la sala de joc.</div>");
+        var resultat = '';
+        var resultatMsg = '';
+        var resultatBBDD = '-1';
+        if (jsonSession[0].ELMEUCOLOR == 'B') {
+            resultat = 'GUANYEN BLANQUES (1-0)';
+            resultatMsg = 'La partida ha acabant guanyant blanques per abandó de ' + pMessage.text + '.';
+            resultatBBDD = '1';
+        } else {
+            resultat = 'GUANYEN NEGRES (0-1)';
+            resultatMsg = 'La partida ha acabant guanyant negres per abandó de ' + pMessage.text + '.';
+            resultatBBDD = '3';
+        }
+        $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultat + "</div>");
+        showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>" + resultatMsg + "</p>");
+        doUpdateResultatPartida(resultatBBDD);
     });
     /*socket.on("systemMessageBroadcastMyRoom", function (pMessage) {
      $("#divListMsg").append("<br /><b style='color:#FF0000'>" + pMessage.text + "</b>");
