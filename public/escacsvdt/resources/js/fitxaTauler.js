@@ -1432,9 +1432,36 @@ function checkInCheck(pCmd, pColor) {
             break;
     }
 
-
-
     return checkColorInEstelaByIiJ(pCmd, colorInCheck, iiJ.i, iiJ.j);
+}
+
+function checkIfCheckMate(pCmd, pColor) {
+    var arrayT = commutatorArrayT(pCmd);
+    if (checkInCheck(TAULER_REAL, pColor) === true) {
+        
+        copyFromArrayTaulerTo_ArrayTauler();
+        setFitxesIEstelesAlTauler(TAULER_VIRTUAL);
+        
+        for (var j = 0; j < _arrayTauler.length; j++) {
+            for (var i = 0; i < _arrayTauler[j].length; i++) {
+                var fitxaNom = _arrayTauler[i][j];
+                var fD = getFitxaDadesFromElDOM(TAULER_VIRTUAL, fitxaNom);
+                if (fD && fD.color == pColor) {
+                    
+                }
+            }
+        }
+        
+        
+    }
+    
+    return ;
+}
+
+function checkIfStaleMate(pCmd, pColor) {
+    //
+    
+    return ;
 }
 
 function esPossibleEnrocarLlarg(pCmd, pFitxaNom) {
