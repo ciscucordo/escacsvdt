@@ -160,7 +160,7 @@ $(document).ready(function () {
     //var socket = io.connect('ws://vdt-6qdomain.rhcloud.com:8000/');
     //var socket = io.connect();
     //var socket = io();
-    var socket = io('http://vdt-6qdomain.rhcloud.com:8000' || 'http://localhost:8000', {
+    var socket = io('http://vdt-6qdomain.rhcloud.com:8000' || 'http://192.168.1.3:8000', {
         //path: '/socket.io-client',
         transports: ['websocket','polling']
     });
@@ -256,7 +256,7 @@ $(document).ready(function () {
         var i = parseInt(pMove.i);
         var j = parseInt(pMove.j);
         var iiJ = new ElMeuPoint(i, j);
-        doIsOKMove(fitxaNom, iiJ, false);
+        doIsOKMove(fitxaNom, iiJ, 'rebrejugada');
         window.colorTorn = window.colorTorn == "B" ? "N" : "B";
     });
     socket.on("proposeDraw", function (pProposeDraw) {
