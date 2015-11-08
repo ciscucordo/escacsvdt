@@ -607,7 +607,6 @@ function _setEstelaR(pCmd, pFitxaNomFrom, pFitxaNomTo, pCol, pFil) {
     if (pFitxaNomTo && pFitxaNomTo !== "") {
         //si trobem una Fitxa de diferent color, i aquesta casella no hi ha estel·la del color contrari, llavors hi posem estel·la
         if (fDFrom.color !== fDTo.color) {
-            //if (checkInCheck(pCmd, fDFrom.color) === false) {
             if (checkColorInEstelaByIiJ(pCmd, colorInCheck, pCol, pFil) === false) {
                 addEstelaInArrayEsteles(pCmd, pFitxaNomFrom, pCol, pFil);
             } else {
@@ -616,7 +615,6 @@ function _setEstelaR(pCmd, pFitxaNomFrom, pFitxaNomTo, pCol, pFil) {
             }
         }
     } else {
-        //if (checkInCheck(pCmd, fDFrom.color) === false) {
         if (checkColorInEstelaByIiJ(pCmd, colorInCheck, pCol, pFil) === false) {
             addEstelaInArrayEsteles(pCmd, pFitxaNomFrom, pCol, pFil);
         } else {
@@ -1244,7 +1242,7 @@ function doIsKOMove() {
 }
 
 //si la jugada realitzada és correcta, afegim la jugada a la llista de fitxes mogudes
-function doIsOKMove(pFitxaNom, xiYOiiJ, pSendMove) {
+function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
 
     var iiJ;
     if ((xiYOiiJ instanceof Point) === true) {
@@ -1401,10 +1399,15 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pSendMove) {
     //activem el control de temps per al contrincant
     startTimer(fD.color, true);
 
-    if (pSendMove) {
+    if (pEnviarRebreJugada === 'enviarjugada') {
         processUserInput("move" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color, escacsVdtClient, socket);
-    } else {
-        //si pSendMove == false significa que rebem el moviment, per tant, guardem posició del tauler
+        
+        var colContrari = fD.color === "B" ? "N" : "B";
+        if (checkIfCheckMate(colContrari) === true) {
+            alert("mate al " + colContrari);
+        }
+        
+    } else if (pEnviarRebreJugada === 'rebrejugada') {
         doCrearPosicioTauler(fD, jugada);
     }
 
@@ -1435,30 +1438,31 @@ function checkInCheck(pCmd, pColor) {
     return checkColorInEstelaByIiJ(pCmd, colorInCheck, iiJ.i, iiJ.j);
 }
 
-function checkIfCheckMate(pCmd, pColor) {
-    var arrayT = commutatorArrayT(pCmd);
+function checkIfCheckMate(pColor) {
+    var b = true;
     if (checkInCheck(TAULER_REAL, pColor) === true) {
-        
-        copyFromArrayTaulerTo_ArrayTauler();
-        setFitxesIEstelesAlTauler(TAULER_VIRTUAL);
-        
-        for (var j = 0; j < _arrayTauler.length; j++) {
-            for (var i = 0; i < _arrayTauler[j].length; i++) {
-                var fitxaNom = _arrayTauler[i][j];
-                var fD = getFitxaDadesFromElDOM(TAULER_VIRTUAL, fitxaNom);
-                if (fD && fD.color == pColor) {
-                    
+        for (var j = 0; j < arrayTauler.length; j++) {
+            for (var i = 0; i < arrayTauler[j].length; i++) {
+                var fitxaNom = arrayTauler[i][j];
+                var fD = getFitxaDadesFromElDOM(TAULER_REAL, fitxaNom);
+                if (fD && fD.color === pColor) {
+                    copyFromArrayTaulerTo_ArrayTauler();
+                    setFitxesIEstelesAlTauler(TAULER_VIRTUAL);
+                    var arrayEstelesFitxa = _arrayEsteles[fD.iiJ.i][fD.iiJ.j];
+                    for (var idxEstela = 0; idxEstela < arrayEstelesFitxa.length; idxEstela++) {
+                        b = (pColor === checkInCheck(TAULER_VIRTUAL, pColor));
+                        if (b === false) {
+                            break;
+                        }
+                    }
                 }
             }
         }
-        
-        
     }
-    
-    return ;
+    return b;
 }
 
-function checkIfStaleMate(pCmd, pColor) {
+function checkIfStaleMate(pColor) {
     //
     
     return ;
