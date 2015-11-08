@@ -44,8 +44,8 @@ var SampleApp = function () {
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
             //  allows us to run/test the server locally.
-            console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
-            self.ipaddress = "127.0.0.1";
+            console.warn('No OPENSHIFT_NODEJS_IP var, using 192.168.1.3 (6qpcnew)');
+            self.ipaddress = "192.168.1.3";
         }
         ;
 
