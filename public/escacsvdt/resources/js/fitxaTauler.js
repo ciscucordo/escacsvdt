@@ -1439,23 +1439,29 @@ function checkInCheck(pCmd, pColor) {
 }
 
 function checkIfCheckMate(pColor) {
-    var b = true;
-    if (checkInCheck(TAULER_REAL, pColor) === true) {
-        for (var j = 0; j < arrayTauler.length; j++) {
-            for (var i = 0; i < arrayTauler[j].length; i++) {
-                var fitxaNom = arrayTauler[i][j];
-                var fD = getFitxaDadesFromElDOM(TAULER_REAL, fitxaNom);
-                if (fD && fD.color === pColor) {
-                    copyFromArrayTaulerTo_ArrayTauler();
-                    setFitxesIEstelesAlTauler(TAULER_VIRTUAL);
-                    var arrayEstelesFitxa = _arrayEsteles[fD.iiJ.i][fD.iiJ.j];
-                    for (var idxEstela = 0; idxEstela < arrayEstelesFitxa.length; idxEstela++) {
-                        b = (pColor === checkInCheck(TAULER_VIRTUAL, pColor));
+    var b = (checkInCheck(TAULER_REAL, pColor) === true);
+    if (b === true) {
+        for (var i = 0; i < arrayEsteles.length; i++) {
+            for (var j = 0; j < arrayEsteles[i].length; j++) {
+                for (var k = 0; k < arrayEsteles[i][j].length; k++) {
+                    var fitxaNomDinsEstela = arrayEsteles[i][j][k];
+                    var fD = getFitxaDadesFromElDOM(TAULER_REAL, fitxaNomDinsEstela);
+                    if (fD && fD.color === pColor) {
+                        copyFromArrayTaulerTo_ArrayTauler();
+                        _arrayTauler[i][j] = fitxaNomDinsEstela;
+                        setFitxesIEstelesAlTauler(TAULER_VIRTUAL);
+                        b = (checkInCheck(TAULER_VIRTUAL, pColor) === true);
                         if (b === false) {
                             break;
                         }
                     }
                 }
+                if (b === false) {
+                    break;
+                }
+            }
+            if (b === false) {
+                break;
             }
         }
     }
