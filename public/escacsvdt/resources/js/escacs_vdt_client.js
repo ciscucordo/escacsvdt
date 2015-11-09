@@ -104,7 +104,7 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
             var reply = words[0];
             var replyMsg = (reply == "1" ? "Sí" : "No");
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - A la proposta de taules de " + nickContrincant + " li has dit que " + replyMsg + "." + (reply == "1" ? " Per tant, la partida acaba en taules." : "") + "</div>");
-            $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: 1/2-1/2</div>");
+            $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: EMPAT (1/2-1/2)</div>");
             this.sendReplyProposeDraw(elMeuNick, reply);
             break;
         case "canBeginGame":
@@ -291,6 +291,24 @@ $(document).ready(function () {
                 showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>El contrincant no accepta les taules. Uuupsss!!! :-(</p>");
                 break;
         }
+    });
+
+    socket.on("doCheckMate", function (pMessage) {
+        var resultat = '';
+        var resultatMsg = '';
+        var resultatBBDD = '-1';
+        if (pMessage == COLOR_BLANC) {
+            resultat = 'GUANYEN BLANQUES (1-0)';
+            resultatMsg = 'La partida ha acabant guanyant blanques per escac i mat.';
+            resultatBBDD = '1';
+        } else if (pMessage == COLOR_NEGRE ){
+            resultat = 'GUANYEN NEGRES (0-1)';
+            resultatMsg = 'La partida ha acabant guanyant negres per escac i mat.';
+            resultatBBDD = '3';
+        }
+        $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultat + "</div>");
+        showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>" + resultatMsg + "</p>");
+        doUpdateResultatPartida(resultatBBDD);
     });
 
 
