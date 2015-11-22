@@ -133,7 +133,7 @@ var SampleApp = function () {
         switch (op) {
             case "doGetSession":
                 
-                console.log(pRequest.session.data.user);
+                //console.log(pRequest.session.data.user);
                 
                 isSessionOp = true;
                 utils.sendJson(pResponse, [{

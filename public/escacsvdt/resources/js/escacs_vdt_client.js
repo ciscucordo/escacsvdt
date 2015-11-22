@@ -38,7 +38,8 @@ EscacsVdtClient.prototype.sendDoCheckMate = function (pNickGuanyador, pColorGuan
         nickGuanyador: pNickGuanyador,
         colorGuanyador: pColorGuanyador
     };
-    this.socket.emit("doCheckMate", doCheckMate);
+    this.socket.emit("message", doCheckMate);
+    //this.socket.emit("doCheckMate", doCheckMate);
 };
 
 EscacsVdtClient.prototype.sendMove = function (pFitxaNom, pI, pJ, pColor) {
@@ -110,9 +111,11 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
             break;
         case "replyProposeDraw":
             var reply = words[0];
-            var replyMsg = (reply == "1" ? "Sí" : "No");
+            var replyMsg = (reply === "1" ? "Sí" : "No");
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - A la proposta de taules de " + nickContrincant + " li has dit que " + replyMsg + "." + (reply == "1" ? " Per tant, la partida acaba en taules." : "") + "</div>");
-            $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: EMPAT (1/2-1/2)</div>");
+            if (reply === "1") {
+                $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: EMPAT (1/2-1/2)</div>");
+            }
             this.sendReplyProposeDraw(elMeuNick, reply);
             break;
         case "canBeginGame":
