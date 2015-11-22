@@ -312,6 +312,9 @@ $(document).ready(function () {
     });
 
     socket.on("doCheckMate", function (pDoCheckMate) {
+        
+        alert("mate");
+        
         var resultat = '';
         var resultatMsg = '';
         var resultatBBDD = '-1';
