@@ -276,7 +276,7 @@ function startTimer(pColor, pApretarRellotge) {
     }
     if (totalSeg > 0) {
         window.timer = setTimeout(function () {
-            startTimer(col)
+            startTimer(col);
         }, 1000);
     }
 }

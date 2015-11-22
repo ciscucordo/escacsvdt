@@ -1250,6 +1250,14 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
     } else if ((xiYOiiJ instanceof ElMeuPoint) === true) {
         iiJ = xiYOiiJ;
     }
+    
+    //mirar si hi ha peça contrària a la casella destí
+    var sNomPecaACasellaDesti = arrayTauler[iiJ.i][iiJ.j];
+    var fDACasellaDesti;
+    if (sNomPecaACasellaDesti) {        
+        fDACasellaDesti = getFitxaDadesFromElDOM(TAULER_REAL, sNomPecaACasellaDesti);
+    }
+    
     var fD = getFitxaDadesFromElDOM(TAULER_REAL, pFitxaNom);
     var jugada = "";
     switch (fD.tipusFitxa) {
@@ -1335,10 +1343,17 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
 
     synchronizeEsteles();
 
-    if (jugada == "") {
-        if (fD.tipusFitxa != TIPUS_FITXA_PEO) {
-            jugada = fD.tipusFitxa;
+    if (jugada === "") {
+        jugada = "<img src='../resources/img/anotacioJugada/"+fD.tipusFitxa+fD.color+".png' alt='"+fD.tipusFitxa+"'>";
+        //if (fD.tipusFitxa != TIPUS_FITXA_PEO) {
+        //    jugada = fD.tipusFitxa;
+        //}
+        
+        //indicar que es tracta d'una captura de peça
+        if (fDACasellaDesti && fDACasellaDesti.color !== fD) {
+            jugada += "x"; 
         }
+        
         switch (iiJ.i) {
             case 0:
                 jugada += "a";
@@ -1404,7 +1419,8 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
         
         var colContrari = fD.color === "B" ? "N" : "B";
         if (checkIfCheckMate(colContrari) === true) {
-            alert("mate al " + colContrari);
+            processUserInput("doCheckMate" + " " + fD.color, escacsVdtClient, socket);
+            //alert("mate al " + colContrari);
         }
         
     } else if (pEnviarRebreJugada === 'rebrejugada') {
