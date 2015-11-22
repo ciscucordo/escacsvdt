@@ -38,8 +38,8 @@ EscacsVdtClient.prototype.sendDoCheckMate = function (pNickGuanyador, pColorGuan
         nickGuanyador: pNickGuanyador,
         colorGuanyador: pColorGuanyador
     };
-    this.socket.emit("message", doCheckMate);
-    //this.socket.emit("doCheckMate", doCheckMate);
+    //this.socket.emit("message", doCheckMate);
+    this.socket.emit("doCheckMate", doCheckMate);
 };
 
 EscacsVdtClient.prototype.sendMove = function (pFitxaNom, pI, pJ, pColor) {
