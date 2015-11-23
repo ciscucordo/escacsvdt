@@ -33,12 +33,12 @@ EscacsVdtClient.prototype.sendReplyProposeDraw = function (pElMeuNick, pReply) {
     this.socket.emit("replyProposeDraw", replyProposeDraw);
 };
 
-EscacsVdtClient.prototype.sendDoCheckMate = function (pNickGuanyador, pColorGuanyador) {
+EscacsVdtClient.prototype.sendDoCheckMate = function (pRoom, pNickGuanyador, pColorGuanyador) {
     var doCheckMate = {
+        room: pRoom,
         nickGuanyador: pNickGuanyador,
         colorGuanyador: pColorGuanyador
     };
-    //this.socket.emit("message", doCheckMate);
     this.socket.emit("doCheckMate", doCheckMate);
 };
 
@@ -121,6 +121,7 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
         case "canBeginGame":
             this.sendCanBeginGame();
             break;
+            
         case "doCheckMate":
             var nickGuanyador;
             var colorGuanyador = words[0];
@@ -129,7 +130,7 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
             } else {
                 nickGuanyador = nickContrincant;
             }
-            this.sendDoCheckMate(nickGuanyador, colorGuanyador);
+            this.sendDoCheckMate(roomRepte, nickGuanyador, colorGuanyador);
             break;
         case "finishGame":
             break;
@@ -314,10 +315,8 @@ $(document).ready(function () {
         }
     });
 
+
     socket.on("doCheckMate", function (pDoCheckMate) {
-        
-        alert("mate");
-        
         var resultat = '';
         var resultatMsg = '';
         var resultatBBDD = '-1';
