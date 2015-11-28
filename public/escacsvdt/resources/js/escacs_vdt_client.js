@@ -43,13 +43,13 @@ EscacsVdtClient.prototype.sendDoCheckMate = function (pRoom, pNickGuanyador, pCo
 };
 
 EscacsVdtClient.prototype.sendMove = function (pFitxaNom, pI, pJ, pColor) {
-    var move = {
+    var doMove = {
         fitxaNom: pFitxaNom,
         i: pI,
         j: pJ,
         color: pColor
     };
-    this.socket.emit("move", move);
+    this.socket.emit("move", doMove);
 };
 
 EscacsVdtClient.prototype.changeRoom = function (pRoom, pElMeuNick) {
@@ -97,7 +97,7 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
             //handle de la creació/canvi de l'habitació
             this.changeRoom(words[0], elMeuNick);
             break;
-        case "move":
+        case "doMove":
             var fitxaNom = words[0];
             var i = words[1];
             var j = words[2];
@@ -132,6 +132,7 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
             }
             this.sendDoCheckMate(roomRepte, nickGuanyador, colorGuanyador);
             break;
+            
         case "finishGame":
             break;
             /*case "disconnect":
@@ -205,15 +206,18 @@ $(document).ready(function () {
         
         escacsVdtClient.processCommand("join" + " " + roomRepte + " " + elMeuNick);
     });
+    
     //mostra missatges del sistema
     socket.on("systemMessage", function (pMessage) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 0);'>" + displayTime() + " - " + pMessage.text + "</div>");
     });
+    
     socket.on("systemMessageJoinRoom", function (pMessage) {
         if (pMessage.text === elMeuNick) {
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 130, 0);'>" + displayTime() + " - Benvingut a la sala de joc.</div>");
         }
     });
+    
     socket.on("systemMessageBroadcastJoinRoom", function (pMessage) {
         if (pMessage.textAlreadyInRoom != "") {
             var namesInRoom = pMessage.textAlreadyInRoom.split(",");
@@ -242,10 +246,12 @@ $(document).ready(function () {
             }
         }
     });
+    
     socket.on("canBeginGame", function() {
         canBeginGame = true;
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - Que comenci la partida!</div>");
     });
+    
     socket.on("systemMessageDisconnection", function (pMessage) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(180, 0, 0);'>" + displayTime() + " - " + pMessage.text + " ha sortit de la sala de joc.</div>");
         var resultat = '';
@@ -264,6 +270,7 @@ $(document).ready(function () {
         showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>" + resultatMsg + "</p>");
         doUpdateResultatPartida(resultatBBDD);
     });
+    
     /*socket.on("systemMessageBroadcastMyRoom", function (pMessage) {
      $("#divListMsg").append("<br /><b style='color:#FF0000'>" + pMessage.text + "</b>");
      });*/
@@ -272,6 +279,7 @@ $(document).ready(function () {
     socket.on("message", function (pMessage) {
         $("#divListMsg").append("<br /><b>" + pMessage.nick + "</b>: " + pMessage.text);
     });
+    
     //mostra els moviments rebuts
     socket.on("move", function (pMove) {
         var fitxaNom = pMove.fitxaNom;
@@ -281,6 +289,7 @@ $(document).ready(function () {
         doIsOKMove(fitxaNom, iiJ, 'rebrejugada');
         window.colorTorn = window.colorTorn == "B" ? "N" : "B";
     });
+    
     socket.on("proposeDraw", function (pProposeDraw) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - En " + nickContrincant + " et proposa taules.</div>");
         //var elMeuNick = jsonSession[0].user; //NICKJUGADOR;
@@ -294,6 +303,7 @@ $(document).ready(function () {
             showConfirmationDialog("Confirmació", "En " + pProposeDraw.nickProposador + " et proposa taules. Acceptes?", fnYes, fnNo);
         }
     });
+    
     socket.on("replyProposeDraw", function (pReplyProposeDraw) {
         if (window.openedDialogProposeDraw) {
             window.openedDialogProposeDraw.dialog("close");
@@ -315,8 +325,10 @@ $(document).ready(function () {
         }
     });
 
-
-    socket.on("doCheckMate", function (pDoCheckMate) {
+    socket.on("doCheckMateFromServer", function (pDoCheckMate) {
+        
+        alert("jol, is mate");
+        
         var resultat = '';
         var resultatMsg = '';
         var resultatBBDD = '-1';

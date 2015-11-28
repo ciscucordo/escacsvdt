@@ -1415,17 +1415,23 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
     startTimer(fD.color, true);
 
     if (pEnviarRebreJugada === 'enviarjugada') {
-        processUserInput("move" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color, escacsVdtClient, socket);
+        processUserInput("doMove" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color, escacsVdtClient, socket);
         
     } else if (pEnviarRebreJugada === 'rebrejugada') {
+        
+        alert("rebre");
+        
         doCrearPosicioTauler(fD, jugada);
+        
+        var colContrari = fD.color === "B" ? "N" : "B";
+        var isCheckMate = checkIfCheckMate(colContrari);
+        if (isCheckMate === true) {
+            processUserInput("doCheckMate" + " " + fD.color, escacsVdtClient, socket);
+        }
+        
     }
     
-    var colContrari = fD.color === "B" ? "N" : "B";
-    if (checkIfCheckMate(colContrari) === true) {
-        processUserInput("doCheckMate" + " " + fD.color, escacsVdtClient, socket);
-        //alert("mate al " + colContrari);
-    }
+    
 
 }
 
