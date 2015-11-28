@@ -1419,8 +1419,6 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
         
     } else if (pEnviarRebreJugada === 'rebrejugada') {
         
-        alert("rebre");
-        
         doCrearPosicioTauler(fD, jugada);
         
         var colContrari = fD.color === "B" ? "N" : "B";
