@@ -49,7 +49,7 @@ EscacsVdtClient.prototype.sendMove = function (pFitxaNom, pI, pJ, pColor) {
         j: pJ,
         color: pColor
     };
-    this.socket.emit("move", doMove);
+    this.socket.emit("moveToServer", doMove);
 };
 
 EscacsVdtClient.prototype.changeRoom = function (pRoom, pElMeuNick) {
