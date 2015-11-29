@@ -44,7 +44,7 @@ EscacsVdtClient.prototype.sendDoCheckMate = function (pRoom, pNickGuanyador, pCo
     console.log(doCheckMate);
             
     
-    this.socket.emit("doCheckMate", doCheckMate);
+    this.socket.emit("checkmate", doCheckMate);
 };
 
 EscacsVdtClient.prototype.sendMove = function (pFitxaNom, pI, pJ, pColor) {
@@ -189,6 +189,7 @@ $(document).ready(function () {
     //var socket = io.connect();
     //var socket = io();
     var socket = io('http://escacsvdt-6qdomain.rhcloud.com:8000' || 'http://192.168.1.3:8000', {
+        reconnect: true,
         //path: '/socket.io-client',
         transports: ['websocket']
     });
@@ -330,7 +331,7 @@ $(document).ready(function () {
         }
     });
 
-    socket.on("doCheckMateFromServer", function (pDoCheckMate) {
+    socket.on("checkmate", function (pDoCheckMate) {
         
         alert("jol, is mate");
         
