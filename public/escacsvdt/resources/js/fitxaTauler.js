@@ -1416,17 +1416,16 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
 
     if (pEnviarRebreJugada === 'enviarjugada') {
         processUserInput("doMove" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color, escacsVdtClient, socket);
-        
     } else if (pEnviarRebreJugada === 'rebrejugada') {
-        
         doCrearPosicioTauler(fD, jugada);
-        
-        var colContrari = fD.color === "B" ? "N" : "B";
-        var isCheckMate = checkIfCheckMate(colContrari);
-        if (isCheckMate === true) {
-            processUserInput("doCheckMate" + " " + fD.color, escacsVdtClient, socket);
-        }
-        
+    }
+    
+    var colorCheckMate = fD.color === "B" ? "N" : "B";
+    var isCheckMate = checkIfCheckMate(colorCheckMate);
+    if (isCheckMate === true) {
+        doIfCheckMate(colorCheckMate);
+        stopTimer();
+        canBeginGame = false;
     }
     
     
