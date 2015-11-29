@@ -186,7 +186,7 @@ $(document).ready(function () {
     var socket = io('http://escacsvdt-6qdomain.rhcloud.com:8000' || 'http://192.168.1.3:8000', {
         reconnect: true,
         //path: '/socket.io-client',
-        transports: ['websocket','polling']
+        transports: ['websocket']
     });
 
     escacsVdtClient = new EscacsVdtClient(socket);
