@@ -37,6 +37,7 @@ window.posCol = null;
 window.timer = null;
 window.listJugadesB = new Array();
 window.listJugadesN = new Array();
+window.resultatPartida = "";
 
 $(document).ready(function ()
 {
@@ -159,6 +160,11 @@ function doCrearPartida()
 
 function doAbandonar()
 {
+    if (checkIfGameFinished() === true) {
+        showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>La partida ja ha acabat.</p>");
+        return;
+    }
+    
     var fnYes = function () {
         $.ajax({
             type: "post",
@@ -188,6 +194,11 @@ function doAbandonar()
 
 function doProposarTaules()
 {
+    if (checkIfGameFinished() === true) {
+        showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>La partida ja ha acabat.</p>");
+        return;
+    }
+    
     processUserInput("proposeDraw", escacsVdtClient, socket);
     
     if (window.openedDialogProposeDraw) {
@@ -198,9 +209,21 @@ function doProposarTaules()
 
 function doProposarAplacar()
 {
+    if (checkIfGameFinished() === true) {
+        showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>La partida ja ha acabat.</p>");
+        return;
+    }
+    
     showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>Proposta d'aplaçar la partida enviada, esperant que contesti el contrincant...</p>");
 }
 
+function checkIfGameFinished() {
+    var jsonPartida = doSelectPartidaById(param_idPartida);
+    if (jsonPartida.length > 0) {
+        window.resultatPartida = jsonPartida[0].RESULTAT;
+    }
+    return (window.resultatPartida !== ""); 
+}
 
 function doSelectIdPartidaByIdRepte(pIdRepte)
 {
@@ -210,6 +233,30 @@ function doSelectIdPartidaByIdRepte(pIdRepte)
         url: "/doSelect-partida",
         datatype: "json",
         data: "IDREPTE=" + pIdRepte,
+        async: false,
+        //cache: false,
+        timeout: 30000,
+        success: function (data, textStatus, jqXHR) {
+            res = data;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+            //
+        }
+    });
+    return res;   
+}
+
+function doSelectPartidaById(pIdPartida)
+{
+    var res = "";
+    $.ajax({
+        type: "post",
+        url: "/doSelect-partida",
+        datatype: "json",
+        data: "ID=" + pIdPartida,
         async: false,
         //cache: false,
         timeout: 30000,

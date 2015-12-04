@@ -249,7 +249,13 @@ $(document).ready(function () {
     });
     
     socket.on("systemMessageDisconnection", function (pMessage) {
+        
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(180, 0, 0);'>" + displayTime() + " - " + pMessage.text + " ha sortit de la sala de joc.</div>");
+        
+        if (checkIfGameFinished() === true) {
+            return;
+        }
+        
         var resultat = '';
         var resultatMsg = '';
         var resultatBBDD = '-1';
@@ -265,6 +271,8 @@ $(document).ready(function () {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultat + "</div>");
         showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>" + resultatMsg + "</p>");
         doUpdateResultatPartida(resultatBBDD);
+        
+        
     });
     
     /*socket.on("systemMessageBroadcastMyRoom", function (pMessage) {
@@ -312,7 +320,7 @@ $(document).ready(function () {
 
                 //2 = empat
                 doUpdateResultatPartida("2");
-
+                
                 break;
             case "0":
                 $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - A la proposta de taules que li has demanat a " + nickContrincant + " t'ha dit que 'No'. Uuupsss!!! :-(</div>");
