@@ -50,12 +50,13 @@ EscacsVdtClient.prototype.sendReplyProposeDraw = function (pElMeuNick, pReply) {
 };
 
 
-EscacsVdtClient.prototype.sendMove = function (pFitxaNom, pI, pJ, pColor) {
+EscacsVdtClient.prototype.sendMove = function (pFitxaNom, pI, pJ, pColor, pTemps) {
     var doMove = {
         fitxaNom: pFitxaNom,
         i: pI,
         j: pJ,
-        color: pColor
+        color: pColor,
+        temps: pTemps
     };
     this.socket.emit("move", doMove);
 };
@@ -106,7 +107,8 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
             var i = words[1];
             var j = words[2];
             var color = words[3];
-            this.sendMove(fitxaNom, i, j, color);
+            var temps = words[4];
+            this.sendMove(fitxaNom, i, j, color, temps);
             window.colorTorn = window.colorTorn == "B" ? "N" : "B";
             break;
         case "proposeDraw":
@@ -290,7 +292,7 @@ $(document).ready(function () {
         var i = parseInt(pMove.i);
         var j = parseInt(pMove.j);
         var iiJ = new ElMeuPoint(i, j);
-        doIsOKMove(fitxaNom, iiJ, 'rebrejugada');
+        doIsOKMove(fitxaNom, iiJ, 'rebrejugada', pMove.temps);
         window.colorTorn = window.colorTorn == "B" ? "N" : "B";
     });
     

@@ -1242,7 +1242,7 @@ function doIsKOMove() {
 }
 
 //si la jugada realitzada és correcta, afegim la jugada a la llista de fitxes mogudes
-function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
+function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
 
     var iiJ;
     if ((xiYOiiJ instanceof Point) === true) {
@@ -1413,11 +1413,25 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
 
     //activem el control de temps per al contrincant
     startTimer(fD.color, true);
+    var elMeuTemps = $("#hiddenTempsBottom").val();
 
     if (pEnviarRebreJugada === 'enviarjugada') {
-        processUserInput("doMove" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color, escacsVdtClient, socket);
+        processUserInput("doMove" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color + " " + elMeuTemps, escacsVdtClient, socket);
     } else if (pEnviarRebreJugada === 'rebrejugada') {
         doCrearPosicioTauler(fD, jugada);
+        
+        var tempsBefore = +$("#hiddenTempsTop").val();
+        var tempsAfter = +pTempsContrincant;
+        var tempsDiff = Math.abs(tempsAfter - tempsBefore);
+        $("#hiddenTempsTop").val(pTempsContrincant);
+        $("#labelTempsTop").html(secondsToHms(pTempsContrincant));
+        
+        if (tempsDiff <= 5) {
+            $("#labelTempsRetardContrincant").html("Bona connexió: " + tempsDiff + " seg. de retard");
+        } else {
+            $("#labelTempsRetardContrincant").html("Mala connexió: " + tempsDiff + " seg. de retard");
+        }
+        
     }
     
     var colorCheckMate = fD.color === "B" ? "N" : "B";
