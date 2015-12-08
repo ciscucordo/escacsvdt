@@ -1427,9 +1427,9 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         $("#labelTempsTop").html(secondsToHms(pTempsContrincant));
         
         if (tempsDiff <= 5) {
-            $("#labelTempsRetardContrincant").html("Bona connexió: " + tempsDiff + " seg. de retard");
+            $("#labelTempsRetardContrincant").html("Bona connexió").css("color", "#009900").css("backgroundColor", "#FFFF99");
         } else {
-            $("#labelTempsRetardContrincant").html("Mala connexió: " + tempsDiff + " seg. de retard");
+            $("#labelTempsRetardContrincant").html("Mala connexió: " + tempsDiff + " seg. de retard").css("color", "#FF0000").css("backgroundColor", "#FFFF99");
         }
         
     }
