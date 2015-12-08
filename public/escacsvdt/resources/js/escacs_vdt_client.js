@@ -179,25 +179,17 @@ $(document).ready(function () {
     nickContrincant = jsonJugadorContrincant[0].NICK;
 
 
-    //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
+    //NOMÉS per a LOCAL
+    /*
+    var socket = io.connect();
+    */
+
+    //NOMÉS per a OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
     var socket = io('http://escacsvdt-6qdomain.rhcloud.com:8000' || 'http://192.168.1.3:8000', {
         reconnect: true,
         //path: '/socket.io-client',
         transports: ['websocket']
     });
-    
-    
-    
-    //per a LOCAL
-    /*
-    var socket = io.connect();
-    */
-    
-    
-    
-    
-    
-    
 
     escacsVdtClient = new EscacsVdtClient(socket);
     //mostra el canvi d'habitació
