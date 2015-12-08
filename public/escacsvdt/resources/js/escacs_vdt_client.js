@@ -185,7 +185,7 @@ $(document).ready(function () {
     */
 
     //NOMÉS per a OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    var socket = io('http://192.168.1.3:8000' || 'http://escacsvdt-6qdomain.rhcloud.com:8000', {
+    var socket = io('ws://192.168.1.3:3002' || 'ws://escacsvdt-6qdomain.rhcloud.com:8000', {
         reconnect: true,
         //path: '/socket.io-client',
         transports: ['websocket']
