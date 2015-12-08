@@ -233,9 +233,12 @@ var SampleApp = function () {
         //self.io.enable('browser client minification');  // send minified client
         //self.io.enable('browser client etag');          // apply etag caching logic based on version number
         //self.io.enable('browser client gzip');          // gzip the file
-        self.io.set('transports', [
+        
+        
+        //TEMPORAL per a OPENSHIFT!!!!!!!!!
+        /*self.io.set('transports', [
             'websocket'
-        ]);
+        ]);*/
         
         var escacsVdtServerSockets = require("./lib/escacs_vdt_server_sockets");
         escacsVdtServerSockets.addSocketIOEvents(self.io);

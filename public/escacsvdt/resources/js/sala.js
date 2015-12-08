@@ -99,9 +99,21 @@ $(document).ready(function ()
 });
 
 function doSortir()
-{
-    //processUserInput("disconnect", escacsVdtClient, socket);
-    window.location = "./llistes.htm";
+{    
+    var fnYes = function () {
+        //processUserInput("finishGame" + " " + param_colorUsuari + " " + "disconnect", escacsVdtClient, socket);
+        //processUserInput("disconnect", escacsVdtClient, socket);
+        window.location = "./llistes.htm";
+    };
+    var fnNo = function () {
+        //
+    };
+    
+    if (checkIfGameFinished() === true) {
+        window.location = "./llistes.htm";
+    } else {
+        showConfirmationDialog("Confirmació", "Vols realment abandonar?", fnYes, fnNo);
+    }
 }
 
 function doCrearPartida()
@@ -166,25 +178,7 @@ function doAbandonar()
     }
     
     var fnYes = function () {
-        $.ajax({
-            type: "post",
-            url: "/doEliminarRepte",
-            datatype: "text",
-            data: "REPTELLISTAT_ID=" + param_idRepte,
-            async: false,
-            //cache: false,
-            timeout: 30000,
-            success: function (data, textStatus, jqXHR) {
-                doOmplirLlistaRepte();
-                sOk = "1";
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                sOk = "0";
-            },
-            complete: function (jqXHR, textStatus) {
-                //
-            }
-        });
+        processUserInput("finishGame" + " " + param_colorUsuari + " " + "resign", escacsVdtClient, socket);
     };
     var fnNo = function () {
         //
@@ -222,7 +216,7 @@ function checkIfGameFinished() {
     if (jsonPartida.length > 0) {
         window.resultatPartida = jsonPartida[0].RESULTAT;
     }
-    return (window.resultatPartida !== ""); 
+    return (window.resultatPartida === 1 || window.resultatPartida === 2 || window.resultatPartida === 3); 
 }
 
 function doSelectIdPartidaByIdRepte(pIdRepte)
@@ -316,15 +310,20 @@ function startTimer(pColor, pApretarRellotge) {
             $("#labelTempsBottom").html(secondsToHms(totalSeg));
             break;
     }
-    var col = pColor;
-    if (pApretarRellotge) {
+    if (totalSeg === 0) {
+        processUserInput("finishGame" + " " + pColor + " " + "time", escacsVdtClient, socket);
         stopTimer();
-        col = colContrari;
-    }
-    if (totalSeg > 0) {
-        window.timer = setTimeout(function () {
-            startTimer(col);
-        }, 1000);
+    } else {
+        var col = pColor;
+        if (pApretarRellotge) {
+            stopTimer();
+            col = colContrari;
+        }
+        if (totalSeg > 0) {
+            window.timer = setTimeout(function () {
+                startTimer(col);
+            }, 1000);
+        }
     }
 }
 

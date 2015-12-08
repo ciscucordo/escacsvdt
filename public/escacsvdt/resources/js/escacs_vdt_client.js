@@ -14,7 +14,23 @@ EscacsVdtClient.prototype.sendMessage = function (pRoom, pText) {
         room: pRoom,
         text: pText
     };
-    this.socket.emit("message", message);
+    this.socket.emit("messagy", message);
+};
+
+EscacsVdtClient.prototype.sendCanBeginGame = function () {
+    this.socket.emit("canBeginGame", {
+        canBeginGame: true
+    });
+};
+
+EscacsVdtClient.prototype.sendFinishGame = function (pRoom, pNickLoser, pColorLoser, pTipusFinish) {
+    var finishGame = {
+        room: pRoom,
+        nickLoser: pNickLoser,
+        colorLoser: pColorLoser,
+        tipusFinish: pTipusFinish
+    };
+    this.socket.emit("finishGame", finishGame);
 };
 
 EscacsVdtClient.prototype.sendProposeDraw = function (pNickContrincant) {
@@ -33,14 +49,6 @@ EscacsVdtClient.prototype.sendReplyProposeDraw = function (pElMeuNick, pReply) {
     this.socket.emit("replyProposeDraw", replyProposeDraw);
 };
 
-/*EscacsVdtClient.prototype.sendDoCheckMate = function (pRoom, pNickGuanyador, pColorGuanyador) {
-    var doCheckMate = {
-        room: pRoom,
-        nickGuanyador: pNickGuanyador,
-        colorGuanyador: pColorGuanyador
-    };
-    this.socket.emit("checkmate", doCheckMate);
-};*/
 
 EscacsVdtClient.prototype.sendMove = function (pFitxaNom, pI, pJ, pColor) {
     var doMove = {
@@ -59,11 +67,7 @@ EscacsVdtClient.prototype.changeRoom = function (pRoom, pElMeuNick) {
     });
 };
 
-EscacsVdtClient.prototype.sendCanBeginGame = function () {
-    this.socket.emit("canBeginGame", {
-        canBeginGame: true
-    });
-};
+
 
 /*EscacsVdtClient.prototype.sendDisconnect = function() {
  this.socket.emit("disconnect");
@@ -121,20 +125,18 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
         case "canBeginGame":
             this.sendCanBeginGame();
             break;
-            
-        /*case "doCheckMate":
-            var nickGuanyador;
-            var colorGuanyador = words[0];
-            if (colorGuanyador === jsonSession[0].ELMEUCOLOR) {
-                nickGuanyador = elMeuNick;
-            } else {
-                nickGuanyador = nickContrincant;
-            }
-            this.sendDoCheckMate(roomRepte, nickGuanyador, colorGuanyador);
-            break;*/
-            
         case "finishGame":
+            var nickLoser, colorLoser, tipusFinish;
+            colorLoser = words[0];
+            var tipusFinish = words[1];
+            if (colorLoser === jsonSession[0].ELMEUCOLOR) {
+                nickLoser = elMeuNick;
+            } else {
+                nickLoser = nickContrincant;
+            }
+            this.sendFinishGame(roomRepte, nickLoser, colorLoser, tipusFinish);
             break;
+
             /*case "disconnect":
              this.sendDisconnect();
              break;*/
@@ -173,21 +175,29 @@ $(document).ready(function () {
     
     elMeuNick = jsonSession[0].user; //NICKJUGADOR;
     
-    //console.log("escacs_vdt_client-->jsonSession:", jsonSession);
-    
     jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
     nickContrincant = jsonJugadorContrincant[0].NICK;
 
 
     //per OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    //var socket = io.connect('ws://escacsvdt-6qdomain.rhcloud.com:8000/');
-    //var socket = io.connect();
-    //var socket = io();
+    /*
     var socket = io('http://escacsvdt-6qdomain.rhcloud.com:8000' || 'http://192.168.1.3:8000', {
         reconnect: true,
         //path: '/socket.io-client',
         transports: ['websocket']
     });
+    */
+    
+    
+    //per a LOCAL
+    var socket = io.connect();
+
+    
+    
+    
+    
+    
+    
 
     escacsVdtClient = new EscacsVdtClient(socket);
     //mostra el canvi d'habitació
@@ -251,7 +261,6 @@ $(document).ready(function () {
     socket.on("systemMessageDisconnection", function (pMessage) {
         
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(180, 0, 0);'>" + displayTime() + " - " + pMessage.text + " ha sortit de la sala de joc.</div>");
-        
         if (checkIfGameFinished() === true) {
             return;
         }
@@ -280,7 +289,7 @@ $(document).ready(function () {
      });*/
 
     //mostra els missatges rebuts del jugador contrari
-    socket.on("message", function (pMessage) {
+    socket.on("messagy", function (pMessage) {
         $("#divListMsg").append("<br /><b>" + pMessage.nick + "</b>: " + pMessage.text);
     });
     
@@ -329,26 +338,37 @@ $(document).ready(function () {
         }
     });
 
-    /*socket.on("checkmate", function (pDoCheckMate) {
-        
-        alert("jol, is mate");
-        
-        var resultat = '';
+    socket.on("finishGame", function (pFinishGame) {
+        var tipusFinish = pFinishGame.tipusFinish;
+        switch(pFinishGame.tipusFinish) {
+            case "resign":
+                tipusFinish = " per abandó.";
+                break;
+            case "time":
+                tipusFinish = " per temps.";
+                break;
+            case "disconnect":
+                tipusFinish = " perquè ha marxat de la sala.";
+                break;
+            case "checkmate":
+                tipusFinish = " per escac i mat.";
+                break;
+        }
         var resultatMsg = '';
         var resultatBBDD = '-1';
-        if (pDoCheckMate.colorGuanyador == COLOR_BLANC) {
-            resultat = 'GUANYEN BLANQUES (1-0)';
-            resultatMsg = 'La partida ha acabant guanyant blanques (<b>' + pDoCheckMate.nickGuanyador + '</b>) per escac i mat.';
+        var colorWinner = pFinishGame.colorLoser === COLOR_BLANC ? COLOR_NEGRE : COLOR_BLANC;
+        var nickWinner = pFinishGame.nickLoser === elMeuNick ? nickContrincant : elMeuNick;
+        if (colorWinner == COLOR_BLANC) {
+            resultatMsg = 'GUANYEN BLANQUES (<b>' + nickWinner + '</b>)' + tipusFinish;
             resultatBBDD = '1';
-        } else if (pDoCheckMate.colorGuanyador == COLOR_NEGRE) {
-            resultat = 'GUANYEN NEGRES (0-1)';
-            resultatMsg = 'La partida ha acabant guanyant negres (<b>' + pDoCheckMate.nickGuanyador + '</b>) per escac i mat.';
+        } else if (colorWinner == COLOR_NEGRE) {
+            resultatMsg = 'GUANYEN NEGRES (<b>' + nickWinner + '</b>)' + tipusFinish;
             resultatBBDD = '3';
         }
-        $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultat + "</div>");
+        $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - " + resultatMsg + "</div>");
         showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>" + resultatMsg + "</p>");
         doUpdateResultatPartida(resultatBBDD);
-    });*/
+    });
 
 
     //mostra la llista d'habitacions disponibles
@@ -411,17 +431,17 @@ function doIfCheckMate(pColorEnCheckMate) {
     } else {
         nickGuanyador = nickContrincant;
     }
-        
+    
     var resultatColor = '';
     var resultatMsg = '';
     var resultatBBDD = '-1';
     if (colorGuanyador == COLOR_BLANC) {
         resultatColor = 'GUANYEN BLANQUES (1-0)';
-        resultatMsg = 'La partida ha acabant guanyant blanques (<b>' + nickGuanyador + '</b>) per escac i mat.';
+        resultatMsg = 'Les blanques (<b>' + nickGuanyador + '</b>) guanyen.';
         resultatBBDD = '1';
     } else if (colorGuanyador == COLOR_NEGRE) {
         resultatColor = 'GUANYEN NEGRES (0-1)';
-        resultatMsg = 'La partida ha acabant guanyant negres (<b>' + nickGuanyador + '</b>) per escac i mat.';
+        resultatMsg = 'Les negres (<b>' + nickGuanyador + '</b>) guanyen.';
         resultatBBDD = '3';
     }
     $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultatColor + "</div>");

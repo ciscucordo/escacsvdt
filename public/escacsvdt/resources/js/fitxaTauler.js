@@ -1423,7 +1423,8 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada) {
     var colorCheckMate = fD.color === "B" ? "N" : "B";
     var isCheckMate = checkIfCheckMate(colorCheckMate);
     if (isCheckMate === true) {
-        doIfCheckMate(colorCheckMate);
+        processUserInput("finishGame" + " " + colorCheckMate + " " + "checkmate", escacsVdtClient, socket);
+        //doIfCheckMate(colorCheckMate);
         stopTimer();
         canBeginGame = false;
     }
