@@ -186,13 +186,23 @@ $(document).ready(function () {
     var socket = io.connect();
     */
 
-    //NOMÉS per a OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    var socket = io('ws://192.168.1.3:3002' || 'ws://escacsvdt-6qdomain.rhcloud.com:8000', {
-        reconnect: true,
-        transports: ['websocket']
-    });
+    var objSocketConnection = {
+        'reconnect': true,
+        'connect timeout': 1000,
+        'reconnection delay': 300,
+        'max reconnection attempts': 10000,
+        'transports': ['websocket']
+    };
 
+    //NOMÉS per a OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
+    var socket = io('ws://192.168.1.3:3002', // || 'ws://escacsvdt-6qdomain.rhcloud.com:8000', {
+        objSocketConnection
+    );
+
+    /*
     escacsVdtClient = new EscacsVdtClient(socket);
+    */
+   
     //mostra el canvi d'habitació
     /*socket.on("joinResult", function(pResult) {
      $("#room").text(pResult.room);
@@ -202,6 +212,9 @@ $(document).ready(function () {
     // Cuando la conexión es exitosa le preguntamos al user
     // su nick mediante un prompt y lo emitimos al servidor
     socket.on("connect", function () {
+        
+        escacsVdtClient = new EscacsVdtClient(socket);
+        
         //entrem al repte actual!!!
         roomRepte = "repte" + jsonSession[0].IDREPTE;
         
@@ -209,10 +222,16 @@ $(document).ready(function () {
         //console.log("escacs_vdt_client-->NICKCONTRINCANT:", nickContrincant);
         
         escacsVdtClient.processCommand("join" + " " + roomRepte + " " + elMeuNick);
-    });
-    
+    })
+    //si falla la connexió en local, provem a OPENSHIFT
+    .on("connect_error", function() {
+        alert("connect_error");
+        socket = io('ws://escacsvdt-6qdomain.rhcloud.com:8000', 
+            objSocketConnection
+        );
+    })
     //mostra missatges del sistema
-    socket.on("systemMessage", function (pMessage) {
+    .on("systemMessage", function (pMessage) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 0);'>" + displayTime() + " - " + pMessage.text + "</div>");
     });
     
