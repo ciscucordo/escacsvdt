@@ -187,10 +187,10 @@ $(document).ready(function () {
     */
 
     var objSocketConnection = {
-        'reconnect': true,
+        //'reconnect': true,
         'connect timeout': 1000,
-        'reconnection delay': 300,
-        'max reconnection attempts': 10000,
+        //'reconnection delay': 300,
+        //'max reconnection attempts': 10000,
         'transports': ['websocket']
     };
 
@@ -226,8 +226,8 @@ $(document).ready(function () {
     //si falla la connexió en local, provem a OPENSHIFT
     .on("connect_error", function() {
         //alert("connect_error");
-        socket.disconnect();
-        socket.destroy();
+        //socket.disconnect();
+        //socket.destroy();
         socket = io('ws://escacsvdt-6qdomain.rhcloud.com:8000', 
             objSocketConnection
         );
