@@ -1479,6 +1479,7 @@ function checkIfCheckMate(pColor) {
             for (var j = 0; j < arrayEsteles[i].length; j++) {
                 for (var k = 0; k < arrayEsteles[i][j].length; k++) {
                     var fitxaNomDinsEstela = arrayEsteles[i][j][k];
+                    fitxaNomDinsEstela = fitxaNomDinsEstela.replace(/@/g, '');
                     var fD = getFitxaDadesFromElDOM(TAULER_REAL, fitxaNomDinsEstela);
                     if (fD && fD.color === pColor) {
                         copyFromArrayTaulerTo_ArrayTauler();
@@ -1710,6 +1711,14 @@ function showCoronacioDialog(pFD, pIiJ) {
 //**************************************************************************
 
 function copyFromArrayTaulerTo_ArrayTauler() {
+    
+    //inicialitzem _arrayTauler a tot null
+    for (var j = 0; j < _arrayTauler.length; j++) {
+        for (var i = 0; i < _arrayTauler[j].length; i++) {
+            _arrayTauler[i][j] = null;
+        }
+    }
+    
     //fem una còpia de les fitxes procedents de TAULER_REAL!!!
     for (var j = 0; j < arrayTauler.length; j++) {
         for (var i = 0; i < arrayTauler[j].length; i++) {
