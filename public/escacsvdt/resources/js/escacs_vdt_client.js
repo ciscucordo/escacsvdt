@@ -225,7 +225,9 @@ $(document).ready(function () {
     })
     //si falla la connexió en local, provem a OPENSHIFT
     .on("connect_error", function() {
-        alert("connect_error");
+        //alert("connect_error");
+        socket.disconnect();
+        socket.destroy();
         socket = io('ws://escacsvdt-6qdomain.rhcloud.com:8000', 
             objSocketConnection
         );
