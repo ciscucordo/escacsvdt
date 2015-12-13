@@ -547,7 +547,7 @@ function dragEndListener(event) {
         //setPosicioFitxa(TAULER_REAL, fD.nom, xiY, param_colorUsuari);
         //accions a fer si el moviment és correcte, com afegir a la llista de jugades,
         //enviar la jugada i el temps
-        doIsOKMove(target, xiY, 'enviarjugada');
+        doIsOKMove(target, xiY, 'enviarjugada', null);
 
         //reiniciem moviment OK
         isOKMove = false;
