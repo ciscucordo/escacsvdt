@@ -437,7 +437,7 @@ function mouseMoveListener(event) {
 
     var color = target.getAttribute("data-color");
     //var fD = getFitxaDadesFromElDOM(TAULER_REAL, target);
-    if (canBeginGame === true && color === param_colorUsuari) {
+    if (canBeginGame === true && color === param_colorUsuari && checkIfGameFinished() === false) {
     //if (fD.color === param_colorUsuari) {
         target.style.cursor = "grab";
     } else {
@@ -449,7 +449,7 @@ function mouseMoveListener(event) {
 
 function dragMoveListener(event) {
 
-    if (canBeginGame === false) return;
+    if (canBeginGame === false || checkIfGameFinished() === true) return;
 
     var target = event.target;
     target.style.cursor = "grabbing";
