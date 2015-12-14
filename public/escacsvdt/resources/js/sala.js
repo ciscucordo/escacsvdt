@@ -315,12 +315,15 @@ function startTimer(pColor, pApretarRellotge) {
         stopTimer();
     } else {
         var col = pColor;
+        stopTimer();
         if (pApretarRellotge) {
-            stopTimer();
             //acumular increment de temps (si n'hi ha) al meu rellotge després d'apretar-lo
-            totalSeg = +$("#hiddenTempsBottom").val();
-            totalSeg += +jsonSession[0].TEMPSINCREMENT;
-            $("#labelTempsBottom").html(secondsToHms(totalSeg));
+            if (pos === "bottom") {
+                totalSeg = +$("#hiddenTempsBottom").val();
+                totalSeg += +jsonSession[0].TEMPSINCREMENT;
+                $("#hiddenTempsBottom").val(totalSeg);
+                $("#labelTempsBottom").html(secondsToHms(totalSeg));
+            }
             col = colContrari;
         }
         if (totalSeg > 0) {
