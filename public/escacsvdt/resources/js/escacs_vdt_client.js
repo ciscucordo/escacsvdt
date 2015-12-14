@@ -238,16 +238,15 @@ $(document).ready(function () {
     //mostra missatges del sistema
     .on("systemMessage", function (pMessage) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 0);'>" + displayTime() + " - " + pMessage.text + "</div>");
-    });
-    
-    socket.on("systemMessageJoinRoom", function (pMessage) {
+    })
+    //mostra missatge que ha entrat a la sala
+    .on("systemMessageJoinRoom", function (pMessage) {
         if (pMessage.text === elMeuNick) {
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 130, 0);'>" + displayTime() + " - Benvingut a la sala de joc.</div>");
             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 130, 0);'>" + displayTime() + " - Esperem que el contrincant entri a la sala</div>");
         }        
-    });
-    
-    socket.on("systemMessageBroadcastJoinRoom", function (pMessage) {
+    })
+    .on("systemMessageBroadcastJoinRoom", function (pMessage) {
         if (pMessage.textAlreadyInRoom != "") {
             var namesInRoom = pMessage.textAlreadyInRoom.split(",");
             var bJo = false;
@@ -268,20 +267,18 @@ $(document).ready(function () {
                 escacsVdtClient.processCommand("canBeginGame");
             }
         }
-    });
-    
-    socket.on("canBeginGame", function() {
+    })
+    //pot començar la partida si el rival ja ha entrat a la sala
+    .on("canBeginGame", function() {
         canBeginGame = true;
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - Que comenci la partida!</div>");
-    });
-    
-    socket.on("systemMessageDisconnection", function (pMessage) {
-        
+    })
+    //mostra el missatge quan hi ha una desconnexió
+    .on("systemMessageDisconnection", function (pMessage) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(180, 0, 0);'>" + displayTime() + " - " + pMessage.text + " ha sortit de la sala de joc.</div>");
         if (checkIfGameFinished() === true) {
             return;
         }
-        
         var resultat = '';
         var resultatMsg = '';
         var resultatBBDD = '-1';
@@ -297,30 +294,27 @@ $(document).ready(function () {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultat + "</div>");
         showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>" + resultatMsg + "</p>");
         doUpdateResultatPartida(resultatBBDD);
-        
-        
-    });
+    })
     
     /*socket.on("systemMessageBroadcastMyRoom", function (pMessage) {
      $("#divListMsg").append("<br /><b style='color:#FF0000'>" + pMessage.text + "</b>");
      });*/
 
     //mostra els missatges rebuts del jugador contrari
-    socket.on("messagy", function (pMessage) {
+    .on("messagy", function (pMessage) {
         $("#divListMsg").append("<br /><b>" + pMessage.nick + "</b>: " + pMessage.text);
-    });
-    
+    })
     //mostra els moviments rebuts
-    socket.on("move", function (pMove) {
+    .on("move", function (pMove) {
         var fitxaNom = pMove.fitxaNom;
         var i = parseInt(pMove.i);
         var j = parseInt(pMove.j);
         var iiJ = new ElMeuPoint(i, j);
         doIsOKMove(fitxaNom, iiJ, 'rebrejugada', pMove.temps);
         window.colorTorn = window.colorTorn == "B" ? "N" : "B";
-    });
-    
-    socket.on("proposeDraw", function (pProposeDraw) {
+    })
+    //mostra el missatge que proposició de taules
+    .on("proposeDraw", function (pProposeDraw) {
         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - En " + nickContrincant + " et proposa taules.</div>");
         //var elMeuNick = jsonSession[0].user; //NICKJUGADOR;
         if (pProposeDraw.nickProposat == elMeuNick) {
@@ -332,9 +326,8 @@ $(document).ready(function () {
             };
             showConfirmationDialog("Confirmació", "En " + pProposeDraw.nickProposador + " et proposa taules. Acceptes?", fnYes, fnNo);
         }
-    });
-    
-    socket.on("replyProposeDraw", function (pReplyProposeDraw) {
+    })
+    .on("replyProposeDraw", function (pReplyProposeDraw) {
         if (window.openedDialogProposeDraw) {
             window.openedDialogProposeDraw.dialog("close");
         }
@@ -353,9 +346,9 @@ $(document).ready(function () {
                 showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>El contrincant no accepta les taules. Uuupsss!!! :-(</p>");
                 break;
         }
-    });
-
-    socket.on("finishGame", function (pFinishGame) {
+    })
+    //finalització de la partida (resign, time, disconnect o checkmate)
+    .on("finishGame", function (pFinishGame) {
         var tipusFinish = pFinishGame.tipusFinish;
         switch(pFinishGame.tipusFinish) {
             case "resign":
