@@ -1422,17 +1422,17 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         
         doCrearPosicioTauler(fD, jugada);
         
-        /*var tempsBefore = +$("#hiddenTempsTop").val();
+        var tempsBefore = +$("#hiddenTempsTop").val();
         var tempsAfter = +pTempsContrincant;
-        var tempsDiff = Math.abs(tempsAfter - tempsBefore);*/
+        var tempsDiff = Math.abs(tempsAfter - tempsBefore);
         $("#hiddenTempsTop").val(pTempsContrincant);
         $("#labelTempsTop").html(secondsToHms(pTempsContrincant));
         
-        /*if (tempsDiff <= 5) {
+        if (tempsDiff <= 5) {
             $("#labelTempsRetardContrincant").html("Bona connexió").css("color", "#009900").css("backgroundColor", "#FFFF99");
         } else {
             $("#labelTempsRetardContrincant").html("Mala connexió: " + tempsDiff + " seg. de retard").css("color", "#FF0000").css("backgroundColor", "#FFFF99");
-        }*/
+        }
         
     }
     
