@@ -209,36 +209,52 @@ function doOmplirLlistaJugador()
 //////////////////////////////////// ini repte /////////////////////////////////
 function doMirarRepteAcceptat()
 {
-    if (!jsonSession) {
-        jsonSession = doGetSession();
-    }
-    
-    var res = "";
-    $.ajax({
-        type: "post",
-        url: "/doMirarRepteAcceptat",
-        datatype: "json",
-        data: "REPTELLISTAT_IDJUGADOR=" + jsonSession[0].IDJUGADOR,
-        async: true,
-        //cache: false,
-        timeout: 30000,
-        success: function (data, textStatus, jqXHR) {
-            var jsonMirarRepteAcceptat = data;
-            if (jsonMirarRepteAcceptat[0].ENTRARASALA == "1") {
-                if (window.openedDialog) {
-                    window.openedDialog.dialog("close");
-                }
-                window.openedDialog = showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>Repte acceptat, entrant a la sala...</p>");
-                doDinsSalaRepteAcceptat(jsonMirarRepteAcceptat[0]);
+    var xhr = getXHRSession();
+    $.when($.ajax(xhr)).then(
+        //function primer param --> ajax success!!!
+        function (pSessionData, textStatus, jqXHR) 
+        {
+            try {
+                var jsonSession = pSessionData;
+                /*if (!jsonSession) {
+                    jsonSession = doGetSession();
+                }*/
+                //var res = "";
+                $.ajax({
+                    type: "post",
+                    url: "/doMirarRepteAcceptat",
+                    datatype: "json",
+                    data: "REPTELLISTAT_IDJUGADOR=" + jsonSession[0].IDJUGADOR,
+                    async: true,
+                    //cache: false,
+                    timeout: 30000,
+                    success: function (data, textStatus, jqXHR) {
+                        var jsonMirarRepteAcceptat = data;
+                        if (jsonMirarRepteAcceptat[0].ENTRARASALA == "1") {
+                            if (window.openedDialog) {
+                                window.openedDialog.dialog("close");
+                            }
+                            window.openedDialog = showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>Repte acceptat, entrant a la sala...</p>");
+                            doDinsSalaRepteAcceptat(jsonMirarRepteAcceptat[0]);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    },
+                    complete: function (jqXHR, textStatus) {
+                        //
+                    }
+                });
+            } catch (e) {
+                doIfSessionFailure(e);
             }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(errorThrown);
-        },
-        complete: function (jqXHR, textStatus) {
-            //
+        }, 
+        //function segon param --> ajax failure!!!
+        function (data, textStatus, jqXHR) 
+        {
+            doIfSessionFailure(textStatus);
         }
-    });
+    );
 }
 
 function doDinsSalaRepteAcceptat(pJsonMirarRepteAcceptat)
@@ -293,7 +309,60 @@ function loadDialogCrearRepte(pIdObj) {
         //cache: true,
         timeout: 30000,
         success: function (result) {
-            $("#dialogCrearRepte").html(result);
+            var xhr = getXHRSession();
+            $.when($.ajax(xhr)).then(
+                //function primer param --> ajax success!!!
+                function (pSessionData, textStatus, jqXHR) 
+                {
+                    try {
+                        var jsonSession = pSessionData;
+                        /*if (!jsonSession) {
+                            jsonSession = doGetSession();
+                        }*/
+                        $("#dialogCrearRepte").html(result);
+                        $("#REPTE_IDJUGADORREPTADOR").val(jsonSession[0].IDJUGADOR);
+                        $("#dialogCrearRepte").dialog({
+                            title: "Nou repte",
+                            autoOpen: false,
+                            height: 230,
+                            width: 342,
+                            modal: true,
+                            resizable: false,
+                            buttons:
+                                [{
+                                    text: "Accepta",
+                                    id: "buttonAcceptarCrearRepte",
+                                    name: "buttonAcceptarCrearRepte",
+                                    click: function () {
+                                        buttonAcceptarCrearRepteOnClick();
+                                    }
+                                }, {
+                                    text: "Tanca",
+                                    id: "buttonCancelarCrearRepte",
+                                    name: "buttonCancelarCrearRepte",
+                                    click: function () {
+                                        buttonCancelarCrearRepteOnClick();
+                                    }
+                                }],
+                            open: function (event, ui) {
+                                //
+                            },
+                            close: function (event, ui) {
+                                //
+                            }
+                        });
+                        $("#dialogCrearRepte").dialog("open");
+                    } catch (e) {
+                        doIfSessionFailure(e);
+                    }
+                }, 
+                //function segon param --> ajax failure!!!
+                function (data, textStatus, jqXHR) 
+                {
+                    doIfSessionFailure(textStatus);
+                }
+            );
+            /*$("#dialogCrearRepte").html(result);
             if (!jsonSession) {
                 jsonSession = doGetSession();
             }
@@ -328,7 +397,7 @@ function loadDialogCrearRepte(pIdObj) {
                     //
                 }
             });
-            $("#dialogCrearRepte").dialog("open");
+            $("#dialogCrearRepte").dialog("open");*/
         }
     });
 }
@@ -359,110 +428,127 @@ function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pV
         timeout: 30000,
         success: function (data) {
 
-            //console.log("data:", data);
+            var xhr = getXHRSession();
+            $.when($.ajax(xhr)).then(
+                //function primer param --> ajax success!!!
+                function (pSessionData, textStatus, jqXHR) 
+                {
+                    try {
+                        var jsonSession = pSessionData;
+                        /*if (!jsonSession) {
+                            jsonSession = doGetSession();
+                        }*/
+                        if (data.length >= 0) {
+                            var html = "<tr>" +
+                                "<td width='10%' style='height: 0px;'>" +
+                                "<!-- // -->" +
+                                "</td>" +
+                                "<td width='40%'>" +
+                                "<!-- // -->" +
+                                "</td>" +
+                                "<td width='30%'>" +
+                                "<!-- // -->" +
+                                "</td>" +
+                                "<td width='20%'>" +
+                                "<!-- // -->" +
+                                "</td>" +
+                                "</tr>";
+                            var regIniFin_ = new regIniFin(pValueNumPagActual, data.length);
+                            var iniReg = regIniFin_.reg_ini;
+                            var finReg = regIniFin_.reg_fin;
+                            var nRows = 0;                        
+                            var nickJugadorSession = jsonSession[0].user; //.NICKJUGADOR;
+                            for (var i = iniReg; i < finReg; i++) {
 
-            if (data.length >= 0) {
-                var html = "<tr>" +
-                        "<td width='10%' style='height: 0px;'>" +
-                        "<!-- // -->" +
-                        "</td>" +
-                        "<td width='40%'>" +
-                        "<!-- // -->" +
-                        "</td>" +
-                        "<td width='30%'>" +
-                        "<!-- // -->" +
-                        "</td>" +
-                        "<td width='20%'>" +
-                        "<!-- // -->" +
-                        "</td>" +
-                        "</tr>";
-                var regIniFin_ = new regIniFin(pValueNumPagActual, data.length);
-                var iniReg = regIniFin_.reg_ini;
-                var finReg = regIniFin_.reg_fin;
-                var nRows = 0;
-                if (!jsonSession) {
-                    jsonSession = doGetSession();
-                }
-                var nickJugadorSession = jsonSession[0].user; //.NICKJUGADOR;
-                for (var i = iniReg; i < finReg; i++) {
+                                var reg = data[i];
 
-                    var reg = data[i];
+                                html += "<tr>" +
+                                    "<td class='formfont' style='text-align: center; height: 25px;'>";
 
-                    html += "<tr>" +
-                            "<td class='formfont' style='text-align: center; height: 25px;'>";
+                                if (nickJugadorSession == reg.REPTELLISTAT_JUGADORREPTADOR_DESC) {
 
-                    if (nickJugadorSession == reg.REPTELLISTAT_JUGADORREPTADOR_DESC) {
+                                    html += "<img alt='eliminar' src='../resources/img/eliminarLista.PNG' style='cursor: pointer' onclick='javascript: doEliminarRepte(" + reg.REPTELLISTAT_ID + ");' title='Elimina el Repte'>";
 
-                        html += "<img alt='eliminar' src='../resources/img/eliminarLista.PNG' style='cursor: pointer' onclick='javascript: doEliminarRepte(" + reg.REPTELLISTAT_ID + ");' title='Elimina el Repte'>";
+                                } else {
 
-                    } else {
+                                    html += "<img alt='acceptar' src='../resources/img/acceptar.PNG' style='cursor: pointer' onclick='javascript: doAcceptarRepte(" + reg.REPTELLISTAT_ID + ");' title='Accepta el Repte'>";
 
-                        html += "<img alt='acceptar' src='../resources/img/acceptar.PNG' style='cursor: pointer' onclick='javascript: doAcceptarRepte(" + reg.REPTELLISTAT_ID + ");' title='Accepta el Repte'>";
+                                }
 
-                    }
+                                html += "</td>" +
+                                    "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
+                                    "<label><b>" + reg.REPTELLISTAT_JUGADORREPTADOR_DESC + "</b>" +
+                                    " (amb " + reg.REPTELLISTAT_COLORJUGADORREPTADOR + ")" +
+                                    "</label>" +
+                                    "</td>" +
+                                    "<td class='formfont' style='text-align: left; padding-left: 5px'>";
 
-                    html += "</td>" +
-                            "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
-                            "<label><b>" + reg.REPTELLISTAT_JUGADORREPTADOR_DESC + "</b>" +
-                            " (amb " + reg.REPTELLISTAT_COLORJUGADORREPTADOR + ")" +
-                            "</label>" +
-                            "</td>" +
-                            "<td class='formfont' style='text-align: left; padding-left: 5px'>";
+                                var tempsAMostrar = "";
+                                var temps = reg.REPTELLISTAT_TEMPS;
+                                var tempsEnHores = temps / 3600;
+                                var tempsEnMinuts = temps / 60;
+                                if (tempsEnHores >= 1) {
+                                    var h = getPartNumber(tempsEnHores, 'int', 2);
+                                    var min = getPartNumber(tempsEnHores, 'frac', 2);
+                                    min = min / 60;
+                                    tempsAMostrar = h + "h. ";
+                                    if (min > 0) {
+                                        tempsAMostrar += " i " + min + "min."
+                                    }
+                                } else {
+                                    tempsAMostrar = tempsEnMinuts + " min. ";
+                                }
 
-                    var tempsAMostrar = "";
-                    var temps = reg.REPTELLISTAT_TEMPS;
-                    var tempsEnHores = temps / 3600;
-                    var tempsEnMinuts = temps / 60;
-                    if (tempsEnHores >= 1) {
-                        var h = getPartNumber(tempsEnHores, 'int', 2);
-                        var min = getPartNumber(tempsEnHores, 'frac', 2);
-                        min = min / 60;
-                        tempsAMostrar = h + "h. ";
-                        if (min > 0) {
-                            tempsAMostrar += " i " + min + "min."
+                                if (reg.REPTELLISTAT_TEMPSINCREMENT != 0) {
+                                    tempsAMostrar += " + " + reg.REPTELLISTAT_TEMPSINCREMENT + " seg. incr.";
+                                }
+
+                                html += "<label>" + tempsAMostrar + "</label>" +
+                                    "</td>" +
+                                    "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
+                                    "<label>" + reg.REPTELLISTAT_AMBEVALUACIOELO_DESC + "</label>" +
+                                    "</td>" +
+                                    "</tr>" +
+                                    "<tr>" +
+                                    "<td colspan='4' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
+                                    "</td>" +
+                                    "</tr>";
+                                nRows++;
+                            }
+
+                            //afegim les files buides fins que arribem a màx. per pàg.
+                            for (var i = 1; i <= regIniFin_.max_reg_por_pag - nRows; i++) {
+                                html += "<tr>" +
+                                        "<td colspan='4' class='formfont' style='text-align: center; height: 25px;'>" +
+                                        "</td>" +
+                                        "</tr>" +
+                                        "<tr>" +
+                                        "<td colspan='4' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
+                                        "</td>" +
+                                        "</tr>";
+                            }
+
+                            $("#subTableRepte").html(html);
+                            $("#labelAlRepteLlistatSize").html(data.length + " repte(s)");
+                            $("#inputNumPagAnteriorRepte").val(regIniFin_.num_pag_anterior);
+                            $("#inputNumPagSeguentRepte").val(regIniFin_.num_pag_siguiente);
+                            $("#inputNumPagActualPagMaxRepte").val(regIniFin_.num_pag_actual + " de " + regIniFin_.num_pag_max);
+                        } else {
+                            $(".labError").text("No hi ha reptes");
                         }
-                    } else {
-                        tempsAMostrar = tempsEnMinuts + " min. ";
+                        finishedOmplirLlistaRepte = true;
+                        
+                    } catch (e) {
+                        doIfSessionFailure(e);
                     }
-
-                    if (reg.REPTELLISTAT_TEMPSINCREMENT != 0) {
-                        tempsAMostrar += " + " + reg.REPTELLISTAT_TEMPSINCREMENT + " seg. incr.";
-                    }
-
-                    html += "<label>" + tempsAMostrar + "</label>" +
-                            "</td>" +
-                            "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
-                            "<label>" + reg.REPTELLISTAT_AMBEVALUACIOELO_DESC + "</label>" +
-                            "</td>" +
-                            "</tr>" +
-                            "<tr>" +
-                            "<td colspan='4' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
-                            "</td>" +
-                            "</tr>";
-                    nRows++;
+                }, 
+                //function segon param --> ajax failure!!!
+                function (data, textStatus, jqXHR) 
+                {
+                    doIfSessionFailure(textStatus);
                 }
+            );
 
-                //afegim les files buides fins que arribem a màx. per pàg.
-                for (var i = 1; i <= regIniFin_.max_reg_por_pag - nRows; i++) {
-                    html += "<tr>" +
-                            "<td colspan='4' class='formfont' style='text-align: center; height: 25px;'>" +
-                            "</td>" +
-                            "</tr>" +
-                            "<tr>" +
-                            "<td colspan='4' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
-                            "</td>" +
-                            "</tr>";
-                }
-
-                $("#subTableRepte").html(html);
-                $("#labelAlRepteLlistatSize").html(data.length + " repte(s)");
-                $("#inputNumPagAnteriorRepte").val(regIniFin_.num_pag_anterior);
-                $("#inputNumPagSeguentRepte").val(regIniFin_.num_pag_siguiente);
-                $("#inputNumPagActualPagMaxRepte").val(regIniFin_.num_pag_actual + " de " + regIniFin_.num_pag_max);
-            } else {
-                $(".labError").text("No hi ha reptes");
-            }
-            finishedOmplirLlistaRepte = true;
         },
         error: function (s, i, error) {
             //window.location = "../../login.htm";
@@ -554,35 +640,52 @@ function doEliminarRepte(pIdRepte)
 
 function doAcceptarRepte(pIdRepte)
 {
-    if (!jsonSession) {
-        jsonSession = doGetSession();
-    }
-    var sOk = "0";
-    $.ajax({
-        type: "post",
-        url: "/doAcceptarRepte",
-        datatype: "text",
-        data: "REPTELLISTAT_ID=" + pIdRepte +
-                "&REPTELLISTAT_IDJUGADORREPTAT=" + jsonSession[0].IDJUGADOR,
-        async: true,
-        //cache: false,
-        timeout: 30000,
-        success: function (data, textStatus, jqXHR) {
-            if (window.openedDialog) {
-                window.openedDialog.dialog("close");
+    var xhr = getXHRSession();
+    $.when($.ajax(xhr)).then(
+        //function primer param --> ajax success!!!
+        function (pSessionData, textStatus, jqXHR) 
+        {
+            try {
+                var jsonSession = pSessionData;
+                /*if (!jsonSession) {
+                    jsonSession = doGetSession();
+                }*/
+                //var sOk = "0";
+                $.ajax({
+                    type: "post",
+                    url: "/doAcceptarRepte",
+                    datatype: "text",
+                    data: "REPTELLISTAT_ID=" + pIdRepte +
+                            "&REPTELLISTAT_IDJUGADORREPTAT=" + jsonSession[0].IDJUGADOR,
+                    async: true,
+                    //cache: false,
+                    timeout: 30000,
+                    success: function (data, textStatus, jqXHR) {
+                        if (window.openedDialog) {
+                            window.openedDialog.dialog("close");
+                        }
+                        window.openedDialog = showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>Repte enviat, esperant per entrar a la sala...</p>");
+                        //doOmplirLlistaRepte();
+                        //sOk = "1";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //sOk = "0";
+                    },
+                    complete: function (jqXHR, textStatus) {
+                        //alert("Esperant entrar a la sala...");
+                    }
+                });
+                //return sOk;
+            } catch (e) {
+                doIfSessionFailure(e);
             }
-            window.openedDialog = showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>Repte enviat, esperant per entrar a la sala...</p>");
-            //doOmplirLlistaRepte();
-            sOk = "1";
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            sOk = "0";
-        },
-        complete: function (jqXHR, textStatus) {
-            //alert("Esperant entrar a la sala...");
+        }, 
+        //function segon param --> ajax failure!!!
+        function (data, textStatus, jqXHR) 
+        {
+            doIfSessionFailure(textStatus);
         }
-    });
-    return sOk;
+    );
 }
 
 function doLogout() {

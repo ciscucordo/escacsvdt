@@ -39,7 +39,30 @@ window.listJugadesB = new Array();
 window.listJugadesN = new Array();
 window.resultatPartida = "";
 
-$(document).ready(function ()
+$(document).ready(
+    function () 
+    {
+        var xhr = getXHRSession();
+        $.when($.ajax(xhr)).then(
+            //function primer param --> ajax success!!!
+            function (pSessionData, textStatus, jqXHR) 
+            {
+                try {
+                    doOnPageReady(pSessionData);
+                } catch (e) {
+                    doIfSessionFailure(e);
+                }
+            }, 
+            //function segon param --> ajax failure!!!
+            function (data, textStatus, jqXHR) 
+            {
+                doIfSessionFailure(textStatus);
+            }
+        );
+    }
+);
+
+/*$(document).ready(function ()
 {
     $("#capcaleraPag").html(htmlCapcaleraPag());
     
@@ -74,7 +97,7 @@ $(document).ready(function ()
     $("#labelJugadorTop").html(nickJugadorContrincant);
     $("#labelTempsTop").html(secondsToHms(jsonSession[0].TEMPS));
     $("#hiddenTempsTop").val(jsonSession[0].TEMPS);
-    $("#labelJugadorBottom").html(jsonSession[0].user/*NICKJUGADOR*/);
+    $("#labelJugadorBottom").html(jsonSession[0].user);
     $("#labelTempsBottom").html(secondsToHms(jsonSession[0].TEMPS));
     $("#hiddenTempsBottom").val(jsonSession[0].TEMPS);
     if (jsonSession[0].ELMEUCOLOR == "B") {
@@ -96,7 +119,66 @@ $(document).ready(function ()
     
     //console.log("param_idRepte:", param_idRepte, " param_idPartida:", param_idPartida);
 
-});
+});*/
+
+function doOnReadyPage(pSessionData) 
+{
+    var jsonSession = pSessionData;
+    /*if (!jsonSession) {
+        jsonSession = doGetSession();
+    }*/
+    
+    $("#capcaleraPag").html(htmlCapcaleraPag());
+   
+    param_idRepte = jsonSession[0].IDREPTE;
+    var jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
+    if (jsonPartida.length > 0) {
+        param_idPartida = jsonPartida[0].ID;
+    } else {
+        param_idPartida = doCrearPartida(jsonSession);
+    }
+    
+    //controlem si hi ha hagut dessincronització per obtenir idPartida!!!
+    if (!param_idPartida) {
+        window.refreshGetIdPartida = self.setInterval(function () {
+            //console.log("No s'ha obtingut param_idPartida, s'intenta recuperar...");
+            jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
+            if (jsonPartida.length > 0) {
+                param_idPartida = jsonPartida[0].ID;
+            }
+            if (param_idPartida) {
+                clearInterval(window.refreshGetIdPartida);
+            }
+        }, 1000);
+    }
+    
+    var jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
+    var nickJugadorContrincant = jsonJugadorContrincant[0].NICK;
+    $("#labelJugadorTop").html(nickJugadorContrincant);
+    $("#labelTempsTop").html(secondsToHms(jsonSession[0].TEMPS));
+    $("#hiddenTempsTop").val(jsonSession[0].TEMPS);
+    $("#labelJugadorBottom").html(jsonSession[0].user);
+    $("#labelTempsBottom").html(secondsToHms(jsonSession[0].TEMPS));
+    $("#hiddenTempsBottom").val(jsonSession[0].TEMPS);
+    if (jsonSession[0].ELMEUCOLOR == "B") {
+        window.posCol = new PosicioColor("bottom", "top");
+    } else {
+        window.posCol = new PosicioColor("top", "bottom");
+    }
+    
+    window.refreshCanBeginGame = self.setInterval(function () {
+        if (canBeginGame === true) {
+            startTimer("B");
+            clearInterval(window.refreshCanBeginGame);
+        }
+    }, 1000);
+
+    //el primer torn sempre és de les BLANQUES ("B") !!!
+    window.colorTorn = "B";
+    param_colorUsuari = jsonSession[0].ELMEUCOLOR;
+    
+    //console.log("param_idRepte:", param_idRepte, " param_idPartida:", param_idPartida);
+}
 
 function doSortir()
 {    
@@ -116,11 +198,12 @@ function doSortir()
     }
 }
 
-function doCrearPartida()
+function doCrearPartida(pSessionData)
 {
-    if (!jsonSession) {
+    var jsonSession = pSessionData; 
+    /*if (!jsonSession) {
         jsonSession = doGetSession();
-    }
+    }*/
     var idJugador = jsonSession[0].IDJUGADOR;
     var idJugadorContrincant = jsonSession[0].IDJUGADORCONTRINCANT; 
     var idRepte = jsonSession[0].IDREPTE;
@@ -178,7 +261,10 @@ function doAbandonar()
     }
     
     var fnYes = function () {
-        processUserInput("finishGame" + " " + param_colorUsuari + " " + "resign", escacsVdtClient, socket);
+        
+        escacsVdtClient.processCommand("finishGame" + " " + param_colorUsuari + " " + "resign");
+        //processUserInput("finishGame" + " " + param_colorUsuari + " " + "resign", escacsVdtClient, socket);
+        
     };
     var fnNo = function () {
         //
@@ -193,7 +279,8 @@ function doProposarTaules()
         return;
     }
     
-    processUserInput("proposeDraw", escacsVdtClient, socket);
+    escacsVdtClient.processCommand("proposeDraw");
+    //processUserInput("proposeDraw", escacsVdtClient, socket);
     
     if (window.openedDialogProposeDraw) {
         window.openedDialogProposeDraw.dialog("close");
@@ -311,7 +398,10 @@ function startTimer(pColor, pApretarRellotge) {
             break;
     }
     if (totalSeg === 0) {
-        processUserInput("finishGame" + " " + pColor + " " + "time", escacsVdtClient, socket);
+        
+        escacsVdtClient.processCommand("finishGame" + " " + pColor + " " + "time");
+        //processUserInput("finishGame" + " " + pColor + " " + "time", escacsVdtClient, socket);
+        
         stopTimer();
     } else {
         var col = pColor;

@@ -1417,7 +1417,9 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
     if (pEnviarRebreJugada === 'enviarjugada') {
         var elMeuTemps = $("#hiddenTempsBottom").val();
         
-        processUserInput("doMove" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color + " " + elMeuTemps, escacsVdtClient, socket);
+        escacsVdtClient.processCommand("doMove" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color + " " + elMeuTemps);
+        //processUserInput("doMove" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color + " " + elMeuTemps, escacsVdtClient, socket);
+        
     } else if (pEnviarRebreJugada === 'rebrejugada') {
         
         doCrearPosicioTauler(fD, jugada);
@@ -1439,7 +1441,10 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
     var colorCheckMate = fD.color === "B" ? "N" : "B";
     var isCheckMate = checkIfCheckMate(colorCheckMate);
     if (isCheckMate === true) {
-        processUserInput("finishGame" + " " + colorCheckMate + " " + "checkmate", escacsVdtClient, socket);
+        
+        escacsVdtClient.processCommand("finishGame" + " " + colorCheckMate + " " + "checkmate");
+        //processUserInput("finishGame" + " " + colorCheckMate + " " + "checkmate", escacsVdtClient, socket);
+        
         //doIfCheckMate(colorCheckMate);
         stopTimer();
         canBeginGame = false;

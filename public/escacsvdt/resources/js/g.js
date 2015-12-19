@@ -1,6 +1,4 @@
 
-var jsonSession;
-
 function htmlCapcaleraPag() {
     var str = "<table style='width: 100%; border: 0px;'>";
     str += "  <tr>";
@@ -23,50 +21,7 @@ function htmlCapcaleraPag() {
     return str;
 }
 
-function doGetSession() {
-    var result = '';
-    $.ajax({
-        url: '/doGetSession',
-        type: 'post',
-        datatype: 'json',
-        data: "",
-        async: false,
-        //cache: false,
-        success: function (data) {
-            result = data;
-            if (result == "") {
-                window.location = './login.htm';
-            }
-        },
-        error: function (s, i, error) {
-            result = error;
-            window.location = './login.htm';
-        }
-    });
-    return result;
-}
 
-function doUpdateRepteSession(pJsonRepteAcceptat) {
-    var result = "0";
-    $.ajax({
-        url: '/doUpdateRepteSession',
-        type: 'post',
-        datatype: 'json',
-        data: pJsonRepteAcceptat,
-        async: true,
-        //cache: false,
-        success: function (data) {
-            result = "1";
-            window.location = "./sala.htm";
-        },
-        error: function (s, i, error) {
-            result = "0";
-            console.log(error);
-            //window.location = "./login.htm";
-        }
-    });
-    return result;
-}
 
 function introOnInput(e) {
     tecla = (document.all) ? e.keyCode : e.which;
