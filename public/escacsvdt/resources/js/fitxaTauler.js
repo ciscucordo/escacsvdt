@@ -21,7 +21,7 @@ var llistaFitxesMogudes = new Array();
 $(document).ready(function () {
 
     //recollir el color usuari de base de dades (a partir de repte_id) !!!
-    addFitxesInArrayTauler(param_colorUsuari);
+    //addFitxesInArrayTauler(param_colorUsuari);
 
 });
 

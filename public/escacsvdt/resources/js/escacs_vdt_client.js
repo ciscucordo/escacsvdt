@@ -77,6 +77,7 @@ EscacsVdtClient.prototype.changeRoom = function (pRoom, pElMeuNick) {
 
 EscacsVdtClient.prototype.processCommand = function (pCommand) {
     
+    var _this = this;
     var xhr = getXHRSession();
     $.when($.ajax(xhr)).then(
         //function primer param --> ajax success!!!
@@ -93,19 +94,19 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
                 var msgCommand = false;
                 switch (command) {
                     /*case "nick":
-                     this.sendNick(words[1]);
+                     _this.sendNick(words[1]);
                      break;*/
                     case "message":
                         var message = $("#send-message").val();
                         $("#divListMsg").append("<br /><b>Jo: </b>" + message);
                         $("#divListMsg").scrollTop($("#divListMsg").prop("scrollHeight"));
                         $("#send-message").val("");
-                        this.sendMessage(roomRepte, message);
+                        _this.sendMessage(roomRepte, message);
                         break;
                     case "join":
                         //var room = words.join(" ");
                         //handle de la creació/canvi de l'habitació
-                        this.changeRoom(words[0], elMeuNick);
+                        _this.changeRoom(words[0], elMeuNick);
                         break;
                     case "doMove":
                         var fitxaNom = words[0];
@@ -113,12 +114,12 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
                         var j = words[2];
                         var color = words[3];
                         var temps = words[4];
-                        this.sendMove(fitxaNom, i, j, color, temps);
+                        _this.sendMove(fitxaNom, i, j, color, temps);
                         window.colorTorn = window.colorTorn == "B" ? "N" : "B";
                         break;
                     case "proposeDraw":
                         $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);'>" + displayTime() + " - Has proposat taules a " + nickContrincant + ".</div>");
-                        this.sendProposeDraw(nickContrincant);
+                        _this.sendProposeDraw(nickContrincant);
                         break;
                     case "replyProposeDraw":
                         var reply = words[0];
@@ -127,10 +128,10 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
                         if (reply === "1") {
                             $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: EMPAT (1/2-1/2)</div>");
                         }
-                        this.sendReplyProposeDraw(elMeuNick, reply);
+                        _this.sendReplyProposeDraw(elMeuNick, reply);
                         break;
                     case "canBeginGame":
-                        this.sendCanBeginGame();
+                        _this.sendCanBeginGame();
                         break;
                     case "finishGame":
                         var nickLoser, colorLoser, tipusFinish;
@@ -141,10 +142,10 @@ EscacsVdtClient.prototype.processCommand = function (pCommand) {
                         } else {
                             nickLoser = nickContrincant;
                         }
-                        this.sendFinishGame(roomRepte, nickLoser, colorLoser, tipusFinish);
+                        _this.sendFinishGame(roomRepte, nickLoser, colorLoser, tipusFinish);
                         break;
                         /*case "disconnect":
-                         this.sendDisconnect();
+                         _this.sendDisconnect();
                          break;*/
                     default:
                         msgCommand = "No es reconeix l'ordre.";
@@ -194,7 +195,7 @@ $(document).ready(
             function (pSessionData, textStatus, jqXHR) 
             {
                 try {
-                    doOnPageReady(pSessionData);
+                    doOnReadyEscacs_vdt_client(pSessionData);
                 } catch (e) {
                     doIfSessionFailure(e);
                 }
@@ -208,7 +209,7 @@ $(document).ready(
     }
 );
 
-function doOnPageReady(pSessionData) 
+function doOnReadyEscacs_vdt_client(pSessionData) 
 {
     var jsonSession = pSessionData;
     /*if (!jsonSession) {
@@ -219,6 +220,10 @@ function doOnPageReady(pSessionData)
 
     jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
     nickContrincant = jsonJugadorContrincant[0].NICK;
+    
+    param_temps = jsonSession[0].TEMPS;
+    param_tempsIncrement = jsonSession[0].TEMPSINCREMENT;
+    param_ambEvaluacioElo = jsonSession[0].AMBEVALUACIOELO;
 
 
     //NOMÉS per a LOCAL
@@ -235,15 +240,15 @@ function doOnPageReady(pSessionData)
     };
 
     //per a LOCALHOST
-    /*var socket = io('ws://192.168.1.3:3002',
+    var socket = io('ws://192.168.1.3:3002',
      objSocketConnection
-     );*/
+     );
 
     //NOMÉS per a OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    var socket = io('ws://escacsvdt-6qdomain.rhcloud.com:8000',
+    /*var socket = io('ws://escacsvdt-6qdomain.rhcloud.com:8000',
             objSocketConnection
             );
-
+*/
 
     /*
      escacsVdtClient = new EscacsVdtClient(socket);
@@ -408,10 +413,10 @@ function doOnPageReady(pSessionData)
                 var resultatBBDD = '-1';
                 var colorWinner = pFinishGame.colorLoser === COLOR_BLANC ? COLOR_NEGRE : COLOR_BLANC;
                 var nickWinner = pFinishGame.nickLoser === elMeuNick ? nickContrincant : elMeuNick;
-                if (colorWinner == COLOR_BLANC) {
+                if (colorWinner === COLOR_BLANC) {
                     resultatMsg = 'GUANYEN BLANQUES (<b>' + nickWinner + '</b>)' + tipusFinish;
                     resultatBBDD = '1';
-                } else if (colorWinner == COLOR_NEGRE) {
+                } else if (colorWinner === COLOR_NEGRE) {
                     resultatMsg = 'GUANYEN NEGRES (<b>' + nickWinner + '</b>)' + tipusFinish;
                     resultatBBDD = '3';
                 }
@@ -474,27 +479,46 @@ function doUpdateResultatPartida(pResultat)
 }
 
 function doIfCheckMate(pColorEnCheckMate) {
-    var colorGuanyador = pColorEnCheckMate === "B" ? "N" : "B";
-    var nickGuanyador;
-    if (jsonSession[0].ELMEUCOLOR == colorGuanyador) {
-        nickGuanyador = elMeuNick;
-    } else {
-        nickGuanyador = nickContrincant;
-    }
+    
+    var xhr = getXHRSession();
+    $.when($.ajax(xhr)).then(
+        //function primer param --> ajax success!!!
+        function (pSessionData, textStatus, jqXHR) 
+        {
+            try {
+                var jsonSession = pSessionData;
+                var colorGuanyador = pColorEnCheckMate === "B" ? "N" : "B";
+                var nickGuanyador;
+                if (jsonSession[0].ELMEUCOLOR == colorGuanyador) {
+                    nickGuanyador = elMeuNick;
+                } else {
+                    nickGuanyador = nickContrincant;
+                }
 
-    var resultatColor = '';
-    var resultatMsg = '';
-    var resultatBBDD = '-1';
-    if (colorGuanyador == COLOR_BLANC) {
-        resultatColor = 'GUANYEN BLANQUES (1-0)';
-        resultatMsg = 'Les blanques (<b>' + nickGuanyador + '</b>) guanyen.';
-        resultatBBDD = '1';
-    } else if (colorGuanyador == COLOR_NEGRE) {
-        resultatColor = 'GUANYEN NEGRES (0-1)';
-        resultatMsg = 'Les negres (<b>' + nickGuanyador + '</b>) guanyen.';
-        resultatBBDD = '3';
-    }
-    $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultatColor + "</div>");
-    showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>" + resultatMsg + "</p>");
-    doUpdateResultatPartida(resultatBBDD);
+                var resultatColor = '';
+                var resultatMsg = '';
+                var resultatBBDD = '-1';
+                if (colorGuanyador == COLOR_BLANC) {
+                    resultatColor = 'GUANYEN BLANQUES (1-0)';
+                    resultatMsg = 'Les blanques (<b>' + nickGuanyador + '</b>) guanyen.';
+                    resultatBBDD = '1';
+                } else if (colorGuanyador == COLOR_NEGRE) {
+                    resultatColor = 'GUANYEN NEGRES (0-1)';
+                    resultatMsg = 'Les negres (<b>' + nickGuanyador + '</b>) guanyen.';
+                    resultatBBDD = '3';
+                }
+                $("#divListMsg").append("<div style='width:100%;position:relative;color:rgb(0, 0, 255);font-weight:bold'>" + displayTime() + " - RESULTAT: " + resultatColor + "</div>");
+                showInformationDialog("Informació", "<p class='formfontgreater1' style='text-align:center'>" + resultatMsg + "</p>");
+                doUpdateResultatPartida(resultatBBDD);
+            } catch (e) {
+                doIfSessionFailure(e);
+            }
+        }, 
+        //function segon param --> ajax failure!!!
+        function (data, textStatus, jqXHR) 
+        {
+            doIfSessionFailure(textStatus);
+        }
+    );
+    
 }

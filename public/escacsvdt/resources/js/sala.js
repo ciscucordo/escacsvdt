@@ -14,6 +14,9 @@ window.colorTorn = "";
 var param_colorUsuari;
 var param_idPartida;
 var param_idRepte;
+var param_temps;
+var param_tempsIncrement;
+var param_ambEvaluacioElo;
 
 var isOKMove = false;
 
@@ -48,7 +51,7 @@ $(document).ready(
             function (pSessionData, textStatus, jqXHR) 
             {
                 try {
-                    doOnPageReady(pSessionData);
+                    doOnReadySala(pSessionData);
                 } catch (e) {
                     doIfSessionFailure(e);
                 }
@@ -121,7 +124,7 @@ $(document).ready(
 
 });*/
 
-function doOnReadyPage(pSessionData) 
+function doOnReadySala(pSessionData) 
 {
     var jsonSession = pSessionData;
     /*if (!jsonSession) {
@@ -176,6 +179,9 @@ function doOnReadyPage(pSessionData)
     //el primer torn sempre és de les BLANQUES ("B") !!!
     window.colorTorn = "B";
     param_colorUsuari = jsonSession[0].ELMEUCOLOR;
+    
+    //posem les peces al tauler
+    addFitxesInArrayTauler(param_colorUsuari);
     
     //console.log("param_idRepte:", param_idRepte, " param_idPartida:", param_idPartida);
 }
@@ -410,7 +416,8 @@ function startTimer(pColor, pApretarRellotge) {
             //acumular increment de temps (si n'hi ha) al meu rellotge després d'apretar-lo
             if (pos === "bottom") {
                 totalSeg = +$("#hiddenTempsBottom").val();
-                totalSeg += +jsonSession[0].TEMPSINCREMENT;
+                totalSeg += +param_tempsIncrement;
+                //totalSeg += +jsonSession[0].TEMPSINCREMENT;
                 $("#hiddenTempsBottom").val(totalSeg);
                 $("#labelTempsBottom").html(secondsToHms(totalSeg));
             }
