@@ -203,7 +203,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
 
 }
 
-function doOmplirLlistaJugador()
+function doOmplirLlistaJugador(pResetPag)
 {
     //$.ajaxSetup({cache: false});
     clearIntervalLlista(PAG_LLISTA_JUGADOR);
@@ -211,6 +211,9 @@ function doOmplirLlistaJugador()
     var objNick = document.getElementById("nick");
     var objEstat = document.getElementById("estat");
     var objNumPagActual = document.getElementById("inputNumPagActualJugador");
+    if (pResetPag) {
+        objNumPagActual.value = "1";
+    }
     var valueNick = objNick.value;
     var valuePerfil_desc = "";
     var valueEstat = objEstat.value;
@@ -222,6 +225,20 @@ function doOmplirLlistaJugador()
             doOmplirLlistaJugadorSub(valueNick, valuePerfil_desc, valueEstat, valueNumPagActual);
         }
     }, 5000);
+}
+
+function onKeyPressFilterJugador(evt) {
+    var keyPressed = (evt.which) ? evt.which : event.keyCode;
+    if (keyPressed === 13) {
+        doOmplirLlistaJugador(true);
+    }
+}
+
+function onKeyPressFilterRepte(evt) {
+    var keyPressed = (evt.which) ? evt.which : event.keyCode;
+    if (keyPressed === 13) {
+        doOmplirLlistaRepte(true);
+    }
 }
 
 //////////////////////////////////// fin jugador ///////////////////////////////
@@ -643,7 +660,7 @@ function doMirarRepteAcceptat()
                     });
         }
 
-        function doOmplirLlistaRepte()
+        function doOmplirLlistaRepte(pResetPag)
         {
             //$.ajaxSetup({cache: false});
             clearIntervalLlista(PAG_LLISTA_REPTE);
@@ -651,6 +668,9 @@ function doMirarRepteAcceptat()
             var objJugadorReptador = document.getElementById("nickJugadorReptador");
             var objAmbEvaluacioElo = document.getElementById("ambEvaluacioElo");
             var objNumPagActual = document.getElementById("inputNumPagActualRepte");
+            if (pResetPag) {
+                objNumPagActual.value = "1";
+            }
             var valueJugadorReptador = objJugadorReptador.value;
             var valueAmbEvaluacioElo = objAmbEvaluacioElo.value;
             var valueNumPagActual = objNumPagActual.value;

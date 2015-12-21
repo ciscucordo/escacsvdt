@@ -94,7 +94,7 @@
                                         <td style="width:40px; text-align: left; vertical-align: top; padding-top: 10px;">
                                             <span class="button3">
                                                 <span>
-                                                    <input class="button3" id="filtrarLlistaJugador" name="filtrarLlistaJugador" type="button" value="" onclick="javascript: doOmplirLlistaJugador();">
+                                                    <input class="button3" id="filtrarLlistaJugador" name="filtrarLlistaJugador" type="button" value="" onclick="javascript: doOmplirLlistaJugador(true);">
                                                 </span>
                                             </span>
                                         </td>
@@ -106,10 +106,10 @@
                                                     <td class="formfont" align="" valign="middle" width="5%" style="height: 40px;">
                                                     </td>
                                                     <td class="formfont" align="" valign="middle" width="50%">
-                                                        <input id="nick" name="NICK" type="text" class="styled-input-text" style="width: 95%; height: 19px;">  
+                                                        <input id="nick" name="NICK" type="text" class="styled-input-text" style="width: 95%; height: 19px;" onkeypress="return onKeyPressFilterJugador(event);">  
                                                     </td>
                                                     <td class="formfont" align="" valign="middle" width="10%">
-                                                        <select id="estat" name="ESTAT" class="styled-select" style="width: 95%; height: 23px;">
+                                                        <select id="estat" name="ESTAT" class="styled-select" style="width: 95%; height: 23px;" onchange="javascript: doOmplirLlistaJugador(true);">
                                                             <option value="-2" class="styled-option"></option>
                                                             <option value="-1" class="styled-option">desconnectat</option>
                                                             <option value="0" class="styled-option">lliure</option>
@@ -251,7 +251,7 @@
                                         <td style="width: 40px; text-align: left; vertical-align: top; padding-top: 10px;">
                                             <span class="button3">
                                                 <span>
-                                                    <input class="button3" id="filtrarLlista" name="filtrarLlistaRepte" type="button" value="Buscar" onclick="javascript: doOmplirLlistaRepte();">
+                                                    <input class="button3" id="filtrarLlista" name="filtrarLlistaRepte" type="button" value="Buscar" onclick="javascript: doOmplirLlistaRepte(true);">
                                                 </span>
                                             </span>
                                         </td>
@@ -262,13 +262,13 @@
                                                         <!-- // -->
                                                     </td>
                                                     <td class="formfont" align="left" valign="middle" width="40%">
-                                                        <input id="nickJugadorReptador" name="NICKJUGADORREPTADOR" type="text" class="styled-input-text" style="width: 95%; height: 19px;" >  
+                                                        <input id="nickJugadorReptador" name="NICKJUGADORREPTADOR" type="text" class="styled-input-text" style="width: 95%; height: 19px;" onkeypress="return onKeyPressFilterRepte(event);">  
                                                     </td>
                                                     <td class="formfont" align="left" valign="middle" width="30%">
-                                                        <input id="temps" name="TEMPS" type="text" class="styled-input-text" style="width: 95%; height: 19px;" >  
+                                                        <input id="temps" name="TEMPS" type="text" class="styled-input-text" style="width: 95%; height: 19px;" onkeypress="return onKeyPressFilterRepte(event);">  
                                                     </td>
                                                     <td class="formfont" align="left" valign="middle" width="20%">
-                                                        <select id="ambEvaluacioElo" name="AMBEVALUACIOELO" class="styled-select" style="width: 95%; height: 23px;">
+                                                        <select id="ambEvaluacioElo" name="AMBEVALUACIOELO" class="styled-select" style="width: 95%; height: 23px;" onchange="javascript: doOmplirLlistaRepte(true);">
                                                             <option value="-2" class="styled-option"></option>
                                                             <option value="1" class="styled-option">Sí</option>
                                                             <option value="0" class="styled-option">No</option>
