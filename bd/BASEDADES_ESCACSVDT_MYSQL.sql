@@ -50,12 +50,12 @@ CREATE TABLE IF NOT EXISTS JUGADOR (
   PROVINCIA VARCHAR (50),
   TELEFON VARCHAR (15),
   EMAIL VARCHAR (50),
-  ACTIU INT (1) DEFAULT 0 NOT NULL, /*si és 0, està de baixa*/
-  PERFIL INT (1) NOT NULL, /*si és 1, és un jugador pertanyent a Club Escacs VDT, si és Invitat serà 0 !!!*/
-  ELO INT (4) DEFAULT 0 NOT NULL,
-  IP VARCHAR (50) NOT NULL,
-  PORT VARCHAR (5) NOT NULL,
-  ESTAT INT (1) DEFAULT -1 NOT NULL, /*desconnectat=-1, lliure=0, reptant=1, jugant=2*/
+  ACTIU INT (1) DEFAULT 0, /*si és 0, està de baixa*/
+  PERFIL INT (1) DEFAULT 1, /*si és 1, és un jugador pertanyent a Club Escacs VDT, si és Invitat serà 0 !!!*/
+  ELO INT (4) DEFAULT 0,
+  IP VARCHAR (50),
+  PORT VARCHAR (5),
+  ESTAT INT (1) DEFAULT -1, /*desconnectat=-1, lliure=0, reptant=1, jugant=2*/
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
