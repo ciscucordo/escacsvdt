@@ -181,7 +181,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
 function doOmplirLlistaJugador()
 {
     //$.ajaxSetup({cache: false});
-    clearIntervalLlista("PAG_LLISTA_JUGADOR");
+    clearIntervalLlista(PAG_LLISTA_JUGADOR);
     //filtres de la llista
     var objNick = document.getElementById("nick");
     var objEstat = document.getElementById("estat");
@@ -196,7 +196,7 @@ function doOmplirLlistaJugador()
         if (finishedOmplirLlistaJugador === true) {
             doOmplirLlistaJugadorSub(valueNick, valuePerfil_desc, valueEstat, valueNumPagActual);
         }
-    }, 30000);
+    }, 5000);
 }
 
 //////////////////////////////////// fin jugador ///////////////////////////////
@@ -557,7 +557,7 @@ function doOmplirLlistaRepteSub(pValueJugadorReptador, pValueAmbEvaluacioElo, pV
 function doOmplirLlistaRepte()
 {
     //$.ajaxSetup({cache: false});
-    clearIntervalLlista("PAG_LLISTA_REPTE");
+    clearIntervalLlista(PAG_LLISTA_REPTE);
     //filtres de la llista
     var objJugadorReptador = document.getElementById("nickJugadorReptador");
     var objAmbEvaluacioElo = document.getElementById("ambEvaluacioElo");
@@ -693,8 +693,8 @@ function doLogout() {
         data: "",
         success: function (data) {
             if (data == "1") {
-                clearIntervalLlista("PAG_LLISTA_JUGADOR");
-                clearIntervalLlista("PAG_LLISTA_REPTE");
+                clearIntervalLlista(PAG_LLISTA_JUGADOR);
+                clearIntervalLlista(PAG_LLISTA_REPTE);
                 window.location = "./login.htm";
             }
         },

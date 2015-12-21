@@ -22,22 +22,22 @@
             window.refreshLlistaRepte = null;
             window.refreshLlistaJugadorsIReptes = null;
             function clearIntervalLlista(pPag) {
-                if (pPag === "PAG_LLISTA_JUGADOR" || pPag === "") {
+                if (pPag === PAG_LLISTA_JUGADOR || pPag === "") {
                     if (window.refreshLlistaJugador) {
                         window.clearInterval(window.refreshLlistaJugador);
                     }
                 }
-                if (pPag === "PAG_LLISTA_PARTIDA" || pPag === "") {
+                if (pPag === PAG_LLISTA_PARTIDA || pPag === "") {
                     if (window.refreshLlistaPartida) {
                         window.clearInterval(window.refreshLlistaPartida);
                     }
                 }
-                if (pPag === "PAG_LLISTA_REPTE" || pPag === "") {
+                if (pPag === PAG_LLISTA_REPTE || pPag === "") {
                     if (window.refreshLlistaRepte) {
                         window.clearInterval(window.refreshLlistaRepte);
                     }
                 }
-                if (pPag === "PAG_LLISTA_JUGADORS_I_REPTES" || pPag === "") {
+                if (pPag === PAG_LLISTA_JUGADORS_I_REPTES || pPag === "") {
                     if (window.refreshLlistaJugadorsIReptes) {
                         window.clearInterval(window.refreshLlistaJugadorsIReptes);
                     }
@@ -251,7 +251,7 @@
                                         <td style="width: 40px; text-align: left; vertical-align: top; padding-top: 10px;">
                                             <span class="button3">
                                                 <span>
-                                                    <input class="button3" id="filtrarLlista" name="filtrarLlistaRepte" type="button" value="" onclick="javascript: doOmplirLlistaRepte();">
+                                                    <input class="button3" id="filtrarLlista" name="filtrarLlistaRepte" type="button" value="Buscar" onclick="javascript: doOmplirLlistaRepte();">
                                                 </span>
                                             </span>
                                         </td>
