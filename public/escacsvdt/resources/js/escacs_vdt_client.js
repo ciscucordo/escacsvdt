@@ -233,7 +233,7 @@ function doOnReadyEscacs_vdt_client(pSessionData)
 
     var objSocketConnection = {
         'reconnect': true,
-        'connect timeout': 1000,
+        'connect timeout': 30000,
         'reconnection delay': 300,
         'max reconnection attempts': 10000,
         'transports': ['websocket']

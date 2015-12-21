@@ -8,7 +8,7 @@ function getXHRSession() {
         data: "",
         async: true,
         cache: false,
-        timeout: 3000/*,
+        timeout: 30000/*,
         success: function (data) {
             if (data == "") {
                 window.location = './login.htm';
