@@ -83,7 +83,6 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
                 {
                     try {
                         var jsonSession = pSessionData;
-
                         if (data.length >= 0) {
                             var html = "<tr>" +
                                     "<td width='10%' style='height: 0px;'>" +
@@ -245,12 +244,24 @@ function doMirarReptesAMi(pSessionIdJugador)
                 var jsonMirarReptesAMi = data;
                 if (jsonMirarReptesAMi[0].IDJUGADORREPTAT === pSessionIdJugador) {
                     var fnYes = function () {
-
+                        doAcceptarRepte(jsonMirarReptesAMi[0].IDREPTE);
                     };
                     var fnNo = function () {
-
+                        doEliminarRepte(jsonMirarReptesAMi[0].IDREPTE);
                     };
-                    showConfirmationDialog("Confirmació", "En " + jsonMirarReptesAMi[0].IDJUGADORREPTADOR + " et repta a una partida. <p>Tempsxxxxxxxxxxxxxxxxxxxxx...</p> Acceptes?", fnYes, fnNo);
+                    if (window.openedDialog) {
+                        window.openedDialog.dialog("close");
+                    }
+                    window.openedDialog = showConfirmationDialog("Confirmació", "En " + 
+                            jsonMirarReptesAMi[0].NICKJUGADORCONTRINCANT + 
+                            " et repta a una partida. <p>Et proposa:</p>" +
+                            "<p>" +
+                            "<br>* El teu color seria: <b>" + (jsonMirarReptesAMi[0].ELMEUCOLOR === "B" ? "Blanques" : "Negres") + "</b>" +
+                            "<br>* Temps (min.): <b>" + jsonMirarReptesAMi[0].TEMPS + "</b>" +
+                            "<br>* Increment (seg.): <b>"  + jsonMirarReptesAMi[0].TEMPSINCREMENT + "</b>" +
+                            "<br>* Amb evaluació ELO: <b>" + jsonMirarReptesAMi[0].AMBEVALUACIOELO + "</b>" +
+                            "</p>" +
+                            "<p style='text-align: center'><b>Acceptes?</b></p>", fnYes, fnNo);
                     //doDinsSalaRepteAcceptat(jsonMirarReptesAMi[0]);
                 }
             },
@@ -353,11 +364,11 @@ function doMirarRepteAcceptat()
 
         function buttonAcceptarCrearRepteOnClick(pIdJugadorReptat)
         {
-            if (pIdJugadorReptat) {
+            //if (pIdJugadorReptat) {
 
-            } else {
+            //} else {
                 doCrearRepte($('#formCrearRepte').serialize());
-            }
+            //}
             $("#dialogCrearRepte").dialog("close");
         }
 
@@ -540,7 +551,7 @@ function doMirarRepteAcceptat()
 
                                                     if (nickJugadorSession == reg.REPTELLISTAT_JUGADORREPTADOR_DESC) {
 
-                                                        html += "<img alt='eliminar' src='../resources/img/eliminarLista.PNG' style='cursor: pointer' onclick='javascript: doEliminarRepte(" + reg.REPTELLISTAT_ID + ");' title='Elimina el Repte'>";
+                                                        html += "<img alt='eliminar' src='../resources/img/eliminarLista.PNG' style='cursor: pointer' onclick='javascript: doEliminarRepte(" + reg.REPTELLISTAT_ID + ", true);' title='Elimina el Repte'>";
 
                                                     } else {
 
@@ -680,7 +691,7 @@ function doMirarRepteAcceptat()
             return sOk;
         }
 
-        function doEliminarRepte(pIdRepte)
+        function doEliminarRepte(pIdRepte, pWithConfirmationDialog)
         {
             var sOk = "0";
             var fnYes = function () {
@@ -707,7 +718,11 @@ function doMirarRepteAcceptat()
             var fnNo = function () {
                 //
             };
-            showConfirmationDialog("Confirmació", "Vols eliminar aquest repte?", fnYes, fnNo);
+            if (pWithConfirmationDialog) {
+                showConfirmationDialog("Confirmació", "Vols eliminar aquest repte?", fnYes, fnNo);
+            } else {
+                fnYes();
+            }
             return sOk;
         }
 
