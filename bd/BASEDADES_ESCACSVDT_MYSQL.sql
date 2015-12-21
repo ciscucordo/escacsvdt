@@ -159,3 +159,51 @@ CREATE TABLE IF NOT EXISTS POSICIOTAULER (
   PRIMARY KEY (ID),
   FOREIGN KEY (IDPARTIDA) REFERENCES PARTIDA (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+
+
+insert into JUGADOR (nom, cognoms, nick, password) values ('Xavier', 'Masclans', 'xavier_masclans', 'xmasclans');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Àngel', 'Exojo', 'angel_exojo', 'aexojo');
+insert into JUGADOR (nom, cognoms, nick, password) values ('David', 'Alcaraz', 'david_alcaraz', 'dalcaraz');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Jordi', 'Cervelló', 'jordi_cervello', 'jcervello');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Agustín', 'Fernández', 'agustin_fernandez', 'afernandez');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Arnau', 'Masclans', 'arnau_masclans', 'amasclans');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Àngel', 'Boixader', 'angelboixader', 'aboixader');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Enric', 'Folch', 'enric_folch', 'efolch');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Alfons', 'Nateras', 'alfonso_nateras', 'anateras');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Joaquim', 'Navajas', 'joaquim_navajas', 'jnavajas');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Joan', 'Turon', 'joan_turon', 'jturon');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Oriol', 'Torrillas', 'oriol_torrillas', 'otorrillas');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Óscar', 'Barroso', 'oscar_barroso', 'obarroso');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Dani', 'Fernández', 'dani_fernandez', 'dfernandez');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Gerard', 'Rius', 'gerard_rius', 'grius');
+insert into JUGADOR (nom, cognoms, nick, password) values ('David', 'González', 'david_gonzalez', 'dgonzadez');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Aleix', 'Centelles', 'aleix_centelles', 'acentelles');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Pere', 'Castells', 'pere_castells', 'pcastells');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Francesc', 'Cordomí', 'francesc_cordomi', 'fcordomi');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Joan', 'Izquierdo', 'joan_izquierdo', 'jizquierdo');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Jordi', 'Casas', 'jordi_casas', 'jcasas');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Josep', 'Barea', 'josep_barea', 'jbarea');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Josep', 'Navajas', 'josep_navajas', 'jnavajas');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Raúl', 'Alfonso', 'raul_alfonso', 'ralfonso');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Josep', 'Guzmán', 'josep_guzman', 'jguzman');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Stefan', 'Alexandry', 'stefan_alexandry', 'salexandry');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Albert', 'Valls', 'albert_valls', 'avalls');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Isidre', 'Camprubí', 'isidre_camprubi', 'icamprubi');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Josep', 'Plantada', 'josep_plantada', 'jplantada');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Jordi', 'Salvany', 'jordi_salvany', 'jsalvany');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Pol', 'Méndez', 'pol_mendez', 'pmendez');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Mercè Montserrat', 'Oviedo', 'montserrat_oviedo', 'moviedo');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Artur', 'Salvany', 'artur_salvany', 'asalvany');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Enric', 'Vallejo', 'enric_vallejo', 'evallejo');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Ayoub', 'Elkhafi', 'ayoub_elkhafi', 'aelkhafi');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Antoni', 'Navajas', 'antoni_navajas', 'anavajas');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Ariadna', 'Alfonso', 'ariadna_alfonso', 'aalfonso');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Maria', 'Alfonso', 'maria_alfonso', 'malfonso');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Erika', 'García', 'erika_garcia', 'egarcia');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Arnau', 'González', 'arnau_gonzalez', 'agonzalez');
+insert into JUGADOR (nom, cognoms, nick, password) values ('David', 'Cregut', 'cregut', 'cregut');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Pedro', 'García', 'pedro_garcia', 'pgarcia');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Alfonso', 'Chavero', 'alfonso_chavero', 'achavero');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Werner', 'Katz', 'werner_katz', 'wkatz');
+insert into JUGADOR (nom, cognoms, nick, password) values ('Juan Manuel', 'Bouzas', 'juan_bouzas', 'jbouzas');
