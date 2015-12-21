@@ -252,14 +252,16 @@ function doMirarReptesAMi(pSessionIdJugador)
                     if (window.openedDialog) {
                         window.openedDialog.dialog("close");
                     }
-                    window.openedDialog = showConfirmationDialog("Confirmació", "En " + 
-                            jsonMirarReptesAMi[0].NICKJUGADORCONTRINCANT + 
-                            " et repta a una partida. <p>Et proposa:</p>" +
+                    var imgArrow = "<img src='../resources/img/arrow.PNG' alt='*' style='vertical-align: middle;'>";
+                    window.openedDialog = showConfirmationDialog("Confirmació", "<p>En " + 
+                            "<b>" + jsonMirarReptesAMi[0].NICKJUGADORCONTRINCANT + "</b>" +
+                            " et repta a una partida." +
+                            "<br>Et proposa:</p>" +
                             "<p>" +
-                            "<br>* El teu color seria: <b>" + (jsonMirarReptesAMi[0].ELMEUCOLOR === "B" ? "Blanques" : "Negres") + "</b>" +
-                            "<br>* Temps (min.): <b>" + jsonMirarReptesAMi[0].TEMPS + "</b>" +
-                            "<br>* Increment (seg.): <b>"  + jsonMirarReptesAMi[0].TEMPSINCREMENT + "</b>" +
-                            "<br>* Amb evaluació ELO: <b>" + jsonMirarReptesAMi[0].AMBEVALUACIOELO + "</b>" +
+                            "<br>"+imgArrow+" El teu color seria: <b>" + (jsonMirarReptesAMi[0].ELMEUCOLOR === "B" ? "Blanques" : "Negres") + "</b>" +
+                            "<br>"+imgArrow+" Temps (min.): <b>" + jsonMirarReptesAMi[0].TEMPS + "</b>" +
+                            "<br>"+imgArrow+" Increment (seg.): <b>"  + jsonMirarReptesAMi[0].TEMPSINCREMENT + "</b>" +
+                            "<br>"+imgArrow+" Amb evaluació ELO: <b>" + jsonMirarReptesAMi[0].AMBEVALUACIOELO + "</b>" +
                             "</p>" +
                             "<p style='text-align: center'><b>Acceptes?</b></p>", fnYes, fnNo);
                     //doDinsSalaRepteAcceptat(jsonMirarReptesAMi[0]);
