@@ -383,6 +383,11 @@ function doMirarRepteAcceptat()
 
         function buttonAcceptarCrearRepteOnClick(pIdJugadorReptat)
         {
+            var valueRepteTemps = $('#REPTE_TEMPS').val();
+            if (valueRepteTemps.trim() === '' || isNaN(valueRepteTemps) === true || (isNaN(valueRepteTemps) === false && parseInt(valueRepteTemps) === 0)) {
+                showAlertDialog("Informació", "<p>Has d'escriure un nombre vàlid i més gran que 0.</p>");
+                return;
+            } 
             //if (pIdJugadorReptat) {
 
             //} else {
