@@ -95,9 +95,6 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
                 var nRows = 0;
                 for (var i = iniReg; i < finReg; i++) {
                     var reg = data[i];
-                    
-                    //console.log(reg);
-                    
                     html += "<tr>" +
                             "<td class='formfont' style='text-align: center; height: 25px;'>" +
                             "<!-- // -->" +
