@@ -1488,10 +1488,15 @@ function checkIfCheckMate(pColor) {
                     var fitxaNomDinsEstela = arrayEsteles[i][j][k];
                     fitxaNomDinsEstela = fitxaNomDinsEstela.replace(/@/g, '');
                     var fD = getFitxaDadesFromElDOM(TAULER_REAL, fitxaNomDinsEstela);
+                    //mirem si les peces del mateix color que rep el check poden fer alguna cosa per evitar el check
                     if (fD && fD.color === pColor) {
                         copyFromArrayTaulerTo_ArrayTauler();
                         _arrayTauler[i][j] = fitxaNomDinsEstela;
                         setFitxesIEstelesAlTauler(TAULER_VIRTUAL);
+                        if (fD.tipusFitxa === 'R') {
+                            var _fD = getFitxaDadesFromElDOM(TAULER_VIRTUAL, fitxaNomDinsEstela);
+                            _fD.iiJ = new ElMeuPoint(i, j);
+                        }
                         b = (checkInCheck(TAULER_VIRTUAL, pColor) === true);
                         if (b === false) {
                             break;
