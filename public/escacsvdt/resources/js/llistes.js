@@ -72,7 +72,7 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
         datatype: 'json',
         data: "JUGADORLLISTAT_NICK=" + pValueNick +
                 "&JUGADORLLISTAT_PERFIL_DESC=" + pValuePerfil_desc +
-                "&JUGADORLLISTAT_ESTAT_DESC=" + pValueEstat,
+                "&JUGADORLLISTAT_ESTAT=" + pValueEstat,
         async: true,
         //cache: false,
         timeout: 30000,
@@ -831,7 +831,7 @@ function doMirarRepteAcceptat()
             doOmplirLlistaPartida();
         }
 
-        function doOmplirLlistaPartidaSub(pValueJugadorBlanques, pValueJugadorNegres, pValueNumPagActual)
+        function doOmplirLlistaPartidaSub(pValueJugadorBlanques, pValueJugadorNegres, pValueResultat, pValueNumPagActual)
         {
             finishedOmplirLlistaPartida === false;
             $.ajax({
@@ -839,7 +839,8 @@ function doMirarRepteAcceptat()
                 type: 'post',
                 datatype: 'json',
                 data: "PARTIDALLISTAT_JUGADORBLANQUES_DESC=" + pValueJugadorBlanques +
-                        "&PARTIDALLISTAT_JUGADORNEGRES_DESC=" + pValueJugadorNegres,
+                        "&PARTIDALLISTAT_JUGADORNEGRES_DESC=" + pValueJugadorNegres +
+                        "&PARTIDALLISTAT_RESULTAT=" + pValueResultat,
                 async: true,
                 //cache: false,
                 timeout: 30000,
@@ -860,10 +861,13 @@ function doMirarRepteAcceptat()
                                                         "<td width='10%' style='height: 0px;'>" +
                                                         "<!-- // -->" +
                                                         "</td>" +
-                                                        "<td width='45%'>" +
+                                                        "<td width='40%'>" +
                                                         "<!-- // -->" +
                                                         "</td>" +
-                                                        "<td width='45%'>" +
+                                                        "<td width='40%'>" +
+                                                        "<!-- // -->" +
+                                                        "</td>" +
+                                                        "<td width='10%'>" +
                                                         "<!-- // -->" +
                                                         "</td>" +
                                                         "</tr>";
@@ -875,10 +879,13 @@ function doMirarRepteAcceptat()
 
                                                     var reg = data[i];
 
-                                                    html += "<tr>" +
-                                                            "<td class='formfont' style='text-align: center; height: 25px;'>";
-                                                    html += "</td>" +
-                                                            "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
+                                                    html += "<tr>";
+                                                    
+                                                    html += "<td class='formfont' style='text-align: center; height: 25px;'>";
+                                                    html += "<img alt='mirar' src='../resources/img/mirarPartida.PNG' style='cursor: pointer' onclick='javascript: doMirarPartida(" + reg.PARTIDALLISTAT_ID + ");' title='Mira la Partida'>";
+                                                    html += "</td>";
+                                                    
+                                                    html += "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
                                                             "<label><b>" + reg.PARTIDALLISTAT_JUGADORBLANQUES_DESC + "</b>" +
                                                             "</label>" +
                                                             "</td>" +
@@ -887,9 +894,13 @@ function doMirarRepteAcceptat()
                                                             "<label><b>" + reg.PARTIDALLISTAT_JUGADORNEGRES_DESC + "</b>" +
                                                             "</label>" +
                                                             "</td>" +
+                                                            "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
+                                                            "<label><b>" + reg.PARTIDALLISTAT_RESULTAT_DESC + "</b>" +
+                                                            "</label>" +
+                                                            "</td>" +
                                                             "</tr>" +
                                                             "<tr>" +
-                                                            "<td colspan='3' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
+                                                            "<td colspan='4' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
                                                             "</td>" +
                                                             "</tr>";
                                                     nRows++;
@@ -898,11 +909,11 @@ function doMirarRepteAcceptat()
                                                 //afegim les files buides fins que arribem a màx. per pàg.
                                                 for (var i = 1; i <= regIniFin_.max_reg_por_pag - nRows; i++) {
                                                     html += "<tr>" +
-                                                            "<td colspan='3' class='formfont' style='text-align: center; height: 25px;'>" +
+                                                            "<td colspan='4' class='formfont' style='text-align: center; height: 25px;'>" +
                                                             "</td>" +
                                                             "</tr>" +
                                                             "<tr>" +
-                                                            "<td colspan='3' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
+                                                            "<td colspan='4' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
                                                             "</td>" +
                                                             "</tr>";
                                                 }
@@ -943,14 +954,16 @@ function doMirarRepteAcceptat()
             //filtres de la llista
             var objJugadorBlanques = document.getElementById("nickJugadorBlanques");
             var objJugadorNegres = document.getElementById("nickJugadorNegres");
+            var objResultat = document.getElementById("resultat");
             var objNumPagActual = document.getElementById("inputNumPagActualPartida");
             if (pResetPag) {
                 objNumPagActual.value = "1";
             }
             var valueJugadorBlanques = objJugadorBlanques.value;
             var valueJugadorNegres = objJugadorNegres.value;
+            var valueResultat = objResultat.value;
             var valueNumPagActual = objNumPagActual.value;
-            doOmplirLlistaPartidaSub(valueJugadorBlanques, valueJugadorNegres, valueNumPagActual);
+            doOmplirLlistaPartidaSub(valueJugadorBlanques, valueJugadorNegres, valueResultat, valueNumPagActual);
             //actualitzem la llista cada 60 seg. (60000)
             window.refreshLlistaPartida = self.setInterval(function () {
                 if (finishedOmplirLlistaPartida === true) {

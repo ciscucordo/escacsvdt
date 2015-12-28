@@ -893,12 +893,14 @@ span.buttonselect {
     background: rgb(225, 125, 75) !important; 
     font-size:11px !important;
     cursor:text !important;
+    color: #FFFFFF !important;
 }
 
 #tabsJugador .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-    background: #FFFFFF; 
+    background: #FFFFFF !important; 
     font-size:11px !important;
     cursor:pointer !important;
+    color: #000000 !important;
 }
 
 #tabsRepteIPartida { 
@@ -919,10 +921,12 @@ span.buttonselect {
     background: rgb(225, 125, 75) !important; 
     font-size:11px !important;
     cursor:text !important;
+    color: #FFFFFF !important;
 }
 
 #tabsRepteIPartida .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-    background: #FFFFFF; 
+    background: #FFFFFF !important; 
     font-size:11px !important;
     cursor:pointer !important;
+    color: #000000 !important;
 }
