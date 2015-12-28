@@ -36,7 +36,8 @@ function Jugada(pIdGraella, pNumJugada, pColor, pJugada)
     this.idGraella = pIdGraella; 
     this.numJugada = pNumJugada;
     this.color = pColor;
-    this.jugada = pJugada;
+    this.jugada = "jol";
+    //this.jugada = pJugada;
 }
 
 window.posCol = null;
@@ -143,6 +144,8 @@ function doOnReadySala(pSessionData)
         param_idGraella = jsonPartida[0].IDGRAELLA;
     } else {
         param_idPartida = doCrearPartida(jsonSession);
+        jsonPartida = doSelectPartidaById(param_idPartida);
+        param_idGraella = jsonPartida[0].IDGRAELLA;
     }
     
     //controlem si hi ha hagut dessincronització per obtenir idPartida!!!
@@ -444,9 +447,10 @@ function stopTimer() {
 }
 
 function apuntarJugada(pColor, pJugada) {
+    var jugada;
     switch (pColor) {
         case "B":
-            var jugada = new Jugada(param_idGraella, window.listJugadesB.length + 1, pColor, pJugada);
+            jugada = new Jugada(param_idGraella, window.listJugadesB.length + 1, pColor, pJugada);
             window.listJugadesB.push(jugada);
             var numJugada = window.listJugadesB.length;
             $("#tableListJugades").append(
@@ -458,7 +462,7 @@ function apuntarJugada(pColor, pJugada) {
                     );
             break;
         case "N":
-            var jugada = new Jugada(param_idGraella, window.listJugadesN.length + 1, pColor, pJugada);
+            jugada = new Jugada(param_idGraella, window.listJugadesN.length + 1, pColor, pJugada);
             window.listJugadesN.push(jugada);
             $("#numJugadaN" + window.listJugadesN.length).html(pJugada);
             break;

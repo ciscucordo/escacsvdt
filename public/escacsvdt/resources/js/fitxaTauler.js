@@ -1409,12 +1409,17 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
     }
 
     //apunta la jugada a la llista de jugades
-    var jugada = apuntarJugada(fD.color, jugada);
+    var vJugada = apuntarJugada(fD.color, jugada);
+
+    console.log("vJugada: ", vJugada);
 
     //activem el control de temps per al contrincant
     startTimer(fD.color, true);
     
     if (pEnviarRebreJugada === 'enviarjugada') {
+        
+        doCrearJugadesGraella(vJugada);
+        
         var elMeuTemps = $("#hiddenTempsBottom").val();
         
         escacsVdtClient.processCommand("doMove" + " " + fD.nom + " " + fD.iiJ.i + " " + fD.iiJ.j + " " + fD.color + " " + elMeuTemps);
@@ -1422,7 +1427,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         
     } else if (pEnviarRebreJugada === 'rebrejugada') {
         
-        doCrearPosicioTauler(fD, jugada);
+        doCrearPosicioTauler(/*fD,*/ vJugada);
         
         var tempsBefore = +$("#hiddenTempsTop").val();
         var tempsAfter = +pTempsContrincant;
@@ -1852,10 +1857,39 @@ function setFitxesIEstelesAlTauler(pCmd) {
 //**************************************************************************
 
 
-function doCrearPosicioTauler(pFD, pJugada)
+function doCrearJugadesGraella(/*pFD,*/ pJugada)
 {
+    $.ajax({
+        type: "post",
+        url: "/doCrearJugadesGraella",
+        datatype: "json",
+        data: "IDGRAELLA=" + pJugada.idGraella +
+                "&NUMJUGADA=" + pJugada.numJugada +
+                "&COLOR=" + pJugada.color +
+                "&JUGADA=" + pJugada.jugada,
+        async: false,
+        //cache: false,
+        timeout: 30000,
+        success: function (data, textStatus, jqXHR) {
+            //alert("success");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+            //
+        }
+    });
+    
+}
+
+
+function doCrearPosicioTauler(/*pFD,*/ pJugada)
+{
+    var idGraella = pJugada.idGraella;
     var numJugada = pJugada.numJugada;
-    var colorUltimaJugada = pFD.color;
+    var colorUltimaJugada = pJugada.color;
+    //var colorUltimaJugada = pFD.color;
     var posicio = codeArrayTaulerReal();
     
     //console.log("idPartida:", param_idPartida, "numJugada:", numJugada, "colorUltimaJugada:", colorUltimaJugada, "posicio:", posicio);
@@ -1864,7 +1898,8 @@ function doCrearPosicioTauler(pFD, pJugada)
         type: "post",
         url: "/doCrearPosicioTauler",
         datatype: "json",
-        data: "IDPARTIDA=" + param_idPartida +
+        data: "IDGRAELLA=" + idGraella +
+                "&IDPARTIDA=" + param_idPartida +
                 "&NUMJUGADA=" + numJugada +
                 "&COLORULTIMAJUGADA=" + colorUltimaJugada +
                 "&POSICIO=" + posicio,
