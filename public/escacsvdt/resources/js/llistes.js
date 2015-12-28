@@ -3,6 +3,7 @@ window.openedDialog = null;
 
 var finishedOmplirLlistaJugador = false;
 var finishedOmplirLlistaRepte = false;
+var finishedOmplirLlistaPartida = false;
 
 $(document).ready(function () {
 
@@ -43,6 +44,7 @@ $(document).ready(function () {
 
     doOmplirLlistaJugador();
     doOmplirLlistaRepte();
+    doOmplirLlistaPartida();
 
 });
 
@@ -238,6 +240,13 @@ function onKeyPressFilterRepte(evt) {
     var keyPressed = (evt.which) ? evt.which : event.keyCode;
     if (keyPressed === 13) {
         doOmplirLlistaRepte(true);
+    }
+}
+
+function onKeyPressFilterPartida(evt) {
+    var keyPressed = (evt.which) ? evt.which : event.keyCode;
+    if (keyPressed === 13) {
+        doOmplirLlistaPartida(true);
     }
 }
 
@@ -802,6 +811,164 @@ function doMirarRepteAcceptat()
                                     }
                             );
                         }
+
+
+
+
+
+
+
+
+        function goToAnteriorPagPartida()
+        {
+            document.getElementById("inputNumPagActualPartida").value = document.getElementById("inputNumPagAnteriorPartida").value;
+            doOmplirLlistaPartida();
+        }
+
+        function goToSeguentPagPartida()
+        {
+            document.getElementById("inputNumPagActualPartida").value = document.getElementById("inputNumPagSeguentPartida").value;
+            doOmplirLlistaPartida();
+        }
+
+        function doOmplirLlistaPartidaSub(pValueJugadorBlanques, pValueJugadorNegres, pValueNumPagActual)
+        {
+            finishedOmplirLlistaPartida === false;
+            $.ajax({
+                url: "/doListPartida",
+                type: 'post',
+                datatype: 'json',
+                data: "PARTIDALLISTAT_JUGADORBLANQUES_DESC=" + pValueJugadorBlanques +
+                        "&PARTIDALLISTAT_JUGADORNEGRES_DESC=" + pValueJugadorNegres,
+                async: true,
+                //cache: false,
+                timeout: 30000,
+                success: function (data) {
+
+                    var xhr = getXHRSession();
+                    $.when($.ajax(xhr)).then(
+                            //function primer param --> ajax success!!!
+                                    function (pSessionData, textStatus, jqXHR)
+                                    {
+                                        try {
+                                            var jsonSession = pSessionData;
+                                            /*if (!jsonSession) {
+                                             jsonSession = doGetSession();
+                                             }*/
+                                            if (data.length >= 0) {
+                                                var html = "<tr>" +
+                                                        "<td width='10%' style='height: 0px;'>" +
+                                                        "<!-- // -->" +
+                                                        "</td>" +
+                                                        "<td width='45%'>" +
+                                                        "<!-- // -->" +
+                                                        "</td>" +
+                                                        "<td width='45%'>" +
+                                                        "<!-- // -->" +
+                                                        "</td>" +
+                                                        "</tr>";
+                                                var regIniFin_ = new regIniFin(pValueNumPagActual, data.length);
+                                                var iniReg = regIniFin_.reg_ini;
+                                                var finReg = regIniFin_.reg_fin;
+                                                var nRows = 0;
+                                                for (var i = iniReg; i < finReg; i++) {
+
+                                                    var reg = data[i];
+
+                                                    html += "<tr>" +
+                                                            "<td class='formfont' style='text-align: center; height: 25px;'>";
+                                                    html += "</td>" +
+                                                            "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
+                                                            "<label><b>" + reg.PARTIDALLISTAT_JUGADORBLANQUES_DESC + "</b>" +
+                                                            "</label>" +
+                                                            "</td>" +
+                                                            
+                                                            "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
+                                                            "<label><b>" + reg.PARTIDALLISTAT_JUGADORNEGRES_DESC + "</b>" +
+                                                            "</label>" +
+                                                            "</td>" +
+                                                            "</tr>" +
+                                                            "<tr>" +
+                                                            "<td colspan='3' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
+                                                            "</td>" +
+                                                            "</tr>";
+                                                    nRows++;
+                                                }
+
+                                                //afegim les files buides fins que arribem a màx. per pàg.
+                                                for (var i = 1; i <= regIniFin_.max_reg_por_pag - nRows; i++) {
+                                                    html += "<tr>" +
+                                                            "<td colspan='3' class='formfont' style='text-align: center; height: 25px;'>" +
+                                                            "</td>" +
+                                                            "</tr>" +
+                                                            "<tr>" +
+                                                            "<td colspan='3' style='height: 5px; background-image: url(../resources/img/separadorFilasLista.PNG); background-repeat: repeat-x;'>" +
+                                                            "</td>" +
+                                                            "</tr>";
+                                                }
+
+                                                $("#subTablePartida").html(html);
+                                                $("#labelAlPartidaLlistatSize").html(data.length + " partida(es)");
+                                                $("#inputNumPagAnteriorPartida").val(regIniFin_.num_pag_anterior);
+                                                $("#inputNumPagSeguentPartida").val(regIniFin_.num_pag_siguiente);
+                                                $("#inputNumPagActualPagMaxPartida").val(regIniFin_.num_pag_actual + " de " + regIniFin_.num_pag_max);
+                                            } else {
+                                                $(".labError").text("No hi ha partides");
+                                            }
+                                            finishedOmplirLlistaPartida = true;
+
+                                        } catch (e) {
+                                            doIfSessionFailure(e);
+                                        }
+                                    },
+                                    //function segon param --> ajax failure!!!
+                                            function (data, textStatus, jqXHR)
+                                            {
+                                                doIfSessionFailure(textStatus);
+                                            }
+                                    );
+
+                                },
+                        error: function (s, i, error) {
+                            //window.location = "../../login.htm";
+                            console.log(error);
+                        }
+                    });
+        }                
+
+        function doOmplirLlistaPartida(pResetPag)
+        {
+            //$.ajaxSetup({cache: false});
+            clearIntervalLlista(PAG_LLISTA_PARTIDA);
+            //filtres de la llista
+            var objJugadorBlanques = document.getElementById("nickJugadorBlanques");
+            var objJugadorNegres = document.getElementById("nickJugadorNegres");
+            var objNumPagActual = document.getElementById("inputNumPagActualPartida");
+            if (pResetPag) {
+                objNumPagActual.value = "1";
+            }
+            var valueJugadorBlanques = objJugadorBlanques.value;
+            var valueJugadorNegres = objJugadorNegres.value;
+            var valueNumPagActual = objNumPagActual.value;
+            doOmplirLlistaPartidaSub(valueJugadorBlanques, valueJugadorNegres, valueNumPagActual);
+            //actualitzem la llista cada 60 seg. (60000)
+            window.refreshLlistaPartida = self.setInterval(function () {
+                if (finishedOmplirLlistaPartida === true) {
+                    try {
+                        doOmplirLlistaPartidaSub(valueJugadorBlanques, valueJugadorNegres, valueNumPagActual);
+                    } finally {
+                        //
+                    }
+                }
+            }, 60000);
+
+        }
+
+
+
+
+
+
 
                 function doLogout() {
                     $.ajax({

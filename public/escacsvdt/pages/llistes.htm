@@ -44,6 +44,13 @@
                 }
             }
         </script>
+        
+        
+          <script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+      </script>  
 
     </head>
     <body>
@@ -217,7 +224,7 @@
 
                     </table>
                 </td>
-                <td id="llistaReptes" style="width: 50%; vertical-align: top">
+                <td style="width: 50%; vertical-align: top">
                     <table style="width: 100%; border-collapse: collapse" >
 
                         <tr>
@@ -226,27 +233,42 @@
                             </td>
                         </tr>
 
-                        <tr>
-                            <td colspan="5">
-                                <table style="width: 100%; border-collapse: collapse" >
-                                    <tr>
-                                        <td width="50%" align="left" valign="top" style="height: 40px; padding-left: 20px">
-                                            <input class="submitStyled" style="font-weight: normal;" type="button" value="NOU REPTE" align="left" onclick="javascript: loadDialogCrearRepte();">
-                                        </td>
-                                        <td width="50%" align="right" valign="top" style="padding-right: 20px">
-                                            <!-- // -->
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
+                        
                         <tr>
                             <td colspan="5" valign="top" align="" style="padding-left: 20px; padding-right: 20px">
+                                
+                                
+                                <div id="tabs">
+                                    <ul>
+                                      <li><a href="#tabs-1">Reptes</a></li>
+                                      <li><a href="#tabs-2">Partides</a></li>
+                                    </ul>
+                                    <div id="tabs-1">
+                                        
+                                    
+                                        
+                                
+                                
+                                
+                                
 
                                 <!--*************************************************************************-->
                                 <!--********* INI LLISTA REPTE *********************************************-->
                                 <!--*************************************************************************-->
                                 <table style="width: 100%; border-collapse: collapse;">
+                                    
+                                    <tr>
+                                        <td colspan="2">
+                                    <table style="width: 100%; border-collapse: collapse" >
+                                                <tr>
+                                                    <td align="left" valign="top" style="height: 40px; padding-left: 20px">
+                                                        <input class="submitStyled" style="font-weight: normal;" type="button" value="NOU REPTE" align="left" onclick="javascript: loadDialogCrearRepte();">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                </tr>
+                                    
                                     <tr>
                                         <td style="width: 40px; text-align: left; vertical-align: top; padding-top: 10px;">
                                             <span class="button3">
@@ -257,6 +279,11 @@
                                         </td>
                                         <td>
                                             <table style="width: 100%; border-collapse: collapse;">
+                                                
+                                                
+                                                        
+                                                    
+                                                
                                                 <tr>
                                                     <td class="formfont" align="" valign="middle" width="10%" style="height: 40px;">
                                                         <!-- // -->
@@ -352,8 +379,113 @@
 
                                 </table>
                                 <!--*************************************************************************-->
-                                <!--********* FIN pàgina a carregar segons l'opció seleccionada *************-->
+                                <!--********* FIN LLISTA REPTE *************-->
                                 <!--*************************************************************************-->
+                                
+                                </div>    
+                                    <div id="tabs-2">
+                                        <!--*************************************************************************-->
+                                <!--********* INI LLISTA PARTIDA *********************************************-->
+                                <!--*************************************************************************-->
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width: 40px; text-align: left; vertical-align: top; padding-top: 10px;">
+                                            <span class="button3">
+                                                <span>
+                                                    <input class="button3" id="filtrarLlista" name="filtrarLlistaPartida" type="button" value="Buscar" onclick="javascript: doOmplirLlistaPartida(true);">
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <table style="width: 100%; border-collapse: collapse;">
+                                                <tr>
+                                                    <td class="formfont" align="" valign="middle" width="10%" style="height: 40px;">
+                                                        <!-- // -->
+                                                    </td>
+                                                    <td class="formfont" align="left" valign="middle" width="40%">
+                                                        <input id="nickJugadorBlanques" name="NICKJUGADORBLANQUES" type="text" class="styled-input-text" style="width: 95%; height: 19px;" onkeypress="return onKeyPressFilterPartida(event);">  
+                                                    </td>
+                                                    <td class="formfont" align="left" valign="middle" width="40%">
+                                                        <input id="nickJugadorNegres" name="NICKJUGADORNEGRES" type="text" class="styled-input-text" style="width: 95%; height: 19px;" onkeypress="return onKeyPressFilterPartida(event);">  
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                            <form id="llista_partida" name="llista_partida" method="post" target="_self" >
+
+                                                <input type="hidden" id="PARAM_PAG_ID" name="PARAM_PAG_ID" value="PAG_LLISTA_PARTIDA">
+
+                                                <table style="width: 100%; border-collapse: collapse;">
+                                                    <tr>
+                                                        <td width="10%" style="height: 0px;">
+                                                            <!-- // -->
+                                                        </td>
+                                                        <td width="45%">
+                                                            <!-- // -->
+                                                        </td>
+                                                        <td width="45%">
+                                                            <!-- // --> 
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="fontcabeceralistado1">
+                                                            <!-- // -->
+                                                        </td>
+                                                        <td class="fontcabeceralistado2">
+                                                            <label>Blanques</label> 
+                                                        </td>
+                                                        <td class="fontcabeceralistado2">
+                                                            <label>Negres</label>  
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <table id="subTablePartida" style="width:100%; border-collapse: collapse;">
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="3" style="height: 25px;">
+                                                            <!-- // -->
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+
+                                            </form>
+
+                                            <table style="width: 100%; border-collapse: collapse; border: 0.5mm; border-color: rgb(225, 125, 75); border-style: solid;">
+                                                <tr>
+                                                    <td colspan="5" style="padding: 10px; text-align: right;">
+                                                        <div class="wraptocenter">
+                                                            <label id="labelAlPartidaLlistatSize" class="formfontbold"></label>
+                                                            <a href="javascript: goToAnteriorPagPartida();"><img alt="Pàg. anterior" src="../resources/img/pagAnteriorGrid2.PNG" style="vertical-align: middle"></a>
+                                                            <input id="inputNumPagActualPagMaxPartida" type="text" class="styled-input-text" style="text-align: center;" size="3" disabled >
+                                                            <a href="javascript: goToSeguentPagPartida();"><img alt="Pàg. següent" src="../resources/img/pagSeguentGrid2.PNG" style="vertical-align: middle"></a>
+                                                            <input type="hidden" id="inputNumPagAnteriorPartida" value="1">
+                                                            <input type="hidden" id="inputNumPagActualPartida" value="1">
+                                                            <input type="hidden" id="inputNumPagSeguentPartida" value="1">
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+                                <!--*************************************************************************-->
+                                <!--********* FIN LLISTA PARTIDA *************-->
+                                <!--*************************************************************************-->
+                                    </div>  
+                                </div>
+                                
+                                
+                                
+                                
 
                             </td>
                         </tr>
@@ -367,7 +499,7 @@
             </tr>
 
         </table>
-
+        
         <div id="dialogCrearRepte" style="display: none"></div>
 
         <script>
