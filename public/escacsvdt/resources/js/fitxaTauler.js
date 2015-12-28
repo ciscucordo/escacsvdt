@@ -1854,7 +1854,7 @@ function setFitxesIEstelesAlTauler(pCmd) {
 
 function doCrearPosicioTauler(pFD, pJugada)
 {
-    var numJugada = pJugada.nJugada;
+    var numJugada = pJugada.numJugada;
     var colorUltimaJugada = pFD.color;
     var posicio = codeArrayTaulerReal();
     

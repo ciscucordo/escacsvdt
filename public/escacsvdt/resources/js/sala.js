@@ -13,6 +13,7 @@ window.colorTorn = "";
 //color del jugador el qual s'ha loginat !!!
 var param_colorUsuari;
 var param_idPartida;
+var param_idGraella;
 var param_idRepte;
 var param_temps;
 var param_tempsIncrement;
@@ -30,9 +31,11 @@ function PosicioColor(pPosB, pPosN)
     this.posN = pPosN;
 }
 
-function Jugada(pNJugada, pJugada)
+function Jugada(pIdGraella, pNumJugada, pColor, pJugada)
 {
-    this.nJugada = pNJugada;
+    this.idGraella = pIdGraella; 
+    this.numJugada = pNumJugada;
+    this.color = pColor;
     this.jugada = pJugada;
 }
 
@@ -137,6 +140,7 @@ function doOnReadySala(pSessionData)
     var jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
     if (jsonPartida.length > 0) {
         param_idPartida = jsonPartida[0].ID;
+        param_idGraella = jsonPartida[0].IDGRAELLA;
     } else {
         param_idPartida = doCrearPartida(jsonSession);
     }
@@ -148,6 +152,7 @@ function doOnReadySala(pSessionData)
             jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
             if (jsonPartida.length > 0) {
                 param_idPartida = jsonPartida[0].ID;
+                param_idGraella = jsonPartida[0].IDGRAELLA;
             }
             if (param_idPartida) {
                 clearInterval(window.refreshGetIdPartida);
@@ -441,21 +446,21 @@ function stopTimer() {
 function apuntarJugada(pColor, pJugada) {
     switch (pColor) {
         case "B":
-            var jugada = new Jugada(window.listJugadesB.length + 1, pJugada);
+            var jugada = new Jugada(param_idGraella, window.listJugadesB.length + 1, pColor, pJugada);
             window.listJugadesB.push(jugada);
-            var nJugada = window.listJugadesB.length;
+            var numJugada = window.listJugadesB.length;
             $("#tableListJugades").append(
                     "<tr>" +
-                    "  <td id='nJugada" + nJugada + "' class='fontformgreater1' style='border:1px solid rgb(225, 125, 75);'>" + nJugada + "</td>" +
-                    "  <td id='nJugadaB" + nJugada + "' style='border:1px solid rgb(225, 125, 75);'>" + pJugada + "</td>" +
-                    "  <td id='nJugadaN" + nJugada + "' style='border:1px solid rgb(225, 125, 75);'></td>" +
+                    "  <td id='numJugada" + numJugada + "' class='fontformgreater1' style='border:1px solid rgb(225, 125, 75);'>" + numJugada + "</td>" +
+                    "  <td id='numJugadaB" + numJugada + "' style='border:1px solid rgb(225, 125, 75);'>" + pJugada + "</td>" +
+                    "  <td id='numJugadaN" + numJugada + "' style='border:1px solid rgb(225, 125, 75);'></td>" +
                     "</tr>"
                     );
             break;
         case "N":
-            var jugada = new Jugada(window.listJugadesN.length + 1, pJugada);
+            var jugada = new Jugada(param_idGraella, window.listJugadesN.length + 1, pColor, pJugada);
             window.listJugadesN.push(jugada);
-            $("#nJugadaN" + window.listJugadesN.length).html(pJugada);
+            $("#numJugadaN" + window.listJugadesN.length).html(pJugada);
             break;
     }
     return jugada;
