@@ -469,7 +469,7 @@ function doUpdateResultatPartida(pResultat)
         //cache: false,
         timeout: 30000,
         success: function (data, textStatus, jqXHR) {
-            //
+            window.resultatPartida = pResultat;
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);
