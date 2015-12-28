@@ -201,35 +201,35 @@ div.ui-datepicker{
 }
 
 .styled-input-text {
-    font-size: 11px; 
-    font-family: Arial, Helvetica, Sans-Serif;
-    font-style: normal;
-    color: black;
+    font-size: 11px !important; 
+    font-family: Arial, Helvetica, Sans-Serif !important;
+    font-style: normal !important;
+    color: black !important;
     background-color: rgb(255, 225, 175) !important;
-    border: 1px;
-    height: 19px;
-    border: 1px solid #000;
+    border: 1px !important;
+    height: 19px !important;
+    border: 1px solid #000 !important;
 }
 
 .styled-select {
-    font-size: 11px; 
-    font-family: Arial, Helvetica, Sans-Serif;
-    font-style: normal;
-    color: black;
+    font-size: 11px !important; 
+    font-family: Arial, Helvetica, Sans-Serif !important;
+    font-style: normal !important;
+    color: black !important;
     background-color: rgb(255, 225, 175) !important;
-    border: 1px;
-    height: 23px;
-    border: 1px solid #000;
-    padding: 3px 2px 2px 0px;
+    border: 1px !important;
+    height: 23px !important;
+    border: 1px solid #000 !important;
+    padding: 3px 2px 2px 0px !important;
 }
 
 .styled-option {
-    font-size: 11px; 
-    font-family: Arial, Helvetica, Sans-Serif;
-    font-style: normal;
-    color: black;
+    font-size: 11px !important; 
+    font-family: Arial, Helvetica, Sans-Serif !important;
+    font-style: normal !important;
+    color: black !important;
     background-color: rgb(255, 225, 175) !important;
-    width: 100%;
+    width: 100% !important;
 }
 
 .styled-input-radio {
