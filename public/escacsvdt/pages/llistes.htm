@@ -46,11 +46,12 @@
         </script>
         
         
-          <script>
-  $(function() {
-    $( "#tabs" ).tabs();
-  });
-      </script>  
+        <script>
+            $(function() {
+                $( "#tabsJugador" ).tabs();
+                $( "#tabsRepteIPartida" ).tabs();
+            });
+        </script>  
 
     </head>
     <body>
@@ -76,7 +77,7 @@
                             </td>
                         </tr>
 
-                        <tr>
+                        <!--<tr>
                             <td colspan="5" valign="top" align="" style="padding-left: 20px; padding-right: 20px; border-right:0.75mm solid rgb(225, 125, 75); ">
                                 <table style="width: 100%; border-collapse: collapse" >
                                     <tr>
@@ -84,15 +85,21 @@
                                             <input class="submitStyled" style="display: none; font-weight: normal;" type="button" value="NOU JUGADOR" align="left" onclick="javascript: insertarJugador();">
                                         </td>
                                         <td width="50%" align="right" valign="top" style="padding-right: 20px">
-                                            <!-- // -->
+                                            
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                        </tr>
+                        </tr>-->
                         <tr>
                             <td colspan="5" valign="top" align="" style="padding-left: 20px; padding-right: 20px; border-right:0.75mm solid rgb(225, 125, 75); ">
 
+                                <div id="tabsJugador">
+                                    <ul>
+                                      <li><a href="#tabsJugador-1">Jugadors</a></li>
+                                    </ul>
+                                    <div id="tabsJugador-1">
+                                
                                 <!--*************************************************************************-->
                                 <!--********* INI LLISTA JUGADOR *********************************************-->
                                 <!--*************************************************************************-->
@@ -211,8 +218,12 @@
                                     </tr>
                                 </table>
                                 <!--*************************************************************************-->
-                                <!--********* FIN pàgina a carregar segons l'opció seleccionada *************-->
+                                <!--********* FIN LLISTA JUGADORS *************-->
                                 <!--*************************************************************************-->
+                                
+                          
+                                </div>
+                                
 
                             </td>
                         </tr>
@@ -238,12 +249,12 @@
                             <td colspan="5" valign="top" align="" style="padding-left: 20px; padding-right: 20px">
                                 
                                 
-                                <div id="tabs">
+                                <div id="tabsRepteIPartida">
                                     <ul>
-                                      <li><a href="#tabs-1">Reptes</a></li>
-                                      <li><a href="#tabs-2">Partides</a></li>
+                                      <li><a href="#tabsRepteIPartida-1">Reptes</a></li>
+                                      <li><a href="#tabsRepteIPartida-2">Partides</a></li>
                                     </ul>
-                                    <div id="tabs-1">
+                                    <div id="tabsRepteIPartida-1">
                                         
                                     
                                         
@@ -383,7 +394,7 @@
                                 <!--*************************************************************************-->
                                 
                                 </div>    
-                                    <div id="tabs-2">
+                                    <div id="tabsRepteIPartida-2">
                                         <!--*************************************************************************-->
                                 <!--********* INI LLISTA PARTIDA *********************************************-->
                                 <!--*************************************************************************-->
