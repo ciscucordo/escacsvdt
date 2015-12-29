@@ -170,6 +170,17 @@ var SampleApp = function () {
                         }]);
                 });
                 break;
+            case "doUpdateVeurePartidaSession":
+                isSessionOp = true;
+                utils.parseReceivedData(pRequest, function (pParams) {
+                    pRequest.session.data.IDPARTIDA = pParams["IDPARTIDA"];
+                    utils.sendJson(pResponse, [{
+                            IDPARTIDA: pRequest.session.data.IDPARTIDA,
+                            user/*NICKJUGADOR*/: pRequest.session.data.user //NICKJUGADOR,
+                        }]);
+                });
+                break;
+                
         }
         return isSessionOp;
     }

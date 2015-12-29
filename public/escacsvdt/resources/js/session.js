@@ -69,3 +69,25 @@ function doUpdateRepteSession(pJsonRepteAcceptat, pRedirecting) {
     });
     return result;
 }
+
+function doUpdateVeurePartidaSession(pJsonVeurePartida, pRedirecting) {
+    var result = "0";
+    $.ajax({
+        url: '/doUpdateVeurePartidaSession',
+        type: 'post',
+        datatype: 'json',
+        data: pJsonVeurePartida,
+        async: true,
+        //cache: false,
+        success: function (data) {
+            result = "1";
+            window.location = pRedirecting;//"./sala.htm";
+        },
+        error: function (s, i, error) {
+            result = "0";
+            console.log(error);
+            //window.location = "./login.htm";
+        }
+    });
+    return result;
+}

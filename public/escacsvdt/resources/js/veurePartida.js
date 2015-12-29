@@ -8,12 +8,6 @@ var TIPUS_FITXA_ALFIL = "A";
 var TIPUS_FITXA_CAVALL = "C";
 var TIPUS_FITXA_TORRE = "T";
 var TIPUS_FITXA_PEO = "P";
-//control del color que toca jugar
-window.colorTorn = "";
-//color del jugador el qual s'ha loginat !!!
-var param_colorUsuari;
-var param_idPartida;
-var param_idGraella;
 
 
 function PosicioColor(pPosB, pPosN)
@@ -27,8 +21,7 @@ function Jugada(pIdGraella, pNumJugada, pColor, pJugada)
     this.idGraella = pIdGraella; 
     this.numJugada = pNumJugada;
     this.color = pColor;
-    this.jugada = "jol";
-    //this.jugada = pJugada;
+    this.jugada = pJugada;
 }
 
 window.posCol = null;
@@ -62,71 +55,36 @@ $(document).ready(
 
 function doOnReadyVeurePartida(pSessionData) 
 {
-    
-    
-    
-    
-    
     var jsonSession = pSessionData;
     
     $("#capcaleraPag").html(htmlCapcaleraPag());
    
-    param_idRepte = jsonSession[0].IDREPTE;
-    var jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
-    if (jsonPartida.length > 0) {
-        param_idPartida = jsonPartida[0].ID;
-        param_idGraella = jsonPartida[0].IDGRAELLA;
-    } else {
-        param_idPartida = doCrearPartida(jsonSession);
-        jsonPartida = doSelectPartidaById(param_idPartida);
-        param_idGraella = jsonPartida[0].IDGRAELLA;
-    }
+    var idPartida = jsonSession[0].IDPARTIDA;
+    var jsonPartida = doSelectPartidaById(idPartida);
     
-    //controlem si hi ha hagut dessincronització per obtenir idPartida!!!
-    if (!param_idPartida) {
-        window.refreshGetIdPartida = self.setInterval(function () {
-            //console.log("No s'ha obtingut param_idPartida, s'intenta recuperar...");
-            jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
-            if (jsonPartida.length > 0) {
-                param_idPartida = jsonPartida[0].ID;
-                param_idGraella = jsonPartida[0].IDGRAELLA;
-            }
-            if (param_idPartida) {
-                clearInterval(window.refreshGetIdPartida);
-            }
-        }, 1000);
-    }
+    var idJugadorBlanques = jsonPartida[0].IDJUGADORBLANQUES;
+    var jsonJugadorBlanques = doSelectJugadorById(idJugadorBlanques);
     
-    var jsonJugadorContrincant = doSelectJugadorById(jsonSession[0].IDJUGADORCONTRINCANT);
-    var nickJugadorContrincant = jsonJugadorContrincant[0].NICK;
-    $("#labelJugadorTop").html(nickJugadorContrincant);
-    $("#labelJugadorBottom").html(jsonSession[0].user);
-    if (jsonSession[0].ELMEUCOLOR == "B") {
+    var idJugadorNegres = jsonPartida[0].IDJUGADORNEGRES;
+    var jsonJugadorNegres = doSelectJugadorById(idJugadorNegres);
+    
+    $("#labelJugadorTop").html(jsonJugadorNegres[0].NICK);
+    $("#labelJugadorBottom").html(jsonJugadorBlanques[0].NICK);
+    //if (jsonSession[0].ELMEUCOLOR == "B") {
         window.posCol = new PosicioColor("bottom", "top");
-    } else {
-        window.posCol = new PosicioColor("top", "bottom");
-    }
+    //} else {
+    //    window.posCol = new PosicioColor("top", "bottom");
+    //}
 }
-
 
 
 
 function doSortir()
 {    
-    var fnYes = function () {
-        //processUserInput("finishGame" + " " + param_colorUsuari + " " + "disconnect", escacsVdtClient, socket);
-        //processUserInput("disconnect", escacsVdtClient, socket);
-        window.location = "./llistes.htm";
-    };
-    var fnNo = function () {
-        //
-    };
-    
-    if (checkIfGameFinished() === true) {
-        window.location = "./llistes.htm";
-    } else {
-        showConfirmationDialog("Confirmació", "Vols realment abandonar?", fnYes, fnNo);
-    }
+    doUpdateVeurePartidaSession({
+        IDPARTIDA: null
+    }, "./llistes.htm");
+    //window.location = "./llistes.htm";
 }
 
 

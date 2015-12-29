@@ -979,7 +979,10 @@ function doMirarRepteAcceptat()
 
 
 function doVeurePartida(pIdPartida) {
-    window.location = "./veurePartida.htm?mirarpartida=1&IDPARTIDA="+pIdPartida;
+    doUpdateVeurePartidaSession({
+        IDPARTIDA: pIdPartida
+    }, "./veurePartida.htm");
+    //window.location = "./veurePartida.htm?mirarpartida=1&IDPARTIDA="+pIdPartida;
 }
 
 
