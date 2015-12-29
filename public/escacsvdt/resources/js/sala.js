@@ -36,8 +36,7 @@ function Jugada(pIdGraella, pNumJugada, pColor, pJugada)
     this.idGraella = pIdGraella; 
     this.numJugada = pNumJugada;
     this.color = pColor;
-    this.jugada = "jol";
-    //this.jugada = pJugada;
+    this.jugada = pJugada;
 }
 
 window.posCol = null;
@@ -214,7 +213,17 @@ function doSortir()
     };
     
     if (checkIfGameFinished() === true) {
-        window.location = "./llistes.htm";
+        doUpdateRepteSession({
+            IDREPTE: null,
+            IDPARTIDA: null,
+            TIPUSJUGADOR: null,
+            ELMEUCOLOR: null,
+            TEMPS: null,
+            TEMPSINCREMENT: null,
+            AMBEVALUACIOELO: null,
+            IDJUGADORCONTRINCANT: null
+        }, "./llistes.htm");
+        //window.location = "./llistes.htm";
     } else {
         showConfirmationDialog("Confirmació", "Vols realment abandonar?", fnYes, fnNo);
     }
