@@ -75,6 +75,10 @@ function doOnReadyVeurePartida(pSessionData)
     //} else {
     //    window.posCol = new PosicioColor("top", "bottom");
     //}
+    
+    var arPosicioTauler = doSelectPosicioTaulerByIdPartida(idPartida);
+    console.log(arPosicioTauler);
+    
 }
 
 
