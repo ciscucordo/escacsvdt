@@ -1301,7 +1301,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
                         if (esPossibleEnrocarCurt(TAULER_REAL, fD.nom) === true) {
                             enrocarCurt(TAULER_REAL, fD.color);
 
-                            jugada = "0-0";
+                            jugada = "O-O";
 
                         }
                     } else
@@ -1314,7 +1314,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
                         if (esPossibleEnrocarLlarg(TAULER_REAL, fD.nom) === true) {
                             enrocarLlarg(TAULER_REAL, fD.color);
 
-                            jugada = "0-0-0";
+                            jugada = "O-O-O";
 
                         }
                     }
@@ -1408,6 +1408,17 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         }
     }
 
+    var colorInCheck = fD.color === "B" ? "N" : "B";
+    var isCheck = checkInCheck(TAULER_REAL, colorInCheck);
+    var isCheckMate = checkIfCheckMate(colorInCheck);
+    if (isCheckMate === true) {
+        jugada += "++";
+    } else if (isCheck === true) {
+        jugada += "+";
+    }
+        
+    
+
     //apunta la jugada a la llista de jugades
     var vJugada = apuntarJugada(fD.color, jugada);
 
@@ -1443,6 +1454,12 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         
     }
     
+    if (isCheckMate === true) {
+        escacsVdtClient.processCommand("finishGame" + " " + colorInCheck + " " + "checkmate");
+        stopTimer();
+        canBeginGame = false;
+    }
+    /*
     var colorCheckMate = fD.color === "B" ? "N" : "B";
     var isCheckMate = checkIfCheckMate(colorCheckMate);
     if (isCheckMate === true) {
@@ -1453,7 +1470,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         //doIfCheckMate(colorCheckMate);
         stopTimer();
         canBeginGame = false;
-    }
+    }*/
     
     
 
