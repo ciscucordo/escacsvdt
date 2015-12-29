@@ -527,10 +527,10 @@ function mouseDownListener(event) {
     var iX = target.offsetLeft,
             iY = target.offsetTop;
 
-    recMovOri.style.left = iX;
-    recMovOri.style.top = iY;
-    recMovDes.style.left = iX;
-    recMovDes.style.top = iY;
+    recMovOri.style.left = iX+"px";
+    recMovOri.style.top = iY+"px";
+    recMovDes.style.left = iX+"px";
+    recMovDes.style.top = iY+"px";
 
     /*var arrayT = commutatorArrayT(TAULER_VIRTUAL);
      console.log("arrayT[4][6]:",arrayT[4][6]);
@@ -592,10 +592,10 @@ function dragMoveListener(event) {
     var recMovOri = document.getElementById("recMovOri");
     var recMovDes = document.getElementById("recMovDes");
 
-    if (recMovDes.style.left === "") {
+    if (!recMovDes.style.left) {
         recMovDes.style.left = recMovOri.style.left;
     }
-    if (recMovDes.style.top === "") {
+    if (!recMovDes.style.top) {
         recMovDes.style.top = recMovOri.style.top;
     }
 
@@ -648,8 +648,8 @@ function dragEndListener(event) {
     var xiY = new Point(iPartX, iPartY);
 
     if (isOKMove === true) {
-        target.style.left = iPartX;
-        target.style.top = iPartY;
+        target.style.left = iPartX+"px";
+        target.style.top = iPartY+"px";
         updateDataCoords(target, 0, 0);
         //fD.iiJ = xiY;
         //setFitxaDadesToElDOM(fD.nom, fD);
@@ -663,8 +663,8 @@ function dragEndListener(event) {
 
     } else {
         //setPosicioFitxa(TAULER_REAL, fD.nom, fD.iiJInArray, param_colorUsuari);
-        target.style.left = iX;
-        target.style.top = iY;
+        target.style.left = iX+"px";
+        target.style.top = iY+"px";
         //target.style.left = fD.casella.x;
         //target.style.top = fD.casella.y;
         updateDataCoords(target, 0, 0);

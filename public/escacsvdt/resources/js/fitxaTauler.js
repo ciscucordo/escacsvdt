@@ -1411,7 +1411,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
     //apunta la jugada a la llista de jugades
     var vJugada = apuntarJugada(fD.color, jugada);
 
-    console.log("vJugada: ", vJugada);
+    //console.log("vJugada: ", vJugada);
 
     //activem el control de temps per al contrincant
     startTimer(fD.color, true);
@@ -1600,7 +1600,7 @@ function esPossibleEnrocarCurt(pCmd, pFitxaNom) {
                         && //que no s'hagi mogut la torre 
                         fD_TB2.isMoved === false
                         && //que no hagi fitxes pel mig
-                        fitxaNom1 === "" && fitxaNom2 === ""
+                        (!fitxaNom1 && !fitxaNom2)
                         && checkColorInEstelaByIiJ(pCmd, COLOR_NEGRE, 5, 7) === false
                         && checkColorInEstelaByIiJ(pCmd, COLOR_NEGRE, 6, 7) === false);
                 break;
@@ -1616,7 +1616,7 @@ function esPossibleEnrocarCurt(pCmd, pFitxaNom) {
                         && //que no s'hagi mogut la torre 
                         fD_TN2.isMoved === false
                         && //que no hagi fitxes pel mig
-                        fitxaNom1 === "" && fitxaNom2 === ""
+                        (!fitxaNom1 && !fitxaNom2)
                         && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 5, 7) === false
                         && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 6, 7) === false);
                 break;
