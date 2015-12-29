@@ -185,7 +185,7 @@ function apuntarJugada(pColor, pJugada) {
     return jugada;
 }
 
-
+/*
 var parseQueryString = function() {
     var str = window.location.search;
     var objURL = {};
@@ -201,3 +201,4 @@ var parseQueryString = function() {
 //Example how to use it: 
 var params = parseQueryString();
 alert(params["IDPARTIDA"]); 
+*/

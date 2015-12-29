@@ -140,6 +140,7 @@ var SampleApp = function () {
                         IDJUGADOR: pRequest.session.data.IDJUGADOR,
                         user/*NICKJUGADOR*/: pRequest.session.data.user, //NICKJUGADOR,
                         IDREPTE: pRequest.session.data.IDREPTE,
+                        IDPARTIDA: pRequest.session.data.IDPARTIDA,
                         TIPUSJUGADOR: pRequest.session.data.TIPUSJUGADOR,
                         ELMEUCOLOR: pRequest.session.data.ELMEUCOLOR,
                         TEMPS: pRequest.session.data.TEMPS,
