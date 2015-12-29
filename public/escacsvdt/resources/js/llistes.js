@@ -378,7 +378,7 @@ function doMirarRepteAcceptat()
                         TEMPSINCREMENT: pJsonMirarRepteAcceptat["TEMPSINCREMENT"],
                         AMBEVALUACIOELO: pJsonMirarRepteAcceptat["AMBEVALUACIOELO"],
                         IDJUGADORCONTRINCANT: pJsonMirarRepteAcceptat["IDJUGADORCONTRINCANT"]
-                    });
+                    }, "./sala.htm");
                     //window.location = "./sala.htm";
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -882,7 +882,7 @@ function doMirarRepteAcceptat()
                                                     html += "<tr>";
                                                     
                                                     html += "<td class='formfont' style='text-align: center; height: 25px;'>";
-                                                    html += "<img alt='mirar' src='../resources/img/mirarPartida.PNG' style='cursor: pointer' onclick='javascript: doMirarPartida(" + reg.PARTIDALLISTAT_ID + ");' title='Mira la Partida'>";
+                                                    html += "<img alt='veure' src='../resources/img/mirarPartida.PNG' style='cursor: pointer' onclick='javascript: doVeurePartida(" + reg.PARTIDALLISTAT_ID + ");' title='Veure la partida'>";
                                                     html += "</td>";
                                                     
                                                     html += "<td class='formfont' style='text-align: left; padding-left: 5px'>" +
@@ -978,8 +978,8 @@ function doMirarRepteAcceptat()
         }
 
 
-function doMirarPartida(pIdPartida) {
-    window.location = "./sala.htm?mirarpartida=1&idpartida="+pIdPartida;
+function doVeurePartida(pIdPartida) {
+    window.location = "./veurePartida.htm?mirarpartida=1&IDPARTIDA="+pIdPartida;
 }
 
 

@@ -197,9 +197,17 @@ function doOnReadySala(pSessionData)
 function doSortir()
 {    
     var fnYes = function () {
-        //processUserInput("finishGame" + " " + param_colorUsuari + " " + "disconnect", escacsVdtClient, socket);
-        //processUserInput("disconnect", escacsVdtClient, socket);
-        window.location = "./llistes.htm";
+        doUpdateRepteSession({
+            IDREPTE: null,
+            IDPARTIDA: null,
+            TIPUSJUGADOR: null,
+            ELMEUCOLOR: null,
+            TEMPS: null,
+            TEMPSINCREMENT: null,
+            AMBEVALUACIOELO: null,
+            IDJUGADORCONTRINCANT: null
+        }, "./llistes.htm");
+        //window.location = "./llistes.htm";
     };
     var fnNo = function () {
         //

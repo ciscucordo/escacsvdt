@@ -48,7 +48,7 @@ function doGetSession() {
     return result;
 }
 
-function doUpdateRepteSession(pJsonRepteAcceptat) {
+function doUpdateRepteSession(pJsonRepteAcceptat, pRedirecting) {
     var result = "0";
     $.ajax({
         url: '/doUpdateRepteSession',
@@ -59,7 +59,7 @@ function doUpdateRepteSession(pJsonRepteAcceptat) {
         //cache: false,
         success: function (data) {
             result = "1";
-            window.location = "./sala.htm";
+            window.location = pRedirecting;//"./sala.htm";
         },
         error: function (s, i, error) {
             result = "0";
