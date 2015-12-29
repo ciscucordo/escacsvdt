@@ -978,29 +978,29 @@ function doMirarRepteAcceptat()
         }
 
 
+function doMirarPartida(pIdPartida) {
+    window.location = "./sala.htm?mirarpartida=1&idpartida="+pIdPartida;
+}
 
 
-
-
-
-                function doLogout() {
-                    $.ajax({
-                        url: '/doLogout',
-                        type: 'post',
-                        datatype: 'json',
-                        data: "",
-                        success: function (data) {
-                            if (data == "1") {
-                                clearIntervalLlista(PAG_LLISTA_JUGADOR);
-                                clearIntervalLlista(PAG_LLISTA_REPTE);
-                                window.location = "./login.htm";
-                            }
-                        },
-                        error: function (s, i, error) {
-                            console.log(error);
-                        }
-                    });
-                }
+function doLogout() {
+    $.ajax({
+        url: '/doLogout',
+        type: 'post',
+        datatype: 'json',
+        data: "",
+        success: function (data) {
+            if (data == "1") {
+                clearIntervalLlista(PAG_LLISTA_JUGADOR);
+                clearIntervalLlista(PAG_LLISTA_REPTE);
+                window.location = "./login.htm";
+            }
+        },
+        error: function (s, i, error) {
+            console.log(error);
+        }
+    });
+}
 
 //////////////////////////////////// fin repte /////////////////////////////////
 
