@@ -1273,7 +1273,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
                         if (esPossibleEnrocarCurt(TAULER_REAL, fD.nom) === true) {
                             enrocarCurt(TAULER_REAL, fD.color);
 
-                            jugada = "0-0";
+                            jugada = "O-O";
 
                         }
                     } else
@@ -1286,7 +1286,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
                         if (esPossibleEnrocarLlarg(TAULER_REAL, fD.nom) === true) {
                             enrocarLlarg(TAULER_REAL, fD.color);
 
-                            jugada = "0-0-0";
+                            jugada = "O-O-O";
 
                         }
                     }
