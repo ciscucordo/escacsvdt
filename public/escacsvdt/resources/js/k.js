@@ -1,3 +1,12 @@
+var COLOR_BLANC = "B";
+var COLOR_NEGRE = "N";
+var TIPUS_FITXA_REI = "R";
+var TIPUS_FITXA_DAMA = "D";
+var TIPUS_FITXA_ALFIL = "A";
+var TIPUS_FITXA_CAVALL = "C";
+var TIPUS_FITXA_TORRE = "T";
+var TIPUS_FITXA_PEO = "P";
+
 var JUGADORLLISTAT_NICK = "jugadorllistat_nick";
 
 var PAG_LLISTA_JUGADOR = "PAG_LLISTA_JUGADOR";

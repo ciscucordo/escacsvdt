@@ -1,13 +1,6 @@
 
 localStorage.debug = '*';
-var COLOR_BLANC = "B";
-var COLOR_NEGRE = "N";
-var TIPUS_FITXA_REI = "R";
-var TIPUS_FITXA_DAMA = "D";
-var TIPUS_FITXA_ALFIL = "A";
-var TIPUS_FITXA_CAVALL = "C";
-var TIPUS_FITXA_TORRE = "T";
-var TIPUS_FITXA_PEO = "P";
+
 //control del color que toca jugar
 window.colorTorn = "";
 //color del jugador el qual s'ha loginat !!!

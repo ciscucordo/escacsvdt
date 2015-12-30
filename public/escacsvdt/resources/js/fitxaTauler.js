@@ -136,6 +136,7 @@ function setPosicioElDOM(elDOM, pCasellaDesti) {
     if (elDOM) {
         elDOM.style.left = pCasellaDesti.x + "px";
         elDOM.style.top = pCasellaDesti.y + "px";
+        elDOM.style.display = "block";
     }
 }
 
@@ -427,9 +428,46 @@ function initializeTaulerInSala(colorBottom) {
     initializeArrayEsteles();
     synchronizeEsteles();
 }
-function initializeTaulerInVeurePartida(colorBottom) {
+function initializeTaulerInVeurePartida(colorBottom) 
+{
     initializeArrayTauler(false);
     addFitxesInArrayTauler(colorBottom, false);
+    /*
+    //BLANQUES
+    setPosicioElDOM("TB1", obtenirPointCasella(colorBottom, CASELLA_A1_B));
+    setPosicioElDOM("CB1", obtenirPointCasella(colorBottom, CASELLA_B1_B));
+    setPosicioElDOM("AB1", obtenirPointCasella(colorBottom, CASELLA_C1_B));
+    setPosicioElDOM("DB1", obtenirPointCasella(colorBottom, CASELLA_D1_B));
+    setPosicioElDOM("RB1", obtenirPointCasella(colorBottom, CASELLA_E1_B));
+    setPosicioElDOM("AB2", obtenirPointCasella(colorBottom, CASELLA_F1_B));
+    setPosicioElDOM("CB2", obtenirPointCasella(colorBottom, CASELLA_G1_B));
+    setPosicioElDOM("TB2", obtenirPointCasella(colorBottom, CASELLA_H1_B));
+    setPosicioElDOM("PB1", obtenirPointCasella(colorBottom, CASELLA_A2_B));
+    setPosicioElDOM("PB2", obtenirPointCasella(colorBottom, CASELLA_B2_B));
+    setPosicioElDOM("PB3", obtenirPointCasella(colorBottom, CASELLA_C2_B));
+    setPosicioElDOM("PB4", obtenirPointCasella(colorBottom, CASELLA_D2_B));
+    setPosicioElDOM("PB5", obtenirPointCasella(colorBottom, CASELLA_E2_B));
+    setPosicioElDOM("PB6", obtenirPointCasella(colorBottom, CASELLA_F2_B));
+    setPosicioElDOM("PB7", obtenirPointCasella(colorBottom, CASELLA_G2_B));
+    setPosicioElDOM("PB8", obtenirPointCasella(colorBottom, CASELLA_H2_B));
+    //NEGRES
+    setPosicioElDOM("TN1", obtenirPointCasella(colorBottom, CASELLA_A8_B));
+    setPosicioElDOM("CN1", obtenirPointCasella(colorBottom, CASELLA_B8_B));
+    setPosicioElDOM("AN1", obtenirPointCasella(colorBottom, CASELLA_C8_B));
+    setPosicioElDOM("DN1", obtenirPointCasella(colorBottom, CASELLA_D8_B));
+    setPosicioElDOM("RN1", obtenirPointCasella(colorBottom, CASELLA_E8_B));
+    setPosicioElDOM("AN2", obtenirPointCasella(colorBottom, CASELLA_F8_B));
+    setPosicioElDOM("CN2", obtenirPointCasella(colorBottom, CASELLA_G8_B));
+    setPosicioElDOM("TN2", obtenirPointCasella(colorBottom, CASELLA_H8_B));
+    setPosicioElDOM("PN1", obtenirPointCasella(colorBottom, CASELLA_A7_B));
+    setPosicioElDOM("PN2", obtenirPointCasella(colorBottom, CASELLA_B7_B));
+    setPosicioElDOM("PN3", obtenirPointCasella(colorBottom, CASELLA_C7_B));
+    setPosicioElDOM("PN4", obtenirPointCasella(colorBottom, CASELLA_D7_B));
+    setPosicioElDOM("PN5", obtenirPointCasella(colorBottom, CASELLA_E7_B));
+    setPosicioElDOM("PN6", obtenirPointCasella(colorBottom, CASELLA_F7_B));
+    setPosicioElDOM("PN7", obtenirPointCasella(colorBottom, CASELLA_G7_B));
+    setPosicioElDOM("PN8", obtenirPointCasella(colorBottom, CASELLA_H7_B));
+    */
 }
 
 function initializeArrayTauler(withHidden) {

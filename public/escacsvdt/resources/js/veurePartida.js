@@ -13,6 +13,8 @@ function Jugada(pIdGraella, pNumJugada, pColor, pJugada)
     this.jugada = pJugada;
 }
 
+window.numJugadaActual = 1;
+window.colorActual = COLOR_BLANC;
 window.posCol = null;
 window.listJugadesB = new Array();
 window.listJugadesN = new Array();
@@ -80,14 +82,41 @@ function goToPosicioTauler(numJugada, color)
             paintFitxesFromPosicioTauler(jugada.POSICIO);
         }
     }
+    window.numJugadaActual = numJugada;
+    window.colorActual = color;
+}
+
+function next() {
+    goToPosicioTauler(window.numJugadaActual, window.colorActual);
+    if (window.colorActual === COLOR_NEGRE) {
+        window.numJugadaActual++;
+    }
+    window.colorActual = window.colorActual === COLOR_BLANC ? COLOR_NEGRE : COLOR_BLANC;
 }
 
 function paintFitxesFromPosicioTauler(posicio) {
     var arrayPosicio = posicio.split(',');
     var idxArrayPosicio = 0;
-    for (var i = 0; i < NUM_FILES; i++) {
-        for (var j = 0; j < NUM_COLUMNES; j++) {
-            arrayTauler[i][j] = arrayPosicio[idxArrayPosicio];
+    for (var j = 0; j < NUM_FILES; j++) {
+        for (var i = 0; i < NUM_COLUMNES; i++) {
+            var fitxaNom = arrayPosicio[idxArrayPosicio];
+            if (!arrayTauler[i][j]) {
+                arrayTauler[i][j] = "";
+            }
+            if (arrayTauler[i][j] !== fitxaNom) {
+                var objFitxaBefore = document.getElementById(arrayTauler[i][j]);
+                if (objFitxaBefore && fitxaNom !== "") {
+                    objFitxaBefore.style.display = "none";
+                }
+                arrayTauler[i][j] = fitxaNom;
+                var objFitxaAfter = document.getElementById(arrayTauler[i][j]);
+                if (objFitxaAfter) {
+                    var xiY = obtenirPointCasellaDeIiJ(i, j, COLOR_BLANC);
+                    if (objFitxaAfter.style.left !== xiY.x + "px" || objFitxaAfter.style.top !== xiY.y + "px") {
+                        setPosicioElDOM(fitxaNom, xiY);
+                    }
+                }
+            }
             idxArrayPosicio++;
         }
     }
