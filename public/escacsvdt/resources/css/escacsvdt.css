@@ -930,3 +930,17 @@ span.buttonselect {
     cursor:pointer !important;
     color: #000000 !important;
 }
+
+.unselectedJugada {
+    background: #eee !important; 
+    color: #000000 !important;
+    font-weight: normal !important;
+    cursor: pointer;
+}
+
+.selectedJugada {
+    background-color: rgb(225, 125, 75) !important;
+    color: #ffffff !important;
+    font-weight:bold !important;
+    cursor: default;
+}

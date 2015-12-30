@@ -18,8 +18,8 @@ window.colorActual = "";
 window.posCol = null;
 window.listJugadesB = new Array();
 window.listJugadesN = new Array();
-window.listAllJugades = new Array(); 
-
+window.listAllPosicioTauler = new Array(); 
+window.listAllJugadesGraella = new Array();
 
 $(document).ready(
     function () 
@@ -68,7 +68,13 @@ function doOnReadyVeurePartida(pSessionData)
     //    window.posCol = new PosicioColor("top", "bottom");
     //}
     
-    window.listAllJugades = doSelectPosicioTaulerByIdPartida(idPartida);
+    window.listAllPosicioTauler = doSelectPosicioTaulerByIdPartida(idPartida);
+    window.listAllJugadesGraella = doSelectJugadesGraellaByIdGraella(jsonPartida[0].IDGRAELLA);
+    
+    for (var i = 0; i < window.listAllJugadesGraella.length; i++) {
+        var reg = window.listAllJugadesGraella[i];
+        apuntarJugada(jsonPartida[0].IDGRAELLA, reg.COLOR, reg.JUGADA);
+    }
     
     initializeTaulerInVeurePartida(COLOR_BLANC);
     
@@ -76,14 +82,17 @@ function doOnReadyVeurePartida(pSessionData)
 
 function goToPosicioTauler(numJugada, color) 
 {
-    for (var i=0; i<window.listAllJugades.length; i++) {
-        var jugada = window.listAllJugades[i];
-        if (jugada.NUMJUGADA === numJugada && jugada.COLORULTIMAJUGADA === color) {
+    for (var i=0; i<window.listAllPosicioTauler.length; i++) {
+        var jugada = window.listAllPosicioTauler[i];
+        if (jugada.NUMJUGADA == numJugada && jugada.COLORULTIMAJUGADA == color) {
             paintFitxesFromPosicioTauler(jugada.POSICIO);
         }
     }
     window.numJugadaActual = numJugada;
     window.colorActual = color;
+    
+    $(".anotacioJugada").removeClass("selectedJugada").addClass("unselectedJugada");
+    $("#numJugada"+window.colorActual+window.numJugadaActual).addClass("selectedJugada");
 }
 
 function clickFirstJugada() {
@@ -105,7 +114,7 @@ function clickPriorJugada() {
 }
 
 function clickNextJugada() {
-    if (window.numJugadaActual+1 >= window.listAllJugades.length) {
+    if (window.numJugadaActual+1 >= window.listAllPosicioTauler.length) {
         clickLastJugada();
     }
     if (window.numJugadaActual === 0 || window.colorActual === COLOR_NEGRE) {
@@ -116,7 +125,7 @@ function clickNextJugada() {
 }
 
 function clickLastJugada() {
-    var jugada = window.listAllJugades[window.listAllJugades.length-1];
+    var jugada = window.listAllPosicioTauler[window.listAllPosicioTauler.length-1];
     window.numJugadaActual = jugada.NUMJUGADA;
     window.colorActual = jugada.COLORULTIMAJUGADA;
     goToPosicioTauler(window.numJugadaActual, window.colorActual);   
@@ -227,24 +236,47 @@ function doSelectPosicioTaulerByIdPartida(pIdPartida)
     return res;   
 }
 
+function doSelectJugadesGraellaByIdGraella(pIdGraella)
+{
+    var res = "";
+    $.ajax({
+        type: "post",
+        url: "/doSelect-jugadesgraella",
+        datatype: "json",
+        data: "IDGRAELLA=" + pIdGraella,
+        async: false,
+        //cache: false,
+        timeout: 30000,
+        success: function (data, textStatus, jqXHR) {
+            res = data;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+            //
+        }
+    });
+    return res;   
+}
 
-function apuntarJugada(pColor, pJugada) {
+function apuntarJugada(pIdGraella, pColor, pJugada) {
     var jugada;
     switch (pColor) {
         case "B":
-            jugada = new Jugada(param_idGraella, window.listJugadesB.length + 1, pColor, pJugada);
+            jugada = new Jugada(pIdGraella, window.listJugadesB.length + 1, pColor, pJugada);
             window.listJugadesB.push(jugada);
             var numJugada = window.listJugadesB.length;
             $("#tableListJugades").append(
                     "<tr>" +
-                    "  <td id='numJugada" + numJugada + "' class='fontformgreater1' style='border:1px solid rgb(225, 125, 75);'>" + numJugada + "</td>" +
-                    "  <td id='numJugadaB" + numJugada + "' style='border:1px solid rgb(225, 125, 75);'>" + pJugada + "</td>" +
-                    "  <td id='numJugadaN" + numJugada + "' style='border:1px solid rgb(225, 125, 75);'></td>" +
+                    "  <td id='numJugada" + numJugada + "' class='fontformgreater1' style='border:1px solid rgb(225, 125, 75);' onclick='javascript: goToPosicioTauler(\"" + numJugada + "\",\""+COLOR_BLANC+"\");'>" + numJugada + "</td>" +
+                    "  <td id='numJugadaB" + numJugada + "' style='border:1px solid rgb(225, 125, 75);' onclick='javascript: goToPosicioTauler(\"" + numJugada + "\",\""+COLOR_BLANC+"\");' class='anotacioJugada'>" + pJugada + "</td>" +
+                    "  <td id='numJugadaN" + numJugada + "' style='border:1px solid rgb(225, 125, 75);' onclick='javascript: goToPosicioTauler(\"" + numJugada + "\",\""+COLOR_NEGRE+"\");' class='anotacioJugada'></td>" +
                     "</tr>"
                     );
             break;
         case "N":
-            jugada = new Jugada(param_idGraella, window.listJugadesN.length + 1, pColor, pJugada);
+            jugada = new Jugada(pIdGraella, window.listJugadesN.length + 1, pColor, pJugada);
             window.listJugadesN.push(jugada);
             $("#numJugadaN" + window.listJugadesN.length).html(pJugada);
             break;
