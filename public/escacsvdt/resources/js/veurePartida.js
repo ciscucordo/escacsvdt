@@ -1,15 +1,4 @@
 
-localStorage.debug = '*';
-var COLOR_BLANC = "B";
-var COLOR_NEGRE = "N";
-var TIPUS_FITXA_REI = "R";
-var TIPUS_FITXA_DAMA = "D";
-var TIPUS_FITXA_ALFIL = "A";
-var TIPUS_FITXA_CAVALL = "C";
-var TIPUS_FITXA_TORRE = "T";
-var TIPUS_FITXA_PEO = "P";
-
-
 function PosicioColor(pPosB, pPosN)
 {
     this.posB = pPosB;
@@ -27,6 +16,7 @@ function Jugada(pIdGraella, pNumJugada, pColor, pJugada)
 window.posCol = null;
 window.listJugadesB = new Array();
 window.listJugadesN = new Array();
+window.listAllJugades = new Array(); 
 
 
 $(document).ready(
@@ -76,14 +66,32 @@ function doOnReadyVeurePartida(pSessionData)
     //    window.posCol = new PosicioColor("top", "bottom");
     //}
     
-    var arPosicioTauler = doSelectPosicioTaulerByIdPartida(idPartida);
-    console.log(arPosicioTauler);
+    window.listAllJugades = doSelectPosicioTaulerByIdPartida(idPartida);
     
     initializeTaulerInVeurePartida(COLOR_BLANC);
     
 }
 
+function goToPosicioTauler(numJugada, color) 
+{
+    for (var i=0; i<window.listAllJugades.length; i++) {
+        var jugada = window.listAllJugades[i];
+        if (jugada.NUMJUGADA === numJugada && jugada.COLORULTIMAJUGADA === color) {
+            paintFitxesFromPosicioTauler(jugada.POSICIO);
+        }
+    }
+}
 
+function paintFitxesFromPosicioTauler(posicio) {
+    var arrayPosicio = posicio.split(',');
+    var idxArrayPosicio = 0;
+    for (var i = 0; i < NUM_FILES; i++) {
+        for (var j = 0; j < NUM_COLUMNES; j++) {
+            arrayTauler[i][j] = arrayPosicio[idxArrayPosicio];
+            idxArrayPosicio++;
+        }
+    }
+}
 
 function doSortir()
 {    
