@@ -13,8 +13,8 @@ function Jugada(pIdGraella, pNumJugada, pColor, pJugada)
     this.jugada = pJugada;
 }
 
-window.numJugadaActual = 1;
-window.colorActual = COLOR_BLANC;
+window.numJugadaActual = 0;
+window.colorActual = "";
 window.posCol = null;
 window.listJugadesB = new Array();
 window.listJugadesN = new Array();
@@ -86,12 +86,40 @@ function goToPosicioTauler(numJugada, color)
     window.colorActual = color;
 }
 
-function next() {
+function clickFirstJugada() {
+    initializeTaulerInVeurePartida(COLOR_BLANC);
+    window.numJugadaActual = 0;
+    window.colorActual = "";
+}
+
+function clickPriorJugada() {
+    if (window.colorActual === COLOR_BLANC) {
+        window.numJugadaActual--;
+    }
+    if (window.numJugadaActual <= 0 && (window.colorActual === COLOR_BLANC || window.colorActual === "")) {
+        clickFirstJugada();
+        return;
+    }
+    window.colorActual = window.colorActual === COLOR_BLANC ? COLOR_NEGRE : COLOR_BLANC;
     goToPosicioTauler(window.numJugadaActual, window.colorActual);
-    if (window.colorActual === COLOR_NEGRE) {
+}
+
+function clickNextJugada() {
+    if (window.numJugadaActual+1 >= window.listAllJugades.length) {
+        clickLastJugada();
+    }
+    if (window.numJugadaActual === 0 || window.colorActual === COLOR_NEGRE) {
         window.numJugadaActual++;
     }
     window.colorActual = window.colorActual === COLOR_BLANC ? COLOR_NEGRE : COLOR_BLANC;
+    goToPosicioTauler(window.numJugadaActual, window.colorActual);   
+}
+
+function clickLastJugada() {
+    var jugada = window.listAllJugades[window.listAllJugades.length-1];
+    window.numJugadaActual = jugada.NUMJUGADA;
+    window.colorActual = jugada.COLORULTIMAJUGADA;
+    goToPosicioTauler(window.numJugadaActual, window.colorActual);   
 }
 
 function paintFitxesFromPosicioTauler(posicio) {
@@ -99,25 +127,21 @@ function paintFitxesFromPosicioTauler(posicio) {
     var idxArrayPosicio = 0;
     for (var j = 0; j < NUM_FILES; j++) {
         for (var i = 0; i < NUM_COLUMNES; i++) {
-            var fitxaNom = arrayPosicio[idxArrayPosicio];
-            if (!arrayTauler[i][j]) {
-                arrayTauler[i][j] = "";
+            var objFitxa = document.getElementById(arrayTauler[i][j]);
+            if (objFitxa) {
+                objFitxa.style.display = "none";
             }
-            if (arrayTauler[i][j] !== fitxaNom) {
-                var objFitxaBefore = document.getElementById(arrayTauler[i][j]);
-                if (objFitxaBefore && fitxaNom !== "") {
-                    objFitxaBefore.style.display = "none";
-                }
-                arrayTauler[i][j] = fitxaNom;
-                var objFitxaAfter = document.getElementById(arrayTauler[i][j]);
-                if (objFitxaAfter) {
-                    var xiY = obtenirPointCasellaDeIiJ(i, j, COLOR_BLANC);
-                    if (objFitxaAfter.style.left !== xiY.x + "px" || objFitxaAfter.style.top !== xiY.y + "px") {
-                        setPosicioElDOM(fitxaNom, xiY);
-                    }
-                }
-            }
+            arrayTauler[i][j] = arrayPosicio[idxArrayPosicio];
             idxArrayPosicio++;
+        }
+    }
+    for (var j = 0; j < NUM_FILES; j++) {
+        for (var i = 0; i < NUM_COLUMNES; i++) {
+            var objFitxa = document.getElementById(arrayTauler[i][j]);
+            if (objFitxa) {
+                //document.getElementById(arrayTauler[i][j]).style.display = "block";
+                setPosicioElDOM(objFitxa, obtenirPointCasellaDeIiJ(i, j, COLOR_BLANC));
+            }
         }
     }
 }
