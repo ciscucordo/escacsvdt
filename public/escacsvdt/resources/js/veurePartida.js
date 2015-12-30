@@ -79,6 +79,8 @@ function doOnReadyVeurePartida(pSessionData)
     var arPosicioTauler = doSelectPosicioTaulerByIdPartida(idPartida);
     console.log(arPosicioTauler);
     
+    initializeTaulerInVeurePartida(COLOR_BLANC);
+    
 }
 
 

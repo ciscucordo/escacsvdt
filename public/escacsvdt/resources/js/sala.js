@@ -188,7 +188,8 @@ function doOnReadySala(pSessionData)
     param_colorUsuari = jsonSession[0].ELMEUCOLOR;
     
     //posem les peces al tauler
-    addFitxesInArrayTauler(param_colorUsuari);
+    initializeTaulerInSala(param_colorUsuari);
+    //addFitxesInArrayTauler(param_colorUsuari);
     
     //console.log("param_idRepte:", param_idRepte, " param_idPartida:", param_idPartida);
 }

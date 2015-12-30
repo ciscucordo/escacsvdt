@@ -3,7 +3,7 @@
 		//ASSOCIAR OBJECTE A HTML ELEMENT !!!!
 		
 		var colorUsuari = "B";
-		var f = new FitxaDades("TB1", TIPUS_FITXA_TORRE, COLOR_BLANC, casella = obtenirPointCasella(colorUsuari, CASELLA_A1_B), iiJInArray = obtenirIiJDePointCasella(colorUsuari, casella), false);
+		var f = new FitxaDades("TB1", TIPUS_FITXA_TORRE, COLOR_BLANC, colorUsuari, casella = obtenirPointCasella(colorUsuari, CASELLA_A1_B), iiJInArray = obtenirIiJDePointCasella(colorUsuari, casella), false);
 	
 	
 		var allData = new WeakMap();

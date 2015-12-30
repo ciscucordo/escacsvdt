@@ -182,11 +182,12 @@ function setTipusFitxaElDOM(elDOM, pColor, pTipusFitxa) {
 }
 
 //FitxaDades: constructor
-function FitxaDades(pCmd, pNom, pTipusFitxa, pColor, pIsMoved, pIiJ) {
+function FitxaDades(pCmd, pNom, pTipusFitxa, pColor, pColorBottomTauler, pIsMoved, pIiJ) {
     this.cmd = pCmd;
     this.nom = pNom;
     this.tipusFitxa = pTipusFitxa;
     this.color = pColor;
+    this.colorBottomTauler = pColorBottomTauler;
     this.isMoved = pIsMoved;
     this.iiJ = pIiJ;
 };
@@ -221,7 +222,14 @@ FitxaDades.prototype = {
     set color(val) {
         this._color = val;
     },
-    //isMoved. si la fitxa s'ha mogut
+    //colorBottomTauler: si és blanc o negre el color que estigui a sota del tauler
+    get colorBottomTauler() {
+        return this._colorBottomTauler;
+    },
+    set colorBottomTauler(val) {
+        this._colorBottomTauler = val;
+    },
+    //isMoved: si la fitxa s'ha mogut
     get isMoved() {
         return this._isMoved;
     },
@@ -248,10 +256,10 @@ FitxaDades.prototype = {
         var xiYDesti = null;
         if ((val instanceof Point) === true) {
             xiYDesti = val;
-            iiJDesti = obtenirIiJDePointCasella(param_colorUsuari, xiYDesti);
+            iiJDesti = obtenirIiJDePointCasella(this._colorBottomTauler/*param_colorUsuari*/, xiYDesti);
         } else if ((val instanceof ElMeuPoint) === true) {
             iiJDesti = val;
-            xiYDesti = obtenirPointCasellaDeIiJ(iiJDesti.i, iiJDesti.j, param_colorUsuari);
+            xiYDesti = obtenirPointCasellaDeIiJ(iiJDesti.i, iiJDesti.j, this._colorBottomTauler/*param_colorUsuari*/);
         }
         if (!this._cmd || this._cmd === "" || this._cmd === TAULER_REAL) {
             if (this._iiJArray) {
@@ -273,6 +281,7 @@ FitxaDades.prototype = {
             this._iiJ_Array = iiJDesti;
             _arrayTauler[iiJDesti.i][iiJDesti.j] = this._nom;
         }
+        
     }
 };
 
@@ -412,183 +421,271 @@ function addEstelaInArrayEsteles(pCmd, pFitxaNom, pCol, pFil) {
     arrayE[pCol][pFil].push(pFitxaNom);
 }
 
-function addFitxesInArrayTauler(colorASot) {
+function initializeTaulerInSala(colorBottom) {
+    initializeArrayTauler(true);
+    addFitxesInArrayTauler(colorBottom, true);
+    initializeArrayEsteles();
+    synchronizeEsteles();
+}
+function initializeTaulerInVeurePartida(colorBottom) {
+    initializeArrayTauler(false);
+    addFitxesInArrayTauler(colorBottom, false);
+}
 
+function initializeArrayTauler(withHidden) {
     //inicialitzem les arrays tauler
     arrayTauler.splice(0, arrayTauler.length);
-    _arrayTauler.splice(0, _arrayTauler.length);
-
+    if (withHidden) {
+        _arrayTauler.splice(0, _arrayTauler.length);
+    }
     arrayTauler = create2DArray(NUM_FILES, NUM_COLUMNES, null);
-    _arrayTauler = create2DArray(NUM_FILES, NUM_COLUMNES, null);
+    if (withHidden) {
+        _arrayTauler = create2DArray(NUM_FILES, NUM_COLUMNES, null);
+    }
+}
 
+function initializeArrayEsteles() {
     arrayEsteles = create3DArray(NUM_FILES, NUM_COLUMNES, 0, null);
     _arrayEsteles = create3DArray(NUM_FILES, NUM_COLUMNES, 0, null);
+}
+
+function addFitxesInArrayTauler(colorBottom, withHidden) {
+
+    //el param. colorBottom és el mateix que param_colorUsuari!!!
 
     //////////////////// PECES BLANQUES ////////////////////////////////////
     //Ta1
-    setFitxaDadesToElDOM(TAULER_REAL, "TB1", new FitxaDades(TAULER_REAL, "TB1", TIPUS_FITXA_TORRE, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_A1_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_TB1", new FitxaDades(TAULER_VIRTUAL, "_TB1", TIPUS_FITXA_TORRE, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_A1_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "TB1", new FitxaDades(TAULER_REAL, "TB1", TIPUS_FITXA_TORRE, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_A1_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_TB1", new FitxaDades(TAULER_VIRTUAL, "_TB1", TIPUS_FITXA_TORRE, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_A1_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "TB1", CASELLA_A1_B, colorUsuari);
 
     //Cb1
-    setFitxaDadesToElDOM(TAULER_REAL, "CB1", new FitxaDades(TAULER_REAL, "CB1", TIPUS_FITXA_CAVALL, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_B1_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_CB1", new FitxaDades(TAULER_VIRTUAL, "_CB1", TIPUS_FITXA_CAVALL, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_B1_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "CB1", new FitxaDades(TAULER_REAL, "CB1", TIPUS_FITXA_CAVALL, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_B1_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_CB1", new FitxaDades(TAULER_VIRTUAL, "_CB1", TIPUS_FITXA_CAVALL, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_B1_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "CB1", CASELLA_B1_B, colorUsuari);
 
     //Ac1
-    setFitxaDadesToElDOM(TAULER_REAL, "AB1", new FitxaDades(TAULER_REAL, "AB1", TIPUS_FITXA_ALFIL, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_C1_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_AB1", new FitxaDades(TAULER_VIRTUAL, "_AB1", TIPUS_FITXA_ALFIL, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_C1_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "AB1", new FitxaDades(TAULER_REAL, "AB1", TIPUS_FITXA_ALFIL, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_C1_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_AB1", new FitxaDades(TAULER_VIRTUAL, "_AB1", TIPUS_FITXA_ALFIL, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_C1_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "AB1", CASELLA_C1_B, colorUsuari);
 
     //Dd1
-    setFitxaDadesToElDOM(TAULER_REAL, "DB1", new FitxaDades(TAULER_REAL, "DB1", TIPUS_FITXA_DAMA, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_D1_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_DB1", new FitxaDades(TAULER_VIRTUAL, "_DB1", TIPUS_FITXA_DAMA, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_D1_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "DB1", new FitxaDades(TAULER_REAL, "DB1", TIPUS_FITXA_DAMA, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_D1_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_DB1", new FitxaDades(TAULER_VIRTUAL, "_DB1", TIPUS_FITXA_DAMA, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_D1_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "DB", CASELLA_D1_B, colorUsuari);
 
     //Re1
-    setFitxaDadesToElDOM(TAULER_REAL, "RB1", new FitxaDades(TAULER_REAL, "RB1", TIPUS_FITXA_REI, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_E1_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_RB1", new FitxaDades(TAULER_VIRTUAL, "_RB1", TIPUS_FITXA_REI, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_E1_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "RB1", new FitxaDades(TAULER_REAL, "RB1", TIPUS_FITXA_REI, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_E1_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_RB1", new FitxaDades(TAULER_VIRTUAL, "_RB1", TIPUS_FITXA_REI, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_E1_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "RB", CASELLA_E1_B, colorUsuari);
 
     //Af1
-    setFitxaDadesToElDOM(TAULER_REAL, "AB2", new FitxaDades(TAULER_REAL, "AB2", TIPUS_FITXA_ALFIL, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_F1_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_AB2", new FitxaDades(TAULER_VIRTUAL, "_AB2", TIPUS_FITXA_ALFIL, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_F1_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "AB2", new FitxaDades(TAULER_REAL, "AB2", TIPUS_FITXA_ALFIL, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_F1_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_AB2", new FitxaDades(TAULER_VIRTUAL, "_AB2", TIPUS_FITXA_ALFIL, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_F1_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "AB2", CASELLA_F1_B, colorUsuari);
 
     //Cg1
-    setFitxaDadesToElDOM(TAULER_REAL, "CB2", new FitxaDades(TAULER_REAL, "CB2", TIPUS_FITXA_CAVALL, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_G1_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_CB2", new FitxaDades(TAULER_VIRTUAL, "_CB2", TIPUS_FITXA_CAVALL, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_G1_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "CB2", new FitxaDades(TAULER_REAL, "CB2", TIPUS_FITXA_CAVALL, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_G1_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_CB2", new FitxaDades(TAULER_VIRTUAL, "_CB2", TIPUS_FITXA_CAVALL, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_G1_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "CB2", CASELLA_G1_B, colorUsuari);
 
     //Th1
-    setFitxaDadesToElDOM(TAULER_REAL, "TB2", new FitxaDades(TAULER_REAL, "TB2", TIPUS_FITXA_TORRE, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_H1_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_TB2", new FitxaDades(TAULER_VIRTUAL, "_TB2", TIPUS_FITXA_TORRE, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_H1_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "TB2", new FitxaDades(TAULER_REAL, "TB2", TIPUS_FITXA_TORRE, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_H1_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_TB2", new FitxaDades(TAULER_VIRTUAL, "_TB2", TIPUS_FITXA_TORRE, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_H1_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "TB2", CASELLA_H1_B, colorUsuari);
 
     //a2
-    setFitxaDadesToElDOM(TAULER_REAL, "PB1", new FitxaDades(TAULER_REAL, "PB1", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_A2_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB1", new FitxaDades(TAULER_VIRTUAL, "_PB1", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_A2_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PB1", new FitxaDades(TAULER_REAL, "PB1", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_A2_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB1", new FitxaDades(TAULER_VIRTUAL, "_PB1", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_A2_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PB1", CASELLA_A2_B, colorUsuari);
 
     //b2
-    setFitxaDadesToElDOM(TAULER_REAL, "PB2", new FitxaDades(TAULER_REAL, "PB2", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_B2_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB2", new FitxaDades(TAULER_VIRTUAL, "_PB2", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_B2_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PB2", new FitxaDades(TAULER_REAL, "PB2", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_B2_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB2", new FitxaDades(TAULER_VIRTUAL, "_PB2", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_B2_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PB2", CASELLA_B2_B, colorUsuari);
 
     //c2
-    setFitxaDadesToElDOM(TAULER_REAL, "PB3", new FitxaDades(TAULER_REAL, "PB3", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_C2_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB3", new FitxaDades(TAULER_VIRTUAL, "_PB3", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_C2_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PB3", new FitxaDades(TAULER_REAL, "PB3", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_C2_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB3", new FitxaDades(TAULER_VIRTUAL, "_PB3", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_C2_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PB3", CASELLA_C2_B, colorUsuari);
 
     //d2
-    setFitxaDadesToElDOM(TAULER_REAL, "PB4", new FitxaDades(TAULER_REAL, "PB4", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_D2_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB4", new FitxaDades(TAULER_VIRTUAL, "_PB4", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_D2_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PB4", new FitxaDades(TAULER_REAL, "PB4", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_D2_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB4", new FitxaDades(TAULER_VIRTUAL, "_PB4", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_D2_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PB4", CASELLA_D2_B, colorUsuari);
 
     //e2
-    setFitxaDadesToElDOM(TAULER_REAL, "PB5", new FitxaDades(TAULER_REAL, "PB5", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_E2_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB5", new FitxaDades(TAULER_VIRTUAL, "_PB5", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_E2_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PB5", new FitxaDades(TAULER_REAL, "PB5", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_E2_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB5", new FitxaDades(TAULER_VIRTUAL, "_PB5", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_E2_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PB5", CASELLA_E2_B, colorUsuari);
 
     //f2
-    setFitxaDadesToElDOM(TAULER_REAL, "PB6", new FitxaDades(TAULER_REAL, "PB6", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_F2_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB6", new FitxaDades(TAULER_VIRTUAL, "_PB6", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_F2_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PB6", new FitxaDades(TAULER_REAL, "PB6", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_F2_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB6", new FitxaDades(TAULER_VIRTUAL, "_PB6", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_F2_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PB6", CASELLA_F2_B, colorUsuari);
 
     //g2
-    setFitxaDadesToElDOM(TAULER_REAL, "PB7", new FitxaDades(TAULER_REAL, "PB7", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_G2_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB7", new FitxaDades(TAULER_VIRTUAL, "_PB7", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_G2_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PB7", new FitxaDades(TAULER_REAL, "PB7", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_G2_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB7", new FitxaDades(TAULER_VIRTUAL, "_PB7", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_G2_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PB7", CASELLA_G2_B, colorUsuari);
 
     //h2
-    setFitxaDadesToElDOM(TAULER_REAL, "PB8", new FitxaDades(TAULER_REAL, "PB8", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_H2_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB8", new FitxaDades(TAULER_VIRTUAL, "_PB8", TIPUS_FITXA_PEO, COLOR_BLANC, false, obtenirPointCasella(param_colorUsuari, CASELLA_H2_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PB8", new FitxaDades(TAULER_REAL, "PB8", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_H2_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PB8", new FitxaDades(TAULER_VIRTUAL, "_PB8", TIPUS_FITXA_PEO, COLOR_BLANC, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_H2_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PB8", CASELLA_H2_B, colorUsuari);
 
     //////////////////// PECES NEGRES //////////////////////////////////////
     //Ta8
-    setFitxaDadesToElDOM(TAULER_REAL, "TN1", new FitxaDades(TAULER_REAL, "TN1", TIPUS_FITXA_TORRE, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_A8_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_TN1", new FitxaDades(TAULER_VIRTUAL, "_TN1", TIPUS_FITXA_TORRE, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_A8_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "TN1", new FitxaDades(TAULER_REAL, "TN1", TIPUS_FITXA_TORRE, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_A8_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_TN1", new FitxaDades(TAULER_VIRTUAL, "_TN1", TIPUS_FITXA_TORRE, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_A8_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "TN1", CASELLA_A8_B, colorUsuari);
 
     //Cb8
-    setFitxaDadesToElDOM(TAULER_REAL, "CN1", new FitxaDades(TAULER_REAL, "CN1", TIPUS_FITXA_CAVALL, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_B8_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_CN1", new FitxaDades(TAULER_VIRTUAL, "_CN1", TIPUS_FITXA_CAVALL, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_B8_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "CN1", new FitxaDades(TAULER_REAL, "CN1", TIPUS_FITXA_CAVALL, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_B8_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_CN1", new FitxaDades(TAULER_VIRTUAL, "_CN1", TIPUS_FITXA_CAVALL, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_B8_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "CN1", CASELLA_B8_B, colorUsuari);
 
     //Ac8
-    setFitxaDadesToElDOM(TAULER_REAL, "AN1", new FitxaDades(TAULER_REAL, "AN1", TIPUS_FITXA_ALFIL, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_C8_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_AN1", new FitxaDades(TAULER_VIRTUAL, "_AN1", TIPUS_FITXA_ALFIL, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_C8_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "AN1", new FitxaDades(TAULER_REAL, "AN1", TIPUS_FITXA_ALFIL, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_C8_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_AN1", new FitxaDades(TAULER_VIRTUAL, "_AN1", TIPUS_FITXA_ALFIL, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_C8_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "AN1", CASELLA_C8_B, colorUsuari);
 
     //Dd8
-    setFitxaDadesToElDOM(TAULER_REAL, "DN1", new FitxaDades(TAULER_REAL, "DN1", TIPUS_FITXA_DAMA, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_D8_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_DN1", new FitxaDades(TAULER_VIRTUAL, "_DN1", TIPUS_FITXA_DAMA, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_D8_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "DN1", new FitxaDades(TAULER_REAL, "DN1", TIPUS_FITXA_DAMA, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_D8_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_DN1", new FitxaDades(TAULER_VIRTUAL, "_DN1", TIPUS_FITXA_DAMA, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_D8_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "DN", CASELLA_D8_B, colorUsuari);
 
     //Re8
-    setFitxaDadesToElDOM(TAULER_REAL, "RN1", new FitxaDades(TAULER_REAL, "RN1", TIPUS_FITXA_REI, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_E8_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_RN1", new FitxaDades(TAULER_VIRTUAL, "_RN1", TIPUS_FITXA_REI, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_E8_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "RN1", new FitxaDades(TAULER_REAL, "RN1", TIPUS_FITXA_REI, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_E8_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_RN1", new FitxaDades(TAULER_VIRTUAL, "_RN1", TIPUS_FITXA_REI, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_E8_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "RN", CASELLA_E8_B, colorUsuari);
 
     //Af8
-    setFitxaDadesToElDOM(TAULER_REAL, "AN2", new FitxaDades(TAULER_REAL, "AN2", TIPUS_FITXA_ALFIL, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_F8_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_AN2", new FitxaDades(TAULER_VIRTUAL, "_AN2", TIPUS_FITXA_ALFIL, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_F8_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "AN2", new FitxaDades(TAULER_REAL, "AN2", TIPUS_FITXA_ALFIL, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_F8_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_AN2", new FitxaDades(TAULER_VIRTUAL, "_AN2", TIPUS_FITXA_ALFIL, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_F8_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "AN2", CASELLA_F8_B, colorUsuari);
 
     //Cg8
-    setFitxaDadesToElDOM(TAULER_REAL, "CN2", new FitxaDades(TAULER_REAL, "CN2", TIPUS_FITXA_CAVALL, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_G8_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_CN2", new FitxaDades(TAULER_VIRTUAL, "_CN2", TIPUS_FITXA_CAVALL, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_G8_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "CN2", new FitxaDades(TAULER_REAL, "CN2", TIPUS_FITXA_CAVALL, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_G8_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_CN2", new FitxaDades(TAULER_VIRTUAL, "_CN2", TIPUS_FITXA_CAVALL, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_G8_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "CN2", CASELLA_G8_B, colorUsuari);
 
     //Th8
-    setFitxaDadesToElDOM(TAULER_REAL, "TN2", new FitxaDades(TAULER_REAL, "TN2", TIPUS_FITXA_TORRE, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_H8_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_TN2", new FitxaDades(TAULER_VIRTUAL, "_TN2", TIPUS_FITXA_TORRE, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_H8_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "TN2", new FitxaDades(TAULER_REAL, "TN2", TIPUS_FITXA_TORRE, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_H8_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_TN2", new FitxaDades(TAULER_VIRTUAL, "_TN2", TIPUS_FITXA_TORRE, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_H8_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "TN2", CASELLA_H8_B, colorUsuari);
 
     //a7
-    setFitxaDadesToElDOM(TAULER_REAL, "PN1", new FitxaDades(TAULER_REAL, "PN1", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_A7_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN1", new FitxaDades(TAULER_VIRTUAL, "_PN1", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_A7_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PN1", new FitxaDades(TAULER_REAL, "PN1", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_A7_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN1", new FitxaDades(TAULER_VIRTUAL, "_PN1", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_A7_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PN1", CASELLA_A7_B, colorUsuari);
 
     //b7
-    setFitxaDadesToElDOM(TAULER_REAL, "PN2", new FitxaDades(TAULER_REAL, "PN2", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_B7_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN2", new FitxaDades(TAULER_VIRTUAL, "_PN2", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_B7_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PN2", new FitxaDades(TAULER_REAL, "PN2", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_B7_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN2", new FitxaDades(TAULER_VIRTUAL, "_PN2", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_B7_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PN2", CASELLA_B7_B, colorUsuari);
 
     //c7
-    setFitxaDadesToElDOM(TAULER_REAL, "PN3", new FitxaDades(TAULER_REAL, "PN3", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_C7_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN3", new FitxaDades(TAULER_VIRTUAL, "_PN3", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_C7_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PN3", new FitxaDades(TAULER_REAL, "PN3", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_C7_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN3", new FitxaDades(TAULER_VIRTUAL, "_PN3", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_C7_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PN3", CASELLA_C7_B, colorUsuari);
 
     //d7
-    setFitxaDadesToElDOM(TAULER_REAL, "PN4", new FitxaDades(TAULER_REAL, "PN4", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_D7_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN4", new FitxaDades(TAULER_VIRTUAL, "_PN4", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_D7_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PN4", new FitxaDades(TAULER_REAL, "PN4", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_D7_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN4", new FitxaDades(TAULER_VIRTUAL, "_PN4", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_D7_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PN4", CASELLA_D7_B, colorUsuari);
 
     //e7
-    setFitxaDadesToElDOM(TAULER_REAL, "PN5", new FitxaDades(TAULER_REAL, "PN5", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_E7_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN5", new FitxaDades(TAULER_VIRTUAL, "_PN5", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_E7_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PN5", new FitxaDades(TAULER_REAL, "PN5", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_E7_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN5", new FitxaDades(TAULER_VIRTUAL, "_PN5", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_E7_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PN5", CASELLA_E7_B, colorUsuari);
 
     //f7
-    setFitxaDadesToElDOM(TAULER_REAL, "PN6", new FitxaDades(TAULER_REAL, "PN6", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_F7_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN6", new FitxaDades(TAULER_VIRTUAL, "_PN6", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_F7_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PN6", new FitxaDades(TAULER_REAL, "PN6", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_F7_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN6", new FitxaDades(TAULER_VIRTUAL, "_PN6", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_F7_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PN6", CASELLA_F7_B, colorUsuari);
 
     //g7
-    setFitxaDadesToElDOM(TAULER_REAL, "PN7", new FitxaDades(TAULER_REAL, "PN7", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_G7_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN7", new FitxaDades(TAULER_VIRTUAL, "_PN7", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_G7_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PN7", new FitxaDades(TAULER_REAL, "PN7", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_G7_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN7", new FitxaDades(TAULER_VIRTUAL, "_PN7", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_G7_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PN7", CASELLA_G7_B, colorUsuari);
 
     //h7
-    setFitxaDadesToElDOM(TAULER_REAL, "PN8", new FitxaDades(TAULER_REAL, "PN8", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_H7_B)));
-    setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN8", new FitxaDades(TAULER_VIRTUAL, "_PN8", TIPUS_FITXA_PEO, COLOR_NEGRE, false, obtenirPointCasella(param_colorUsuari, CASELLA_H7_B)));
+    setFitxaDadesToElDOM(TAULER_REAL, "PN8", new FitxaDades(TAULER_REAL, "PN8", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_H7_B)));
+    if (withHidden) {
+        setFitxaDadesToElDOM(TAULER_VIRTUAL, "_PN8", new FitxaDades(TAULER_VIRTUAL, "_PN8", TIPUS_FITXA_PEO, COLOR_NEGRE, colorBottom, false, obtenirPointCasella(colorBottom, CASELLA_H7_B)));
+    }
     //setPosicioFitxa(TAULER_REAL, "PN8", CASELLA_H7_B, colorUsuari);
 
+
+
+/*
     var colorMov = "B";
 
     synchronizeEsteles();
+*/
 
 }
 
