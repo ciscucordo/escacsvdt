@@ -968,7 +968,7 @@ function doMirarRepteAcceptat()
             window.refreshLlistaPartida = self.setInterval(function () {
                 if (finishedOmplirLlistaPartida === true) {
                     try {
-                        doOmplirLlistaPartidaSub(valueJugadorBlanques, valueJugadorNegres, valueNumPagActual);
+                        doOmplirLlistaPartidaSub(valueJugadorBlanques, valueJugadorNegres, valueResultat, valueNumPagActual);
                     } finally {
                         //
                     }
