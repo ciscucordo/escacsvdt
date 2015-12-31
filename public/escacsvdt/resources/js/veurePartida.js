@@ -99,11 +99,12 @@ function clickFirstJugada() {
     initializeTaulerInVeurePartida(COLOR_BLANC);
     window.numJugadaActual = 0;
     window.colorActual = "";
+    goToPosicioTauler(window.numJugadaActual, window.colorActual);
 }
 
 function clickPriorJugada() {
     if (window.colorActual === COLOR_BLANC) {
-        window.numJugadaActual--;
+        +window.numJugadaActual--;
     }
     if (window.numJugadaActual <= 0 && (window.colorActual === COLOR_BLANC || window.colorActual === "")) {
         clickFirstJugada();
@@ -114,11 +115,11 @@ function clickPriorJugada() {
 }
 
 function clickNextJugada() {
-    if (window.numJugadaActual+1 >= window.listAllPosicioTauler.length) {
+    if (+window.numJugadaActual+1 >= window.listAllPosicioTauler.length) {
         clickLastJugada();
     }
     if (window.numJugadaActual === 0 || window.colorActual === COLOR_NEGRE) {
-        window.numJugadaActual++;
+        +window.numJugadaActual++;
     }
     window.colorActual = window.colorActual === COLOR_BLANC ? COLOR_NEGRE : COLOR_BLANC;
     goToPosicioTauler(window.numJugadaActual, window.colorActual);   

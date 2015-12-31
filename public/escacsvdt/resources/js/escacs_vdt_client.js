@@ -247,11 +247,11 @@ function doOnReadyEscacs_vdt_client(pSessionData)
     */
 
     //NOMÉS per a OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    
+    /*
     var socket = io('ws://escacsvdt-6qdomain.rhcloud.com:8000',
         objSocketConnection
     );
-    
+    */
 
     /*
      escacsVdtClient = new EscacsVdtClient(socket);
