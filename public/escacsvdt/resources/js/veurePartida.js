@@ -93,8 +93,14 @@ function goToPosicioTauler(numJugada, color)
     
     $(".anotacioJugada").removeClass("selectedJugada").addClass("unselectedJugada");
     $("#numJugada"+window.colorActual+window.numJugadaActual).addClass("selectedJugada");
-    $("#numJugada"+window.colorActual+window.numJugadaActual).focus();
+    //$("#numJugada"+window.colorActual+window.numJugadaActual).focus();
     //$("#divListJugades").scrollTop($("#tableListJugades").outerHeight());
+    
+    var xY = getPosition(document.getElementById("numJugada"+window.colorActual+window.numJugadaActual));
+    
+    $("#divListJugades").scrollTop(xY.y);
+    
+    
 }
 
 function clickFirstJugada() {
@@ -285,6 +291,18 @@ function apuntarJugada(pIdGraella, pColor, pJugada) {
             break;
     }
     return jugada;
+}
+
+function getPosition(element) {
+    var xPosition = 0;
+    var yPosition = 0;
+  
+    while(element) {
+        xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+        yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+        element = element.offsetParent;
+    }
+    return { x: xPosition, y: yPosition };
 }
 
 /*
