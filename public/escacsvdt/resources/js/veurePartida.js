@@ -97,8 +97,9 @@ function goToPosicioTauler(numJugada, color)
     //$("#divListJugades").scrollTop($("#tableListJugades").outerHeight());
     
     var xY = getPosition(document.getElementById("numJugada"+window.colorActual+window.numJugadaActual));
+    console.log(xY);
     
-    $("#divListJugades").scrollTop(xY.y);
+    $("#divListJugades").scrollTop(xY.y-100);
     
     
 }
