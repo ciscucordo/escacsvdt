@@ -93,7 +93,8 @@ function goToPosicioTauler(numJugada, color)
     
     $(".anotacioJugada").removeClass("selectedJugada").addClass("unselectedJugada");
     $("#numJugada"+window.colorActual+window.numJugadaActual).addClass("selectedJugada");
-    $("#divListJugades").scrollTop($("#tableListJugades").outerHeight());
+    $("#numJugadaN17").focus();
+    //$("#divListJugades").scrollTop($("#tableListJugades").outerHeight());
 }
 
 function clickFirstJugada() {
