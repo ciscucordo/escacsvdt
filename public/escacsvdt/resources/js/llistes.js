@@ -15,7 +15,7 @@ $(document).ready(function () {
         function (pSessionData, textStatus, jqXHR)
         {
             var jsonSession = pSessionData;
-            $("#labNickJugadorSessio").text(jsonSession[0].user);
+            $("#labNickJugadorSessio").html("Sessió iniciada per: <b>" + jsonSession[0].user + "</b>");
         }
     );
     
