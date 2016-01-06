@@ -8,6 +8,18 @@ var finishedOmplirLlistaPartida = false;
 $(document).ready(function () {
 
     $("#capcaleraPag").html(htmlCapcaleraPag());
+    
+    var xhr = getXHRSession();
+    $.when($.ajax(xhr)).then(
+        //function primer param --> ajax success!!!
+        function (pSessionData, textStatus, jqXHR)
+        {
+            var jsonSession = pSessionData;
+            $("#labNickJugadorSessio").text(jsonSession[0].user);
+        }
+    );
+    
+    
 
     $("#form-filter-jugador").submit(function (e) {
         e.preventDefault();
