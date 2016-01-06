@@ -999,22 +999,30 @@ function doVeurePartida(pIdPartida) {
 
 
 function doLogout() {
-    $.ajax({
-        url: '/doLogout',
-        type: 'post',
-        datatype: 'json',
-        data: "",
-        success: function (data) {
-            if (data == "1") {
-                clearIntervalLlista(PAG_LLISTA_JUGADOR);
-                clearIntervalLlista(PAG_LLISTA_REPTE);
-                window.location = "./login.htm";
+    
+    var fnYes = function () {
+        $.ajax({
+            url: '/doLogout',
+            type: 'post',
+            datatype: 'json',
+            data: "",
+            success: function (data) {
+                if (data == "1") {
+                    clearIntervalLlista(PAG_LLISTA_JUGADOR);
+                    clearIntervalLlista(PAG_LLISTA_REPTE);
+                    window.location = "./login.htm";
+                }
+            },
+            error: function (s, i, error) {
+                console.log(error);
             }
-        },
-        error: function (s, i, error) {
-            console.log(error);
-        }
-    });
+        });
+    };
+    var fnNo = function () {
+        //
+    };
+    showConfirmationDialog("Confirmació", "Vols sortir?", fnYes, fnNo);
+    
 }
 
 //////////////////////////////////// fin repte /////////////////////////////////
