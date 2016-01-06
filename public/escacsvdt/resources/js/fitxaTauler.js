@@ -1769,8 +1769,8 @@ function esPossibleEnrocarCurt(pCmd, pFitxaNom) {
                         fD_TN2.isMoved === false
                         && //que no hagi fitxes pel mig
                         (!fitxaNom1 && !fitxaNom2)
-                        && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 5, 7) === false
-                        && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 6, 7) === false);
+                        && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 5, 0) === false
+                        && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 6, 0) === false);
                 break;
             }
         }
