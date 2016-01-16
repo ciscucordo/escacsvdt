@@ -181,6 +181,7 @@ function doOnReadySala(pSessionData)
     var ifJugadorSessionDraw = calcularELO(jsonJugadorSession[0].ELO, jsonJugadorContrincant[0].ELO, 0.5);
     var ifJugadorSessionLose = calcularELO(jsonJugadorSession[0].ELO, jsonJugadorContrincant[0].ELO, 0);
     $("#divVariacioELO").html(
+      "<span style='padding:10px;font-weight:bold;'>Variació ELO:</span>" +      
       "<ul>" +
       "<li style='color:rgb(0, 130, 0);'>Si guanyo: +" + Math.abs(ifJugadorSessionWin) + "</li>" +
       "<li style='color:rgb(0, 0, 255);'>Si empato: " + (Math.abs(ifJugadorSessionDraw) === 0 ? "=0" : ifJugadorSessionDraw) + "</li>" +
