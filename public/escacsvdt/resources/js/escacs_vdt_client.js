@@ -457,14 +457,171 @@ function doOnReadyEscacs_vdt_client(pSessionData)
 function doUpdateResultatPartida(pResultat)
 {
 
-    //console.log("idPartida:", param_idPartida);
-
     $.ajax({
         type: "post",
         url: "/doUpdateResultatPartida",
         datatype: "json",
         data: "IDPARTIDA=" + param_idPartida +
                 "&RESULTAT=" + pResultat,
+        async: false,
+        //cache: false,
+        timeout: 30000,
+        success: function (data, textStatus, jqXHR) {
+            window.resultatPartida = pResultat;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+            //
+        }
+    });
+
+}
+
+function calcularELO(pEloACalcular, pEloContrincant, pPunts) {
+    var taulaVariacioELO = [
+        //lowInterval   //highInterval  //variació ELO
+        [0,             3,              0.5],
+        [3.01,          10,             0.51],
+        [10.01,         17,             0.52],
+        [17.01,         25,             0.53],
+        [25.01,         32,             0.54],
+        [32.01,         39,             0.55],
+        [39.01,         46,             0.56],
+        [46.01,         53,             0.57],
+        [53.01,         61,             0.58],
+        [61.01,         68,             0.59],
+        [68.01,         76,             0.6],
+        [76.01,         83,             0.61],
+        [83.01,         91,             0.62],
+        [91.01,         98,             0.63],
+        [98.01,         106,            0.64],
+        [106.01,	113,            0.65],
+        [113.01,	121,            0.66],
+        [121.01,        129,            0.67],
+        [129.01,	137,            0.68],
+        [137.01,        145,            0.69],
+        [145.01,	153,            0.7],
+        [153.01,	162,            0.71],
+        [162.01,	170,            0.72],
+        [170.01,	179,            0.73],
+        [179.01,	188,            0.74],
+        [188.01,	197,            0.75],
+        [197.01,	206,            0.76],
+        [206.01,	215,            0.77],
+        [215.01,	225,            0.78],
+        [225.01,	235,            0.79],
+        [235.01,	245,            0.8],
+        [245.01,	256,            0.81],
+        [256.01,	267,            0.82],
+        [267.01,	278,            0.83],
+        [278.01,	290,            0.84],
+        [290.01,	302,            0.85],
+        [302.01,	315,            0.86],
+        [315.01,	328,            0.87],
+        [328.01,	344,            0.88],
+        [344.01,	357,            0.89],
+        [357.01,	374,            0.9],
+        [374.01,	391,            0.91],
+        [391.01,	411,            0.92],
+        [411.01,	432,            0.93],
+        [432.01,	456,            0.94],
+        [456.01,	484,            0.95],
+        [484.01,	517,            0.96],
+        [517.01,	559,            0.97],
+        [559.01,	619,            0.98],
+        [619.01,	735,            0.99]
+    ];
+    var eloACalcular = pEloACalcular ? pEloACalcular : 1700;
+    var eloContrincant = pEloContrincant ? pEloContrincant : 1700;
+    var k = 15;
+    var valorAgregat = 0;
+    var diffELO = eloContrincant-eloACalcular;
+    for (var i = 0; i < taulaVariacioELO.length; i++) {
+        var lowInterval = taulaVariacioELO[i][0];
+        var highInterval = taulaVariacioELO[i][1];
+        if (Math.abs(diffELO) >= lowInterval && Math.abs(diffELO) <= highInterval) {
+            valorAgregat = taulaVariacioELO[i][2];
+            break;
+        }
+    }
+    if (diffELO > 0) {
+        valorAgregat = 1-valorAgregat;
+    }
+    valorAgregat = k*(pPunts-1/*1=núm.partides*/*valorAgregat); 
+    valorAgregat = valorAgregat.toFixed(2);
+    return valorAgregat;
+}
+
+
+function doInsertHistorialJugador()
+{
+    var idPartida = param_idPartida;
+    var jsonPartida = doSelectPartidaById(idPartida);
+    var eloCalculat = 1700;
+    
+    //càlcul ELO blanques
+    var idJugadorBlanques = jsonPartida[0].IDJUGADORBLANQUES;
+    var jsonJugadorBlanques = doSelectJugadorById(idJugadorBlanques);
+    var idJugadorNegres = jsonPartida[0].IDJUGADORNEGRES;
+    var jsonJugadorNegres = doSelectJugadorById(idJugadorNegres);
+    
+    var punts = 0;
+    switch (jsonPartida[0].RESULTAT) {
+        case 1:
+            punts = 1;
+            break;
+        case 2:
+            punts = 0.5;
+            break;
+        case 3:
+            punts = 0;
+            break;
+    }
+    eloCalculat = calcularELO(jsonJugadorBlanques[0].ELO, jsonJugadorNegres[0].ELO, punts);
+    $.ajax({
+        type: "post",
+        url: "/doInsertHistorialJugador",
+        datatype: "json",
+        data: "IDJUGADOR=" + idJugadorBlanques +
+                "&IDPARTIDA=" + param_idPartida +
+                "&ELO=" + eloCalculat,
+        async: true,
+        //cache: false,
+        timeout: 30000,
+        success: function (data, textStatus, jqXHR) {
+            window.resultatPartida = pResultat;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+            //
+        }
+    });
+    
+    //càlcul ELO negres
+    punts = 0;
+    switch (jsonPartida[0].RESULTAT) {
+        case 1:
+            punts = 0;
+            break;
+        case 2:
+            punts = 0.5;
+            break;
+        case 3:
+            punts = 1;
+            break;
+    }
+    eloCalculat = calcularELO(jsonJugadorNegres[0].ELO, jsonJugadorBlanques[0].ELO, punts);
+    $.ajax({
+        type: "post",
+        url: "/doInsertHistorialJugador",
+        datatype: "json",
+        data: "IDJUGADOR=" + idJugadorNegres +
+                "&IDPARTIDA=" + param_idPartida +
+                "&ELO=" + eloCalculat,
         async: false,
         //cache: false,
         timeout: 30000,

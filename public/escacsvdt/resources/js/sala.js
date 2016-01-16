@@ -176,6 +176,18 @@ function doOnReadySala(pSessionData)
         }
     }, 1000);
 
+    var jsonJugadorSession = doSelectJugadorById(jsonSession[0].IDJUGADOR);
+    var ifJugadorSessionWin = calcularELO(jsonJugadorSession[0].ELO, jsonJugadorContrincant[0].ELO, 1);
+    var ifJugadorSessionDraw = calcularELO(jsonJugadorSession[0].ELO, jsonJugadorContrincant[0].ELO, 0.5);
+    var ifJugadorSessionLose = calcularELO(jsonJugadorSession[0].ELO, jsonJugadorContrincant[0].ELO, 0);
+    $("#divVariacioELO").html(
+      "<ul>" +
+      "<li style='color:rgb(0, 130, 0);'>Si guanyo: +" + Math.abs(ifJugadorSessionWin) + "</li>" +
+      "<li style='color:rgb(0, 0, 255);'>Si empato: " + (Math.abs(ifJugadorSessionDraw) === 0 ? "=0" : ifJugadorSessionDraw) + "</li>" +
+      "<li style='color:rgb(180, 0, 0);'>Si perdo: -" + Math.abs(ifJugadorSessionLose) + "</li>" + 
+      "</ul>"
+    );
+
     //el primer torn sempre és de les BLANQUES ("B") !!!
     window.colorTorn = "B";
     param_colorUsuari = jsonSession[0].ELMEUCOLOR;
