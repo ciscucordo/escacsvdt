@@ -1547,9 +1547,9 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
     var isCheck = checkInCheck(TAULER_REAL, colorInCheck);
     var isCheckMate = checkIfCheckMate(colorInCheck);
     if (isCheckMate === true) {
-        jugada += "++";
+        jugada += "&#43;&#43;";
     } else if (isCheck === true) {
-        jugada += "+";
+        jugada += "&#43;";
     }
         
     
@@ -2018,7 +2018,7 @@ function doCrearJugadesGraella(/*pFD,*/ pJugada)
         data: "IDGRAELLA=" + pJugada.idGraella +
                 "&NUMJUGADA=" + pJugada.numJugada +
                 "&COLOR=" + pJugada.color +
-                "&JUGADA=" + pJugada.jugada,
+                "&JUGADA=" + pJugada.jugada.replace( "&#43;", "escac" ),
         async: false,
         //cache: false,
         timeout: 30000,
