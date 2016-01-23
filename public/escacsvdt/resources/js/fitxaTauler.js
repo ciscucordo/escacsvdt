@@ -1719,7 +1719,7 @@ function esPossibleEnrocarLlarg(pCmd, pFitxaNom) {
                         && //que no s'hagi mogut la torre 
                         fD_TN1.isMoved === false
                         && //que no hagi fitxes pel mig
-                        fitxaNom1 === "" && fitxaNom2 === "" && fitxaNom3 === ""
+                        (!fitxaNom1 && !fitxaNom2 && !fitxaNom3)
                         && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 1, 0) === false
                         && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 2, 0) === false
                         && checkColorInEstelaByIiJ(pCmd, COLOR_BLANC, 3, 0) === false);
