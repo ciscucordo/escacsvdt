@@ -183,7 +183,7 @@ function setTipusFitxaElDOM(elDOM, pColor, pTipusFitxa) {
 }
 
 //FitxaDades: constructor
-function FitxaDades(pCmd, pNom, pTipusFitxa, pColor, pColorBottomTauler, pIsMoved, pIiJ) {
+function FitxaDades(pCmd, pNom, pTipusFitxa, pColor, pColorBottomTauler, pIsMoved, pIiJ, pIsTwoForward, pIsLastMove) {
     this.cmd = pCmd;
     this.nom = pNom;
     this.tipusFitxa = pTipusFitxa;
@@ -191,6 +191,8 @@ function FitxaDades(pCmd, pNom, pTipusFitxa, pColor, pColorBottomTauler, pIsMove
     this.colorBottomTauler = pColorBottomTauler;
     this.isMoved = pIsMoved;
     this.iiJ = pIiJ;
+    this.isTwoForward = pIsTwoForward;
+    this.isLastMove = pIsLastMove;
 };
 
 //FitxaDades: getters i setters
@@ -250,9 +252,6 @@ FitxaDades.prototype = {
         }
     },
     set iiJ(val) {
-        
-        //console.log((val instanceof Point) );
-        
         var iiJDesti = null;
         var xiYDesti = null;
         if ((val instanceof Point) === true) {
@@ -282,7 +281,20 @@ FitxaDades.prototype = {
             this._iiJ_Array = iiJDesti;
             _arrayTauler[iiJDesti.i][iiJDesti.j] = this._nom;
         }
-        
+    },
+    //isTwoForward només es fa servir pels peons (si han avançat 2 caselles endavant)
+    get isTwoForward() {
+        return this._isTwoForward;
+    },
+    set isTwoForward(val) {
+        this._isTwoForward = val;
+    },
+    //isLastMove
+    get isLastMove() {
+        return this._isLastMove;
+    },
+    set isLastMove(val) {
+        this._isLastMove = val;
     }
 };
 
@@ -1208,17 +1220,34 @@ function setEstelaP(pFD) {
 
 }
 
+ 
 
+function coronacio(pFD, pTipusFitxaAConvertir) {
+    var fDBeforeChange = new FitxaDades(pFD.cmp, pFD.nom, pFD.tipusFitxa, pFD.color, pFD.colorBottomTauler, true, pFD.iiJ, false, true);
+    var fDAfterChange = new FitxaDades(pFD.cmp, pFD.nom, pFD.tipusFitxa, pFD.color, pFD.colorBottomTauler, true, pFD.iiJ, false, true);;
+    var countFitxesByTipusIColor = getCountFitxesByTipusIColor(pTipusFitxaAConvertir, pFD.color)+'';
+    fDAfterChange.nom = pTipusFitxaAConvertir + pFD.color + countFitxesByTipusIColor;
+    fDAfterChange.tipusFitxa = pTipusFitxaAConvertir;
+    var elDOM = getElDOMByNom(fDBeforeChange.nom);
+    elDOM.id = fDAfterChange.nom;
+    setTipusFitxaElDOM(elDOM.id, pFD.color, pTipusFitxaAConvertir);
+    setFitxaDadesToElDOM(TAULER_REAL, fDAfterChange.nom, fDAfterChange);
+}
 
-function coronacio(pFitxaNom, pFitxaColor, pTipusFitxaAConvertir, pI, pJ) {
-    var fD = getFitxaDadesFromElDOM(TAULER_REAL, pFitxaNom);
-    fD.nom = "DXX";
-    fD.tipusFitxa = pTipusFitxaAConvertir;
-    fD.iiJ = new ElMeuPoint(pI, pJ);
-    setFitxaDadesToElDOM(TAULER_REAL, pFitxaNom, fD);
-    var elDOM = getElDOMByNom(pFitxaNom);
-    elDOM.id = fD.nom;
-    setTipusFitxaElDOM(elDOM.id, pFitxaColor, pTipusFitxaAConvertir);
+function getCountFitxesByTipusIColor(pTipusFitxa, pColor) {
+    //inicialitzem el comptador a 3, qualsevol nombre superior a 2!!!
+    var counter = 3;
+    //files
+    for (var j = 0; j < 8; j++) {
+        //columnes
+        for (var i = 0; i < 8; i++) {
+            var fitxaNom = arrayTauler[i][j];
+            if (fitxaNom && fitxaNom.indexOf(pTipusFitxa+pColor) != -1) {
+                counter++;
+            } 
+        }
+    }
+    return counter;
 }
 
 function getElDOMByNom(pFitxaNom) {
@@ -1386,12 +1415,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         iiJ = xiYOiiJ;
     }
     
-    //mirar si hi ha peça contrària a la casella destí
-    var sNomPecaACasellaDesti = arrayTauler[iiJ.i][iiJ.j];
-    var fDACasellaDesti;
-    if (sNomPecaACasellaDesti) {        
-        fDACasellaDesti = getFitxaDadesFromElDOM(TAULER_REAL, sNomPecaACasellaDesti);
-    }
+    var isPromotion = false;
     
     var fD = getFitxaDadesFromElDOM(TAULER_REAL, pFitxaNom);
     var jugada = "";
@@ -1457,21 +1481,38 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
             }
             break;
         case TIPUS_FITXA_PEO:
-            switch (fD.color) {
-                case COLOR_BLANC:
-                    if (iiJ.j === 0) {
-                        showCoronacioDialog(fD, iiJ);
-                    }
-                    break;
-                case COLOR_NEGRE:
-                    if (iiJ.j === 7) {
-                        showCoronacioDialog(fD, iiJ);
-                    }
-                    break;
+            //només mostrar diàleg de coronació si estem enviant la jugada!
+            if (pEnviarRebreJugada === 'enviarjugada') {
+                isPromotion = true;
+                switch (fD.color) {
+                    case COLOR_BLANC:
+                        if (iiJ.j === 0) {
+                            showCoronacioDialog(fD, function() {
+                                doIsOKMoveCallback(fD, xiYOiiJ, pEnviarRebreJugada, jugada);
+                            });
+                        }
+                        break;
+                    case COLOR_NEGRE:
+                        if (iiJ.j === 7) {
+                            showCoronacioDialog(fD, function() {
+                                doIsOKMoveCallback(fD, xiYOiiJ, pEnviarRebreJugada, jugada);
+                            });
+                        }
+                        break;
+                }
             }
             break;
     }
 
+    if (isPromotion === false) {
+        doIsOKMoveCallback(fD, xiYOiiJ, pEnviarRebreJugada, jugada);
+    }
+
+    
+    
+}
+
+function doIsOKMoveCallback(fD, xiYOiiJ, pEnviarRebreJugada, jugada) {
     fD.iiJ = xiYOiiJ/*xiY*/;
     fD.isMoved = true;
     setFitxaDadesToElDOM(TAULER_REAL, fD.nom, fD);
@@ -1480,9 +1521,13 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
 
     if (jugada === "") {
         jugada = "<img src='../resources/img/anotacioJugada/"+fD.tipusFitxa+fD.color+".png' alt='"+fD.tipusFitxa+"'>";
-        //if (fD.tipusFitxa != TIPUS_FITXA_PEO) {
-        //    jugada = fD.tipusFitxa;
-        //}
+        
+        //mirar si hi ha peça contrària a la casella destí
+        var sNomPecaACasellaDesti = arrayTauler[iiJ.i][iiJ.j];
+        var fDACasellaDesti;
+        if (sNomPecaACasellaDesti) {        
+            fDACasellaDesti = getFitxaDadesFromElDOM(TAULER_REAL, sNomPecaACasellaDesti);
+        }
         
         //indicar que es tracta d'una captura de peça
         if (fDACasellaDesti && fDACasellaDesti.color !== fD) {
@@ -1551,13 +1596,9 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
     } else if (isCheck === true) {
         jugada += "&#43;";
     }
-        
-    
 
     //apunta la jugada a la llista de jugades
     var vJugada = apuntarJugada(fD.color, jugada);
-
-    //console.log("vJugada: ", vJugada);
 
     //activem el control de temps per al contrincant
     startTimer(fD.color, true);
@@ -1594,21 +1635,6 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         stopTimer();
         canBeginGame = false;
     }
-    /*
-    var colorCheckMate = fD.color === "B" ? "N" : "B";
-    var isCheckMate = checkIfCheckMate(colorCheckMate);
-    if (isCheckMate === true) {
-        
-        escacsVdtClient.processCommand("finishGame" + " " + colorCheckMate + " " + "checkmate");
-        //processUserInput("finishGame" + " " + colorCheckMate + " " + "checkmate", escacsVdtClient, socket);
-        
-        //doIfCheckMate(colorCheckMate);
-        stopTimer();
-        canBeginGame = false;
-    }*/
-    
-    
-
 }
 
 function checkInCheck(pCmd, pColor) {
@@ -1839,24 +1865,24 @@ function esPossibleCapturarAlPas(pCmd, pFitxaNom) {
     return sCapturarAlPas;
 }
 
-function showCoronacioDialog(pFD, pIiJ) {
+function showCoronacioDialog(pFD) {
     var tableCoronacio =
             "<table id='tableCoronacio' style='width:100%'>" +
             "<tbody>" +
-            "<tr>" +
-            "<td style='width:25%;text-align:center'>" +
-            "<img id='coronarCavall' src='./img/CB.PNG' onclick='javascript:coronacio(\"" + pFD.nom + "\",\"" + pFD.color + "\",\"" + TIPUS_FITXA_CAVALL + "\"," + pIiJ.i + "," + pIiJ.j + ");window.dialog.dialog(\"close\");' style='cursor:pointer'>" +
-            "</td>" +
-            "<td style='width:25%;text-align:center'>" +
-            "<img id='coronarAlfil' src='./img/AB.PNG' onclick='javascript:coronacio(\"" + pFD.nom + "\",\"" + pFD.color + "\",\"" + TIPUS_FITXA_ALFIL + "\"," + pIiJ.i + "," + pIiJ.j + ");window.dialog.dialog(\"close\");' style='cursor:pointer'>" +
-            "</td>" +
-            "<td style='width:25%;text-align:center'>" +
-            "<img id='coronarTorre' src='./img/TB.PNG' onclick='javascript:coronacio(\"" + pFD.nom + "\",\"" + pFD.color + "\",\"" + TIPUS_FITXA_TORRE + "\"," + pIiJ.i + "," + pIiJ.j + ");window.dialog.dialog(\"close\");' style='cursor:pointer'>" +
-            "</td>" +
-            "<td style='width:25%;text-align:center'>" +
-            "<img id='coronarDama' src='./img/DB.PNG' onclick='javascript:coronacio(\"" + pFD.nom + "\",\"" + pFD.color + "\",\"" + TIPUS_FITXA_DAMA + "\"," + pIiJ.i + "," + pIiJ.j + ");window.dialog.dialog(\"close\");' style='cursor:pointer'>" +
-            "</td>" +
-            "</tr>" +
+            "  <tr>" +
+            "    <td style='width:25%;text-align:center'>" +
+            "      <img id='coronarCavall' src='../resources/img/" + TIPUS_FITXA_CAVALL + pFD.color + ".PNG' style='cursor:pointer'>" +
+            "    </td>" +
+            "    <td style='width:25%;text-align:center'>" +
+            "      <img id='coronarAlfil' src='../resources/img/" + TIPUS_FITXA_ALFIL + pFD.color + ".PNG' style='cursor:pointer'>" +
+            "    </td>" +
+            "    <td style='width:25%;text-align:center'>" +
+            "      <img id='coronarTorre' src='../resources/img/" + TIPUS_FITXA_TORRE + pFD.color + ".PNG' style='cursor:pointer'>" +
+            "    </td>" +
+            "    <td style='width:25%;text-align:center'>" +
+            "      <img id='coronarDama' src='../resources/img/" + TIPUS_FITXA_DAMA + pFD.color + ".PNG' style='cursor:pointer'>" +
+            "    </td>" +
+            "  </tr>" +
             "</tbody>" +
             "</table>";
     window.dialog = $("<div>" + tableCoronacio + "</div>").dialog({
@@ -1868,6 +1894,22 @@ function showCoronacioDialog(pFD, pIiJ) {
         resizable: false,
         open: function (event, ui) {
             $(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+            $('#coronarCavall').on('click', function () {
+                coronacio(pFD, TIPUS_FITXA_CAVALL);
+                window.dialog.dialog('close');
+            });
+            $('#coronarAlfil').on('click', function () {
+                coronacio(pFD, TIPUS_FITXA_ALFIL);
+                window.dialog.dialog('close');
+            });
+            $('#coronarTorre').on('click', function () {
+                coronacio(pFD, TIPUS_FITXA_TORRE);
+                window.dialog.dialog('close');
+            });
+            $('#coronarDama').on('click', function () {
+                coronacio(pFD, TIPUS_FITXA_DAMA);
+                window.dialog.dialog('close');
+            });
         },
         close: function () {
             //
