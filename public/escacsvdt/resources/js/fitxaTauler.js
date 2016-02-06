@@ -1424,6 +1424,7 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         iiJ = xiYOiiJ;
     }
     
+    var isCapturaAlPas = false;
     var isPromotion = false;
     
     var fD = getFitxaDadesFromElDOM(TAULER_REAL, pFitxaNom);
@@ -1496,12 +1497,13 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
                     var arrEsPossibleCapturarAlPas = esPossibleCapturarAlPas(TAULER_REAL, fD.nom);
                     arrEsPossibleCapturarAlPas = arrEsPossibleCapturarAlPas.split("|");
                     if (arrEsPossibleCapturarAlPas.length === 2) {
+                        isCapturaAlPas = true;
                         var fitxaNomACapturarAlPas = arrEsPossibleCapturarAlPas[1];
                         capturarAlPas(TAULER_REAL, fD.nom, iiJ, fitxaNomACapturarAlPas);
                     } else if (iiJ.j === 0 && pEnviarRebreJugada === 'enviarjugada') {
                         isPromotion = true;
                         showCoronacioDialog(fD, function() {
-                            doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant);
+                            doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant, false);
                         });
                     }
                     break;
@@ -1509,12 +1511,13 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
                     var arrEsPossibleCapturarAlPas = esPossibleCapturarAlPas(TAULER_REAL, fD.nom);
                     arrEsPossibleCapturarAlPas = arrEsPossibleCapturarAlPas.split("|");
                     if (arrEsPossibleCapturarAlPas.length === 2) {
+                        isCapturaAlPas = true;
                         var fitxaNomACapturarAlPas = arrEsPossibleCapturarAlPas[1];
                         capturarAlPas(TAULER_REAL, fD.nom, iiJ, fitxaNomACapturarAlPas);
                     } else if (iiJ.j === 7 && pEnviarRebreJugada === 'enviarjugada') {
                         isPromotion = true;
                         showCoronacioDialog(fD, function() {
-                            doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant);
+                            doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant, false);
                         });
                     }
                     break;
@@ -1523,14 +1526,16 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
     }
 
     if (isPromotion === false) {
-        doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant);
+        doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant, isCapturaAlPas);
     }
 
     
     
 }
 
-function doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant) {
+function doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant, pCapturarAlPas) {
+    
+    resetIsLastMoveTaulerReal();
     
     //posició de la fitxa abans de moure
     var pointBefore = new ElMeuPoint(fD.iiJ.i, fD.iiJ.j);
@@ -1559,7 +1564,7 @@ function doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrinca
         }
         
         //indicar que es tracta d'una captura de peça
-        if (fDACasellaDesti && fDACasellaDesti.color !== fD) {
+        if ((fDACasellaDesti && fDACasellaDesti.color !== fD.color) || pCapturarAlPas === true) {
             jugada += "x"; 
         }
         
@@ -1624,6 +1629,10 @@ function doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrinca
         jugada += "&#43;&#43;";
     } else if (isCheck === true) {
         jugada += "&#43;";
+    }
+
+    if (pCapturarAlPas === true) {
+        jugada += '(e.p.)';
     }
 
     //apunta la jugada a la llista de jugades
@@ -1978,6 +1987,18 @@ function copyFromArrayTaulerTo_ArrayTauler() {
                 }
             }
             //_arrayTauler[i][j] = fitxaNom;
+        }
+    }
+}
+
+function resetIsLastMoveTaulerReal() {
+    for (var j = 0; j < arrayTauler.length; j++) {
+        for (var i = 0; i < arrayTauler[j].length; i++) {
+            var fitxaNom = arrayTauler[i][j];
+            var fD = getFitxaDadesFromElDOM(TAULER_REAL, fitxaNom);
+            if (fD) {
+                fD.isMoved = false;
+            }
         }
     }
 }
