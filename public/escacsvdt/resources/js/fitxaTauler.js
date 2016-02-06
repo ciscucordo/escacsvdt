@@ -1483,19 +1483,20 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
         case TIPUS_FITXA_PEO:
             //només mostrar diàleg de coronació si estem enviant la jugada!
             if (pEnviarRebreJugada === 'enviarjugada') {
-                isPromotion = true;
                 switch (fD.color) {
                     case COLOR_BLANC:
                         if (iiJ.j === 0) {
+                            isPromotion = true;
                             showCoronacioDialog(fD, function() {
-                                doIsOKMoveCallback(fD, xiYOiiJ, pEnviarRebreJugada, jugada);
+                                doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant);
                             });
                         }
                         break;
                     case COLOR_NEGRE:
                         if (iiJ.j === 7) {
+                            isPromotion = true;
                             showCoronacioDialog(fD, function() {
-                                doIsOKMoveCallback(fD, xiYOiiJ, pEnviarRebreJugada, jugada);
+                                doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant);
                             });
                         }
                         break;
@@ -1505,15 +1506,16 @@ function doIsOKMove(pFitxaNom, xiYOiiJ, pEnviarRebreJugada, pTempsContrincant) {
     }
 
     if (isPromotion === false) {
-        doIsOKMoveCallback(fD, xiYOiiJ, pEnviarRebreJugada, jugada);
+        doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant);
     }
 
     
     
 }
 
-function doIsOKMoveCallback(fD, xiYOiiJ, pEnviarRebreJugada, jugada) {
-    fD.iiJ = xiYOiiJ/*xiY*/;
+function doIsOKMoveCallback(fD, iiJ, pEnviarRebreJugada, jugada, pTempsContrincant) {
+    fD.iiJ = iiJ;
+    //fD.iiJ = xiYOiiJ;
     fD.isMoved = true;
     setFitxaDadesToElDOM(TAULER_REAL, fD.nom, fD);
 
