@@ -609,7 +609,18 @@ function doMirarRepteAcceptat()
 
                                                     } else {
 
-                                                        html += "<img alt='acceptar' src='../resources/img/acceptar.PNG' style='cursor: pointer' onclick='javascript: doAcceptarRepte(" + reg.REPTELLISTAT_ID + ");' title='Accepta el Repte'>";
+                                                        html += "<img alt='acceptar' src='../resources/img/acceptar.PNG' style='cursor: pointer' ";
+                                                        
+                                                        if (reg.REPTELLISTAT_ESTATJUGADORREPTADOR === 0) {
+                                                            html += " onclick='javascript: doAcceptarRepte(" + reg.REPTELLISTAT_ID + ");' title='Accepta el Repte'>";
+                                                        } else if (reg.REPTELLISTAT_ESTATJUGADORREPTADOR === -1) {
+                                                            html += " onclick=\"javascript: showInformationDialog(&quot;Informació&quot;, &quot;<p class=\'formfontgreater1\' style=\'text-align:center\'>En aquests moments <b>" + reg.REPTELLISTAT_JUGADORREPTADOR_DESC + "</b> està desconnectat!</p>&quot;);\">";
+                                                        } else if (reg.REPTELLISTAT_ESTATJUGADORREPTADOR === 1) {
+                                                            html += " onclick=\"javascript: showInformationDialog(&quot;Informació&quot;, &quot;<p class=\'formfontgreater1\' style=\'text-align:center\'>En aquests moments <b>" + reg.REPTELLISTAT_JUGADORREPTADOR_DESC + "</b> està reptant a una altra persona.</p>&quot;);\">";
+                                                        } else if (reg.REPTELLISTAT_ESTATJUGADORREPTADOR === 2) {
+                                                            html += " onclick=\"javascript: showInformationDialog(&quot;Informació&quot;, &quot;<p class=\'formfontgreater1\' style=\'text-align:center\'>En aquests moments <b>" + reg.REPTELLISTAT_JUGADORREPTADOR_DESC + "</b> està jugant amb una altra persona, espera que acabi.</p>&quot;);\">";
+                                                        }
+                                                        
 
                                                     }
 

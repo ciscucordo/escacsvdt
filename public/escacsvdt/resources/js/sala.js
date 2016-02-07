@@ -4,6 +4,7 @@ localStorage.debug = '*';
 //control del color que toca jugar
 window.colorTorn = "";
 //color del jugador el qual s'ha loginat !!!
+var param_idJugadorSessio;
 var param_colorUsuari;
 var param_idPartida;
 var param_idGraella;
@@ -129,6 +130,7 @@ function doOnReadySala(pSessionData)
     
     $("#capcaleraPag").html(htmlCapcaleraPag());
    
+    param_idJugadorSessio = jsonSession[0].IDJUGADOR;
     param_idRepte = jsonSession[0].IDREPTE;
     var jsonPartida = doSelectIdPartidaByIdRepte(param_idRepte);
     if (jsonPartida.length > 0) {
@@ -203,6 +205,7 @@ function doOnReadySala(pSessionData)
 function doSortir()
 {    
     var fnYes = function () {
+        doUpdateStateJugador(param_idJugadorSessio, 0);
         doUpdateRepteSession({
             IDREPTE: null,
             IDPARTIDA: null,
