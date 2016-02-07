@@ -205,7 +205,8 @@ function doOnReadySala(pSessionData)
 function doSortir()
 {    
     var fnYes = function () {
-        doUpdateStateJugador(param_idJugadorSessio, 0);
+        //posem estat lliure, el jugador sessió surt de la partida
+        doUpdateStateJugador(0);
         doUpdateRepteSession({
             IDREPTE: null,
             IDPARTIDA: null,
@@ -223,6 +224,8 @@ function doSortir()
     };
     
     if (checkIfGameFinished() === true) {
+        //posem estat lliure, el jugador sessió surt de la partida
+        doUpdateStateJugador(0);
         doUpdateRepteSession({
             IDREPTE: null,
             IDPARTIDA: null,
@@ -237,6 +240,31 @@ function doSortir()
     } else {
         showConfirmationDialog("Confirmació", "Vols realment abandonar?", fnYes, fnNo);
     }
+}
+
+function doUpdateStateJugador(pEstat)
+{
+
+    $.ajax({
+        type: "post",
+        url: "/doUpdateStateJugador",
+        datatype: "json",
+        data: "IDJUGADOR=" + param_idJugadorSessio +
+                "&ESTAT=" + pEstat,
+        async: false,
+        //cache: false,
+        timeout: 30000,
+        success: function (data, textStatus, jqXHR) {
+            //
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function (jqXHR, textStatus) {
+            //
+        }
+    });
+
 }
 
 function doCrearPartida(pSessionData)
