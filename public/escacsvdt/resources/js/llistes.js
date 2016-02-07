@@ -247,7 +247,7 @@ function doOmplirLlistaJugador(pResetPag)
         if (finishedOmplirLlistaJugador === true) {
             doOmplirLlistaJugadorSub(valueNick, valuePerfil_desc, valueEstat, valueNumPagActual);
         }
-    }, 50000);
+    }, 5000);
 }
 
 function onKeyPressFilterJugador(evt) {
