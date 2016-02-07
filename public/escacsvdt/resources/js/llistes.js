@@ -122,7 +122,16 @@ function doOmplirLlistaJugadorSub(pValueNick, pValuePerfil_desc, pValueEstat, pV
                                 if (reg.JUGADORLLISTAT_ID === jsonSession[0].IDJUGADOR) {
                                     html += "<!-- // -->";
                                 } else {
-                                    html += "<img src='../resources/img/challenge.PNG' alt='reptar' title='Reptar al jugador' style='cursor: pointer;' onclick='javascript: reptarJugador(" + reg.JUGADORLLISTAT_ID + ")'>";
+                                    html += "<img src='../resources/img/challenge.PNG' alt='reptar' title='Reptar al jugador' style='cursor: pointer;'";
+                                    if (reg.JUGADORLLISTAT_ESTAT === 0) {
+                                        html += " onclick='javascript: reptarJugador(" + reg.JUGADORLLISTAT_ID + ")'>";
+                                    } else if (reg.JUGADORLLISTAT_ESTAT === -1) {
+                                        html += " onclick=\"javascript: showInformationDialog(&quot;Informació&quot;, &quot;<p class=\'formfontgreater1\' style=\'text-align:center\'>En aquests moments <b>" + reg.JUGADORLLISTAT_NICK + "</b> està desconnectat!</p>&quot;);\">";
+                                    } else if (reg.JUGADORLLISTAT_ESTAT === 1) {
+                                        html += " onclick=\"javascript: showInformationDialog(&quot;Informació&quot;, &quot;<p class=\'formfontgreater1\' style=\'text-align:center\'>En aquests moments <b>" + reg.JUGADORLLISTAT_NICK + "</b> està reptant a una altra persona.</p>&quot;);\">";
+                                    } else if (reg.JUGADORLLISTAT_ESTAT === 2) {
+                                        html += " onclick=\"javascript: showInformationDialog(&quot;Informació&quot;, &quot;<p class=\'formfontgreater1\' style=\'text-align:center\'>En aquests moments <b>" + reg.JUGADORLLISTAT_NICK + "</b> està jugant amb una altra persona, espera que acabi.</p>&quot;);\">";
+                                    }
                                 }
 
                                 html += "</td>" +
@@ -238,7 +247,7 @@ function doOmplirLlistaJugador(pResetPag)
         if (finishedOmplirLlistaJugador === true) {
             doOmplirLlistaJugadorSub(valueNick, valuePerfil_desc, valueEstat, valueNumPagActual);
         }
-    }, 5000);
+    }, 50000);
 }
 
 function onKeyPressFilterJugador(evt) {
