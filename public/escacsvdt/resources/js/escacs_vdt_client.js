@@ -240,18 +240,18 @@ function doOnReadyEscacs_vdt_client(pSessionData)
     };
 
     //per a LOCALHOST
-    
+    /*
     var socket = io('ws://192.168.1.3:3002',
         objSocketConnection
     );
-    
+    */
 
     //NOMÉS per a OPENSHIFT -->https://coderwall.com/p/pgk00a/socket-io-and-openshift-websockets
-    /*
+    
     var socket = io('ws://escacsvdt-6qdomain.rhcloud.com:8000',
         objSocketConnection
     );
-    */
+    
 
     /*
      escacsVdtClient = new EscacsVdtClient(socket);
